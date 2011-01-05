@@ -1,26 +1,36 @@
 == Description
-A early draft of a way to determine the size of the characters using EastAsianWidth.txt, based on the very early draft of a [Ruby interface to UnicodeData.txt]{https://github.com/runpaint/unicode-data} by runpaint.
+
+An early draft of a way to determine the size of the characters using <tt>EastAsianWidth.txt</tt>, based on the very early draft of a {Ruby interface to UnicodeData.txt}[https://github.com/runpaint/unicode-data] by runpaint.
 
 == Install
+
 Install the gem with
 
   gem install unicode-display_width
 
 == Usage
+
   require 'unicode/display_width'
 
 The easy way is to use the String#display_size method:
   "⚀".display_width #=> 1
+  '一'.display_width #=> 2
 
-To obtain more detailed data, you can use the Codepoint struct (c is the codepoint in integer format):
-  Unicode::DiplayWidth.codepoint( c ).width
+To obtain more detailed data, you can use the following syntax:
+  Unicode::DiplayWidth.codepoint( c )
 
 == Bugs / TODO
-It does not work correctly for all characters ;). For example, there is a class of unicode characters, which is not exactly defined to be narrow or full-width ("ambiguous"). This gem currently gives them a size of 1, which is not always correct.
+
+Since it is not tested extensively, it does probably not work correctly for all characters... For example, there is a class of unicode characters, which is not exactly defined to be narrow or full-width ("ambiguous"). This gem currently gives them a size of 1, which is not always correct.
+
+Furthermore, the index data structure can be improved.
 
 == Copyright
+
 Copyright (c) 2011 Jan Lelis, http://rbjl.net, released under the MIT license.
-Copyright (c) 2009 Run Paint Run Run
-EastAsianWidth.txt: Copyright (c) 1991-2010 Unicode, Inc.
+
+Contains code by runpaint:   Copyright (c) 2009 Run Paint Run Run
+
+Contains EastAsianWidth.txt: Copyright (c) 1991-2010 Unicode, Inc.
 
 J-_-L

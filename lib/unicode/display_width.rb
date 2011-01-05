@@ -1,10 +1,10 @@
 # encoding: utf-8
 module Unicode; end
-module Unicode::DisplayWidth; end
+module Unicode::DisplayWidth
+  VERSION = '0.1.1'
+end
 
 class << Unicode::DisplayWidth
-  VERSION = '0.1.1'
-
   DATA_DIR = File.join(File.dirname(__FILE__), '../../data/')
   TABLE_FILE = DATA_DIR + 'EastAsianWidth.index'
   DATA_FILE  = DATA_DIR + 'EastAsianWidth.txt'
