@@ -16,14 +16,12 @@ The easy way is to use the String#display_size method:
   "⚀".display_width #=> 1
   '一'.display_width #=> 2
 
-To obtain more detailed data, you can use the following syntax:
+To obtain more detailed character data, you can use the following syntax:
   Unicode::DiplayWidth.codepoint( c )
 
-== Bugs / TODO
+=== Ambigous Characters
 
-Since it is not tested extensively, it does probably not work correctly for all characters... For example, there is a class of unicode characters, which is not exactly defined to be narrow or full-width ("ambiguous"). This gem currently gives them a size of 1, which is not always correct.
-
-Furthermore, the index data structure can be improved.
+The display_width method takes an optional argument, which will be used as width for characters defined as "ambigious". The default value is 1.
 
 == Copyright
 
@@ -31,6 +29,6 @@ Copyright (c) 2011 Jan Lelis, http://rbjl.net, released under the MIT license.
 
 Contains code by runpaint:   Copyright (c) 2009 Run Paint Run Run
 
-Contains EastAsianWidth.txt: Copyright (c) 1991-2010 Unicode, Inc.
+Contains EastAsianWidth.txt: Copyright (c) 1991-2014 Unicode, Inc.
 
 J-_-L
