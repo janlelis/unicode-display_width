@@ -14,7 +14,7 @@ end
 
 desc "Install the gem locally"
 task :install => :gem do
-  sh %{gem install pkg/#{gemspec.name}-#{gemspec.version}}
+  sh %{gem install pkg/#{gemspec.name}-#{gemspec.version}.gem}
 end
 
 desc "Generate the gemspec"
@@ -29,7 +29,7 @@ end
 
 desc 'Run tests'
 task :test do |t|
-  sh 'bacon -q -Ilib -I. test/*_test.rb'
+  sh 'rspec'
 end
 
 task :default => :test
