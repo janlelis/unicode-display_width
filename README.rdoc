@@ -17,7 +17,7 @@ The easy way is to use the String#display_size method:
   '一'.display_width #=> 2
 
 To obtain more detailed character data, you can use the following syntax:
-  Unicode::DiplayWidth.codepoint( c )
+  Unicode::DisplayWidth.codepoint( c )
 
 === Ambigous Characters
 
