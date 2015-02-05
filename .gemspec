@@ -15,4 +15,5 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.rdoc", "LICENSE.txt", "CHANGELOG.txt"]
   s.license = 'MIT'
   s.add_development_dependency 'rspec', '~> 3.2'
+  s.add_development_dependency 'rake', '~> 10.4'
 end
