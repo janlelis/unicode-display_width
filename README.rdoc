@@ -1,4 +1,4 @@
-== Description
+== unicode/display_width {<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />}[https://travis-ci.org/janlelis/unicode-display_width]
 
 An early draft of a way to determine the size of the characters using <tt>EastAsianWidth.txt</tt>, based on the very early draft of a {Ruby interface to UnicodeData.txt}[https://github.com/runpaint/unicode-data] by runpaint.
 
