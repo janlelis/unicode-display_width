@@ -4,39 +4,40 @@ module Unicode::DisplayWidth
   VERSION = '0.1.1'
 end
 
+
 class << Unicode::DisplayWidth
   DATA_DIR = File.join(File.dirname(__FILE__), '../../data/')
   TABLE_FILE = DATA_DIR + 'EastAsianWidth.index'
   DATA_FILE  = DATA_DIR + 'EastAsianWidth.txt'
 
-  # only needed for building the index
-  def data
-    @data ||= File.open DATA_FILE
-  end
+  # # # lookup
 
   def table
     if @table
       @table
     else
-      build_table unless File.file?(TABLE_FILE)
       @table = Marshal.load File.respond_to?(:binread) ? File.binread(TABLE_FILE) : File.read(TABLE_FILE)
     end
   end
 
   def codepoint(n)
     n = n.to_s.unpack('U')[0] unless n.is_a? Integer
-    table[n] or raise ArgumentError
+    table[n] or raise ArgumentError, 'codepoint not found'
   end
   alias width codepoint
   alias of    codepoint
 
+
+  # # # index
+
   def build_table
+    data = File.open DATA_FILE
     data.rewind
     table = {}
     dir = File.dirname TABLE_FILE
     Dir.mkdir(dir) unless Dir.exists?(dir)
-    data.lines.each{ |line|
-      line =~ /^(.*);(.*) # .*$/
+    data.each_line{ |line|
+      line =~ /^(\S+?);(\S+)\s+#.*$/
       if $1 && $2
         cps, width = $1, $2
         if cps['..']
@@ -52,16 +53,18 @@ class << Unicode::DisplayWidth
   end
 end
 
+
+# # # core ext
+
 class String
   def display_width(ambiguous = 1)
-    #codepoints.inject(0){ |a,c|
     unpack('U*').inject(0){ |a,c|
       width = case Unicode::DisplayWidth.codepoint(c).to_s
               when *%w[F W]
                 2
               when *%w[N Na H]
                 1
-              when *%w[A] # TODO
+              when *%w[A]
                 ambiguous
               else
                 1
