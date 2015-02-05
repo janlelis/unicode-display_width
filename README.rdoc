@@ -25,7 +25,7 @@ The display_width method takes an optional argument, which will be used as width
 
 == Copyright
 
-Copyright (c) 2011 Jan Lelis, http://rbjl.net, released under the MIT license.
+Copyright (c) 2011, 2015 Jan Lelis, http://rbjl.net, released under the MIT license.
 
 Contains code by runpaint:   Copyright (c) 2009 Run Paint Run Run
 
