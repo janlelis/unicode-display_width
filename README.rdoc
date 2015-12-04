@@ -4,9 +4,13 @@ An early draft of a way to determine the size of the characters using <tt>EastAs
 
 == Install
 
-Install the gem with
+Install the gem with:
 
   gem install unicode-display_width
+
+or add to your Gemfile:
+
+  gem 'unicode-display_width'
 
 == Usage
 
@@ -19,7 +23,7 @@ The easy way is to use the <tt>String#display_width</tt> method:
 To obtain more detailed character data, you can use the following syntax:
   Unicode::DisplayWidth.codepoint( c )
 
-=== Ambigous Characters
+=== Ambiguous Characters
 
 The <tt>display_width</tt> method takes an optional argument, which will be used as width for characters defined as "ambigious". The default value is 1.
 
@@ -29,6 +33,6 @@ Copyright (c) 2011, 2015 Jan Lelis, http://rbjl.net, released under the MIT lice
 
 Contains code by runpaint:   Copyright (c) 2009 Run Paint Run Run
 
-Contains EastAsianWidth.txt: Copyright (c) 1991-2014 Unicode, Inc.
+Contains EastAsianWidth.txt: Copyright (c) 1991-2015 Unicode, Inc.
 
 J-_-L
