@@ -1,6 +1,7 @@
 ## 0.3.0
 * Update project's meta files
 * Move code to generate index from library to Rakefile
+* Add rake task to update EastAsianWidth.txt
 
 ## 0.2.0
 

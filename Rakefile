@@ -66,3 +66,17 @@ namespace :update do
   end
 end
 
+# # #
+# Update data file
+
+namespace :update do
+  desc "#{gemspec.name} | Update unicode data"
+  task :data do
+    require File.dirname(__FILE__) + '/lib/unicode/display_width'
+    require 'open-uri'
+    open("http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt") { |f|
+      File.write(Unicode::DisplayWidth::DATA_FILE, f.read)
+    }
+  end
+end
+
