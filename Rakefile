@@ -36,3 +36,33 @@ desc "#{gemspec.name} | Tests"
 task :tests do
   sh "rspec spec"
 end
+
+# # #
+# Update index table
+
+namespace :update do
+  desc "#{gemspec.name} | Update index"
+  task :index do
+    require File.dirname(__FILE__) + '/lib/unicode/display_width'
+    data = File.open Unicode::DisplayWidth::DATA_FILE
+    data.rewind
+    table = {}
+    dir = File.dirname Unicode::DisplayWidth::TABLE_FILE
+    Dir.mkdir(dir) unless Dir.exists?(dir)
+    data.each_line{ |line|
+      line =~ /^(\S+?);(\S+)\s+#.*$/
+      if $1 && $2
+        cps, width = $1, $2
+        if cps['..']
+          range = Range.new *cps.split('..').map{ |cp| cp.to_i(16) }
+          range.each{ |cp| table[ cp ] = width.to_sym }
+        else
+          table[ cps.to_i(16) ] = width.to_sym
+        end
+      end
+
+    }
+    File.open(Unicode::DisplayWidth::TABLE_FILE, 'wb') { |f| Marshal.dump(table, f) }
+  end
+end
+

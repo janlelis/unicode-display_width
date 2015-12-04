@@ -1,5 +1,6 @@
 ## 0.3.0
 * Update project's meta files
+* Move code to generate index from library to Rakefile
 
 ## 0.2.0
 
