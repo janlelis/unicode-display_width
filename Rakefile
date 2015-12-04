@@ -32,10 +32,12 @@ end
 # # #
 # Run all specs
 
-desc "#{gemspec.name} | Tests"
-task :tests do
+
+desc "#{gemspec.name} | Test"
+task :test do
   sh "rspec spec"
 end
+task :default => :test
 
 # # #
 # Update index table
