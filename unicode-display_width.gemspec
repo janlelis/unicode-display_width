@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary = "Support for east_asian_width string widths."
   s.description =  "This gem adds String#display_size to get the display size of a string using EastAsianWidth.txt."
   s.required_rubygems_version = ">= 1.3.6"
-  s.files = Dir.glob(%w[{lib,test}/**/*.rb bin/* [A-Z]*.{txt,rdoc} data/EastAsianWidth.index ext/**/*.{rb,c} **/deps.rip]) + %w{Rakefile .gemspec}
+  s.files = Dir.glob(%w[{lib,test}/**/*.rb bin/* [A-Z]*.{txt,rdoc} data/EastAsianWidth.index ext/**/*.{rb,c} **/deps.rip]) + %w{Rakefile unicode-display_width.gemspec}
   s.extra_rdoc_files = ["README.rdoc", "MIT-LICENSE.txt", "CHANGELOG.txt"]
   s.license = 'MIT'
   s.add_development_dependency 'rspec', '~> 3.2'
