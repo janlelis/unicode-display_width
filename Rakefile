@@ -1,35 +1,38 @@
-require 'rake'
-require 'fileutils'
+# # #
+# Get gemspec info
 
-def gemspec
-  @gemspec ||= eval(File.read('.gemspec'), binding, '.gemspec')
-end
+gemspec_file = Dir['*.gemspec'].first
+gemspec = eval File.read(gemspec_file), binding, gemspec_file
+info = "#{gemspec.name} | #{gemspec.version} | " \
+       "#{gemspec.runtime_dependencies.size} dependencies | " \
+       "#{gemspec.files.size} files"
 
-desc "Build the gem"
-task :gem=>:gemspec do
-  sh "gem build .gemspec"
+
+# # #
+# Gem build and install task
+
+desc info
+task :gem do
+  puts info + "\n\n"
+  print "  "; sh "gem build #{gemspec_file}"
   FileUtils.mkdir_p 'pkg'
   FileUtils.mv "#{gemspec.name}-#{gemspec.version}.gem", 'pkg'
+  puts; sh %{gem install --no-document pkg/#{gemspec.name}-#{gemspec.version}.gem}
 end
 
-desc "Install the gem locally"
-task :install => :gem do
-  sh %{gem install pkg/#{gemspec.name}-#{gemspec.version}.gem}
+
+# # #
+# Start an IRB session with the gem loaded
+
+desc "#{gemspec.name} | IRB"
+task :irb do
+  sh "irb -I ./lib -r #{gemspec.name.gsub '-','/'}"
 end
 
-desc "Generate the gemspec"
-task :generate do
-  puts gemspec.to_ruby
-end
+# # #
+# Run all specs
 
-desc "Validate the gemspec"
-task :gemspec do
-  gemspec.validate
+desc "#{gemspec.name} | Tests"
+task :tests do
+  sh "rspec spec"
 end
-
-desc 'Run tests'
-task :test do |t|
-  sh 'rspec'
-end
-
-task :default => :test

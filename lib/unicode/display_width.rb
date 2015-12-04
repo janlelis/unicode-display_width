@@ -1,9 +1,10 @@
 # encoding: utf-8
-module Unicode; end
-module Unicode::DisplayWidth
-  VERSION = '0.2.0'
-end
 
+module Unicode
+  module DisplayWidth
+    VERSION = '0.2.0'
+  end
+end
 
 class << Unicode::DisplayWidth
   DATA_DIR = File.join(File.dirname(__FILE__), '../../data/')

@@ -12,7 +12,7 @@ Install the gem with
 
   require 'unicode/display_width'
 
-The easy way is to use the String#display_size method:
+The easy way is to use the <tt>String#display_width</tt> method:
   "⚀".display_width #=> 1
   '一'.display_width #=> 2
 
@@ -21,7 +21,7 @@ To obtain more detailed character data, you can use the following syntax:
 
 === Ambigous Characters
 
-The display_width method takes an optional argument, which will be used as width for characters defined as "ambigious". The default value is 1.
+The <tt>display_width</tt> method takes an optional argument, which will be used as width for characters defined as "ambigious". The default value is 1.
 
 == Copyright
 
