@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Unicode
   module DisplayWidth
     VERSION = '0.3.1'.freeze
@@ -12,7 +10,7 @@ module Unicode
         if defined?(@table) && @table
           @table
         else
-          @table = Marshal.load File.respond_to?(:binread) ? File.binread(TABLE_FILE) : File.read(TABLE_FILE)
+          @table = Marshal.load(File.binread(TABLE_FILE))
         end
       end
 

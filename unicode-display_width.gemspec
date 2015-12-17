@@ -10,10 +10,10 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/janlelis/unicode-display_width"
   s.summary = "Support for east_asian_width string widths."
   s.description =  "This gem adds String#display_width to get the display size of a string using EastAsianWidth.txt."
-  s.required_rubygems_version = ">= 1.3.6"
   s.files = Dir.glob(%w[{lib,test}/**/*.rb bin/* [A-Z]*.{txt,rdoc} data/EastAsianWidth.index ext/**/*.{rb,c} **/deps.rip]) + %w{Rakefile unicode-display_width.gemspec}
   s.extra_rdoc_files = ["README.rdoc", "MIT-LICENSE.txt", "CHANGELOG.txt"]
   s.license = 'MIT'
+  s.required_ruby_version = '~> 2.0'
   s.add_development_dependency 'rspec', '~> 3.2'
   s.add_development_dependency 'rake', '~> 10.4'
 end
