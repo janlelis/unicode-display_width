@@ -1,6 +1,8 @@
 ## 9.0.0 (around June 2016)
 * Set required Ruby version to 2.0
 * Add NO_STRING_EXT mode to disable monkey patching
+* Deprecate usage of aliases: String#display_size and String#display_width
+* Remove of and width aliases for Unicode::DisplayWidth.codepoint
 
 ## 0.3.1
 

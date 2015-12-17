@@ -18,8 +18,6 @@ module Unicode
         n = n.to_s.unpack('U')[0] unless n.is_a? Integer
         table[n] or raise ArgumentError, 'codepoint not found'
       end
-      alias width codepoint
-      alias of    codepoint
 
       def for(string, ambiguous = 1)
         string.unpack('U*').inject(0){ |total_width, char|
