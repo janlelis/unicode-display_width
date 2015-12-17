@@ -2,18 +2,7 @@ require_relative '../display_width'
 
 class String
   def display_width(ambiguous = 1)
-    unpack('U*').inject(0){ |total_width, char|
-      total_width + case Unicode::DisplayWidth.codepoint(char).to_s
-      when 'F', 'W'
-        2
-      when 'N', 'Na', 'H'
-        1
-      when 'A'
-        ambiguous
-      else
-        1
-      end
-    }
+    Unicode::DisplayWidth.for(self, ambiguous)
   end
 
   def display_size(*args)

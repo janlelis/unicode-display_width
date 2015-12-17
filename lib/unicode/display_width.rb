@@ -20,6 +20,21 @@ module Unicode
       end
       alias width codepoint
       alias of    codepoint
+
+      def for(string, ambiguous = 1)
+        string.unpack('U*').inject(0){ |total_width, char|
+          total_width + case Unicode::DisplayWidth.codepoint(char).to_s
+          when 'F', 'W'
+            2
+          when 'N', 'Na', 'H'
+            1
+          when 'A'
+            ambiguous
+          else
+            1
+          end
+        }
+      end
     end
   end
 end
