@@ -42,8 +42,16 @@ class String
       a + width
     }
   end
-  alias display_size   display_width
-  alias display_length display_width
+
+  def display_size(*args)
+    warn "Deprecation warning: Please use `String#display_width` instead of `String#display_size`"
+    display_width(*args)
+  end
+
+  def display_length(*args)
+    warn "Deprecation warning: Please use `String#display_width` instead of `String#display_length`"
+    display_width(*args)
+  end
 end
 
 # J-_-L
