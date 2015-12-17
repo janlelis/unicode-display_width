@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-require 'rubygems' unless defined? Gem
 require File.dirname(__FILE__) + "/lib/unicode/display_width"
 
 Gem::Specification.new do |s|
@@ -10,7 +9,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/janlelis/unicode-display_width"
   s.summary = "Support for east_asian_width string widths."
   s.description =  "This gem adds String#display_width to get the display size of a string using EastAsianWidth.txt."
-  s.files = Dir.glob(%w[{lib,test}/**/*.rb bin/* [A-Z]*.{txt,rdoc} data/EastAsianWidth.index ext/**/*.{rb,c} **/deps.rip]) + %w{Rakefile unicode-display_width.gemspec}
+  s.files = Dir.glob(%w[{lib,spec}/**/*.rb [A-Z]*.{txt,rdoc} data/EastAsianWidth.index ext/**/*.rb]) + %w{Rakefile unicode-display_width.gemspec}
   s.extra_rdoc_files = ["README.rdoc", "MIT-LICENSE.txt", "CHANGELOG.txt"]
   s.license = 'MIT'
   s.required_ruby_version = '~> 2.0'
