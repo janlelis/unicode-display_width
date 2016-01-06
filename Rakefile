@@ -56,7 +56,7 @@ namespace :update do
       if $1 && $2
         cps, width = $1, $2
         if cps['..']
-          range = Range.new *cps.split('..').map{ |cp| cp.to_i(16) }
+          range = Range.new(*cps.split('..').map{ |cp| cp.to_i(16)) }
           range.each{ |cp| table[ cp ] = width.to_sym }
         else
           table[ cps.to_i(16) ] = width.to_sym
