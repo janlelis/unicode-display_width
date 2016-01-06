@@ -9,7 +9,7 @@ module Unicode
 
     class << self
       def table
-        if @table
+        if defined?(@table) && @table
           @table
         else
           @table = Marshal.load File.respond_to?(:binread) ? File.binread(TABLE_FILE) : File.read(TABLE_FILE)
