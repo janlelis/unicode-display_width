@@ -28,18 +28,17 @@ end
 
 class String
   def display_width(ambiguous = 1)
-    unpack('U*').inject(0){ |a,c|
-      width = case Unicode::DisplayWidth.codepoint(c).to_s
-              when *%w[F W]
-                2
-              when *%w[N Na H]
-                1
-              when *%w[A]
-                ambiguous
-              else
-                1
-              end
-      a + width
+    unpack('U*').inject(0){ |total_width, char|
+      total_width + case Unicode::DisplayWidth.codepoint(char).to_s
+      when 'F', 'W'
+        2
+      when 'N', 'Na', 'H'
+        1
+      when 'A'
+        ambiguous
+      else
+        1
+      end
     }
   end
 
