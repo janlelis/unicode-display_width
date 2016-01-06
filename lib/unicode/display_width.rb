@@ -2,7 +2,7 @@
 
 module Unicode
   module DisplayWidth
-    VERSION = '0.3.0'.freeze
+    VERSION = '0.3.1'.freeze
     DATA_DIR = File.join(File.dirname(__FILE__), '../../data/').freeze
     TABLE_FILE = (DATA_DIR + 'EastAsianWidth.index').freeze
     DATA_FILE  = (DATA_DIR + 'EastAsianWidth.txt').freeze

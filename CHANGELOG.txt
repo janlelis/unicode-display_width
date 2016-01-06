@@ -1,7 +1,11 @@
-## Next (around June 2016)
+## 0.3.1
+
+* Faster than 0.3.0
 * Deprecate usage of aliases: String#display_size and String#display_width
+* Eliminate Ruby warnings (@amatsuda)
 
 ## 0.3.0
+
 * Update EastAsianWidth from 7.0 to 8.0
 * Add rake task to update EastAsianWidth.txt
 * Move code to generate index from library to Rakefile
