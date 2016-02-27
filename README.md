@@ -32,7 +32,7 @@ width for characters defined as "ambigious". The default value is 1.
 
 ## Copyright
 
-Copyright (c) 2011, 2015 Jan Lelis, http://rbjl.net, released under the MIT
+Copyright (c) 2011, 2015-2016 Jan Lelis, http://janlelis.com, released under the MIT
 license.
 
 Contains code by runpaint:   Copyright (c) 2009 Run Paint Run Run
