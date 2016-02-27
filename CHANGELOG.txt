@@ -2,6 +2,7 @@
 
 * Set required Ruby version to 2.0
 * Add NO_STRING_EXT mode to disable monkey patching
+* Remove require 'unicode/display_size' (use 'unicode/display_width')
 * Remove of and width aliases for Unicode::DisplayWidth.codepoint
 
 ## 0.3.1
