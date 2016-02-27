@@ -2,8 +2,8 @@
 
 require 'unicode/display_width'
 
-describe Unicode::DisplayWidth do
-  describe 'String#display_width' do
+describe 'Unicode::DisplayWidth.for' do
+  describe '[east asian width]' do
     it 'returns 2 for F chars' do
       expect( '！'.display_width ).to eq 2
     end
@@ -26,6 +26,16 @@ describe Unicode::DisplayWidth do
 
     it 'returns first argument of display_width for A chars' do
       expect( '·'.display_width(2) ).to eq 2
+    end
+  end
+
+  describe '[general category]' do
+    it 'returns 1 for non-special (non east width) chars' do
+      expect( 'A'.display_width ).to eq 1
+    end
+
+    it 'returns 0 for Mn chars' do
+      expect( 'ֿ'.display_width ).to eq 0
     end
   end
 end

@@ -1,5 +1,6 @@
 ## 1.0.0
 
+* Feature: Treat width of chars of general category "Nonspacing_Mark" (Mn) as 0
 * Set required Ruby version to 2.0
 * Add NO_STRING_EXT mode to disable monkey patching
 * Remove require 'unicode/display_size' (use 'unicode/display_width')
