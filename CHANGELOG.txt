@@ -1,4 +1,4 @@
-## Next (around June 2016)
+## 1.0.0
 
 * Set required Ruby version to 2.0
 * Add NO_STRING_EXT mode to disable monkey patching
