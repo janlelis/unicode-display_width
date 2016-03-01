@@ -1,8 +1,10 @@
 ## unicode/display_width [<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />](https://travis-ci.org/janlelis/unicode-display_width)
 
-An early draft of a way to determine the size of the characters using
-`EastAsianWidth.txt`, based on the very early draft of a [Ruby interface to
-UnicodeData.txt](https://github.com/runpaint/unicode-data) by runpaint.
+Determines the (monospace) display width of a Ruby string. Pure Ruby implementation based on [EastAsianWidth.txt](http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data. You can also use [wcswidth-ruby](https://github.com/janlelis/wcswidth-ruby) for this purpose, but it is less often updated by OS vendors, so results may differ.
+
+## Introduction
+
+TBD
 
 ## Install
 
@@ -16,26 +18,27 @@ or add to your Gemfile:
 
 ## Usage
 
-    require 'unicode/display_width'
+TBD
 
-The easy way is to use the `String#display_width` method:
+- Ambiguous Characters
+
+### Usage with String Extension
+
+Activated by default. Will be deactivated in version 2.0:
+
+    require 'unicode/display_width/string_ext'
+
     "⚀".display_width #=> 1
     '一'.display_width #=> 2
 
-To obtain more detailed character data, you can use the following syntax:
-    Unicode::DisplayWidth.codepoint( c )
-
-### Ambiguous Characters
-
-The `display_width` method takes an optional argument, which will be used as
-width for characters defined as "ambigious". The default value is 1.
+Currently, you can actively opt-out from the string extension with: `require 'unicode/display_width/no_string_ext'`
 
 ## Copyright
 
 Copyright (c) 2011, 2015-2016 Jan Lelis, http://janlelis.com, released under the MIT
 license.
 
-Contains code by runpaint:   Copyright (c) 2009 Run Paint Run Run
+Early versions based on runpaint's: Copyright (c) 2009 Run Paint Run Run
 
 Contains EastAsianWidth.txt: Copyright (c) 1991-2015 Unicode, Inc.
 
