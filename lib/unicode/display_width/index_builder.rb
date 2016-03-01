@@ -4,8 +4,11 @@ module Unicode
   module DisplayWidth
     module IndexBuilder
       EAST_ASIAN_WIDTH_DATA_FILENAME = (DATA_DIRECTORY + 'EastAsianWidth.txt').freeze
-      ZERO_WIDTH_CATEGORIES = %w[Mn Me]
-      SPECIAL_WIDTHS = {}
+      ZERO_WIDTH_CATEGORIES = %w[Mn Me Cf]
+      SPECIAL_WIDTHS = {
+        0x0    => 0, # NULL
+        0x00AD => 1, # SOFT HYPHEN
+      }
 
       def self.fetch!
         require 'open-uri'
@@ -26,10 +29,10 @@ module Unicode
             cps, width, category = $1, $2, $3
             if cps['..']
               Range.new(*cps.split('..').map{ |cp| cp.to_i(16) }).each{ |cp|
-                index[cp] = is_zero_width?(category) ? 0 : width.to_sym
+                index[cp] = is_zero_width?(category, cp) ? 0 : width.to_sym
               }
             else
-              index[cps.to_i(16)] = is_zero_width?(category) ? 0 : width.to_sym
+              index[cps.to_i(16)] = is_zero_width?(category, cps.to_i(16)) ? 0 : width.to_sym
             end
           end
         }
@@ -37,8 +40,9 @@ module Unicode
         File.open(INDEX_FILENAME, 'wb') { |f| Marshal.dump(index, f) }
       end
 
-      def self.is_zero_width?(category)
-        ZERO_WIDTH_CATEGORIES.include?(category)
+      def self.is_zero_width?(category, cp)
+        ZERO_WIDTH_CATEGORIES.include?(category) &&
+            [cp].pack('U') !~ /\p{Cf}(?<=\p{Arabic})/
       end
     end
   end
