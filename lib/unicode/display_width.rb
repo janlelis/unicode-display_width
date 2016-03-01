@@ -13,7 +13,7 @@ module Unicode
         end
       end
 
-      def for(string, ambiguous = 1)
+      def of(string, ambiguous = 1)
         string.unpack('U*').inject(0){ |total_width, char|
           total_width + case width = index[char]
           when Integer
