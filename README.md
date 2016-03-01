@@ -21,6 +21,7 @@ or add to your Gemfile:
 TBD
 
 - Ambiguous Characters
+- Overwrite
 
 ### Usage with String Extension
 

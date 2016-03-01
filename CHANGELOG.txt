@@ -1,6 +1,7 @@
 ## 1.0.0
 
 * Treat width of chars of general categories (Mn, Me, Cf) as 0 (with exceptions)
+* Allow custom overrides for specific codepoints
 * Set required Ruby version to 2.0
 * Add NO_STRING_EXT mode to disable monkey patching
 * Internal API & index format changed drastically

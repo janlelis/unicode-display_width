@@ -1,8 +1,8 @@
 require_relative '../display_width'
 
 class String
-  def display_width(ambiguous = 1)
-    Unicode::DisplayWidth.of(self, ambiguous)
+  def display_width(ambiguous = 1, overwrite = {})
+    Unicode::DisplayWidth.of(self, ambiguous, overwrite)
   end
 
   def display_size(*args)

@@ -38,4 +38,10 @@ describe 'Unicode::DisplayWidth.for' do
       expect( 'ֿ'.display_width ).to eq 0
     end
   end
+
+  describe 'overwrite' do
+    it 'can be passed a 3rd parameter that contains a hash with overwrites' do
+      expect( "\t".display_width(1, 0x09 => 12) ).to eq 12
+    end
+  end
 end
