@@ -3,8 +3,8 @@
 * Treat width of chars of general categories (Mn, Me) as 0
 * Set required Ruby version to 2.0
 * Add NO_STRING_EXT mode to disable monkey patching
-* Remove require 'unicode/display_size' (use 'unicode/display_width')
 * Internal API & index format changed drastically
+* Remove require 'unicode/display_size' (use 'unicode/display_width' instead)
 
 ## 0.3.1
 

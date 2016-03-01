@@ -1,34 +1,24 @@
+require_relative 'display_width/constants'
+
 module Unicode
   module DisplayWidth
-    VERSION = '0.3.1'.freeze
-    DATA_DIRECTORY = File.join(File.dirname(__FILE__), '../../data/').freeze
-    INDEX_FILENAME = (DATA_DIRECTORY + 'EastAsianWidth.index').freeze
+    def self.of(string, ambiguous = 1)
+      require_relative 'display_width/index' unless defined? ::Unicode::DisplayWidth::INDEX
 
-    class << self
-      def index
-        if defined?(@index) && @index
-          @index
+      string.unpack('U*').inject(0){ |total_width, char|
+        total_width + case width = INDEX[char]
+        when Integer
+          width
+        when :F, :W
+          2
+        when :N, :Na, :H
+          1
+        when :A
+          ambiguous
         else
-          @index = Marshal.load(File.binread(INDEX_FILENAME))
+          1
         end
-      end
-
-      def of(string, ambiguous = 1)
-        string.unpack('U*').inject(0){ |total_width, char|
-          total_width + case width = index[char]
-          when Integer
-            width
-          when :F, :W
-            2
-          when :N, :Na, :H
-            1
-          when :A
-            ambiguous
-          else
-            1
-          end
-        }
-      end
+      }
     end
   end
 end

@@ -1,4 +1,4 @@
-require_relative '../display_width'
+require_relative 'constants'
 
 module Unicode
   module DisplayWidth
