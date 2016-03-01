@@ -28,14 +28,17 @@ module Unicode
           if $1 && $2
             cps, width, category = $1, $2, $3
             if cps['..']
-              Range.new(*cps.split('..').map{ |cp| cp.to_i(16) }).each{ |cp|
-                index[cp] = is_zero_width?(category, cp) ? 0 : width.to_sym
-              }
+              codepoints = Range.new(*cps.split('..').map{ |cp| cp.to_i(16) })
             else
-              index[cps.to_i(16)] = is_zero_width?(category, cps.to_i(16)) ? 0 : width.to_sym
+              codepoints = [cps.to_i(16)]
             end
+
+            codepoints.each{ |cp|
+              index[cp] = is_zero_width?(category, cp) ? 0 : width.to_sym
+            }
           end
         }
+
         index.merge! SPECIAL_WIDTHS
         File.open(INDEX_FILENAME, 'wb') { |f| Marshal.dump(index, f) }
       end
