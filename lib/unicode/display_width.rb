@@ -12,11 +12,9 @@ module Unicode
                                     width
                                   when :F, :W
                                     2
-                                  when :N, :Na, :H
-                                    1
                                   when :A
                                     ambiguous
-                                  else
+                                  else # including :N, :Na, :H
                                     1
                                   end
         )
