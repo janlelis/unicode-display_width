@@ -45,32 +45,8 @@ task :default => :test
 namespace :update do
   desc "#{gemspec.name} | Update index"
   task :index do
-    require File.dirname(__FILE__) + '/lib/unicode/display_width'
-
-    data = File.open Unicode::DisplayWidth::EAST_ASIAN_WIDTH_DATA_FILENAME
-    data.rewind
-    Dir.mkdir(Unicode::DisplayWidth::DATA_DIR) unless Dir.exists?(Unicode::DisplayWidth::DATA_DIR)
-    east_asian_width_table = {}
-    general_category_width_table = {}
-    zero_width_category = "Mn"
-
-    data.each_line{ |line|
-      line =~ /^(\S+?);(\S+)\s+#\s(\S+).*$/
-      if $1 && $2
-        cps, width, category = $1, $2, $3
-        if cps['..']
-          Range.new(*cps.split('..').map{ |cp| cp.to_i(16) }).each{ |cp|
-            east_asian_width_table[cp] = width.to_sym
-            general_category_width_table[cp] = 0 if category == zero_width_category
-          }
-        else
-          east_asian_width_table[cps.to_i(16)] = width.to_sym
-          general_category_width_table[cps.to_i(16)] = 0 if category == zero_width_category
-        end
-      end
-    }
-    File.open(Unicode::DisplayWidth::EAST_ASIAN_WIDTH_INDEX_FILENAME, 'wb') { |f| Marshal.dump(east_asian_width_table, f) }
-    File.open(Unicode::DisplayWidth::GENERAL_CATEGORY_WIDTH_INDEX_FILENAME, 'wb') { |f| Marshal.dump(general_category_width_table, f) }
+    require File.dirname(__FILE__) + '/lib/unicode/display_width/index_builder'
+    Unicode::DisplayWidth::IndexBuilder.build!
   end
 end
 
@@ -80,11 +56,8 @@ end
 namespace :update do
   desc "#{gemspec.name} | Update unicode data"
   task :data do
-    require File.dirname(__FILE__) + '/lib/unicode/display_width'
-    require 'open-uri'
-    open("http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt") { |f|
-      File.write(Unicode::DisplayWidth::EAST_ASIAN_WIDTH_DATA_FILENAME, f.read)
-    }
+    require File.dirname(__FILE__) + '/lib/unicode/display_width/index_builder'
+    Unicode::DisplayWidth::IndexBuilder.fetch!
   end
 end
 
