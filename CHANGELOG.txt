@@ -1,7 +1,9 @@
 ## 1.0.0
 
-* Treat width of chars of general categories (Mn, Me, Cf) as 0
-* Introduce list of characters with special widths
+* Faster than 0.3.1
+* Advanced determination of character width
+* This includes: Treat width of most chars of general categories (Mn, Me, Cf) as 0
+* This includes: Introduce list of characters with special widths
 * Allow custom overrides for specific codepoints
 * Set required Ruby version to 2.0
 * Add NO_STRING_EXT mode to disable monkey patching
