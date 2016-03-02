@@ -3,10 +3,11 @@ require_relative 'constants'
 module Unicode
   module DisplayWidth
     module IndexBuilder
+      EAST_ASIAN_WIDTH_DATA_URL      = "http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt".freeze
       EAST_ASIAN_WIDTH_DATA_FILENAME = (DATA_DIRECTORY + 'EastAsianWidth.txt').freeze
-      IGNORE_CATEGORIES = %w[Cs Co Cn]
-      ZERO_WIDTH_CATEGORIES = %w[Mn Me Cf]
-      ZERO_WIDTH_CODEPOINTS = [*0x1160..0x11FF]
+      IGNORE_CATEGORIES     = %w[Cs Co Cn].freeze
+      ZERO_WIDTH_CATEGORIES = %w[Mn Me Cf].freeze
+      ZERO_WIDTH_CODEPOINTS = [*0x1160..0x11FF].freeze
       SPECIAL_WIDTHS = {
         0x0    =>  0, # \0 NULL
         0x5    =>  0, #    ENQUIRY
@@ -19,11 +20,11 @@ module Unicode
         0xE    =>  0, #    SHIFT OUT
         0xF    =>  0, #    SHIFT IN
         0x00AD =>  1, #    SOFT HYPHEN
-      }
+      }.freeze
 
       def self.fetch!
         require 'open-uri'
-        open("http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt") { |f|
+        open(EAST_ASIAN_WIDTH_DATA_URL) { |f|
           File.write(EAST_ASIAN_WIDTH_DATA_FILENAME, f.read)
         }
       end
