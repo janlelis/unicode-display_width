@@ -4,6 +4,7 @@ module Unicode
   module DisplayWidth
     module IndexBuilder
       EAST_ASIAN_WIDTH_DATA_FILENAME = (DATA_DIRECTORY + 'EastAsianWidth.txt').freeze
+      IGNORE_CATEGORIES = %w[Cs Co Cn]
       ZERO_WIDTH_CATEGORIES = %w[Mn Me Cf]
       ZERO_WIDTH_CODEPOINTS = [*0x1160..0x11FF]
       SPECIAL_WIDTHS = {
@@ -37,6 +38,7 @@ module Unicode
           line =~ /^(\S+?);(\S+)\s+#\s(\S+).*$/
           if $1 && $2
             cps, width, category = $1, $2, $3
+            next if IGNORE_CATEGORIES.include?(category)
             if cps['..']
               codepoints = Range.new(*cps.split('..').map{ |cp| cp.to_i(16) })
             else
