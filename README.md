@@ -41,6 +41,4 @@ license.
 
 Early versions based on runpaint's: Copyright (c) 2009 Run Paint Run Run
 
-Contains EastAsianWidth.txt: Copyright (c) 1991-2015 Unicode, Inc.
-
-J-_-L
+Unicode data: http://www.unicode.org/copyright.html#Exhibit1
