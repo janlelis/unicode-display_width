@@ -97,7 +97,11 @@ describe 'Unicode::DisplayWidth.for' do
     end
 
     it 'returns 1 for SOFT HYPHEN' do
-      expect( "\u{00AD}".display_width ).to eq 1
+      expect( "­".display_width ).to eq 1
+    end
+
+    it 'returns 3 for THREE-EM DASH' do
+      expect( "⸻".display_width ).to eq 3
     end
   end
 
