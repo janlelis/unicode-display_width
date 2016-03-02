@@ -29,15 +29,66 @@ describe 'Unicode::DisplayWidth.for' do
     end
   end
 
-  describe '[general category]' do
-    it 'returns 1 for non-special (non east width) chars' do
-      expect( 'A'.display_width ).to eq 1
-    end
-
+  describe '[zero width]' do
     it 'returns 0 for Mn chars' do
       expect( 'ֿ'.display_width ).to eq 0
     end
   end
+
+  describe '[special characters]' do
+    it 'returns 0 for ␀' do
+      expect( "\0".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␅' do
+      expect( "\x05".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␇' do
+      expect( "\a".display_width ).to eq 0
+    end
+
+    it 'returns -1 for ␈' do
+      expect( "aaaa\b".display_width ).to eq 3
+    end
+
+    it 'returns -1 for ␈, but at least 0' do
+      expect( "\b".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␊' do
+      expect( "\n".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␋' do
+      expect( "\v".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␌' do
+      expect( "\f".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␍' do
+      expect( "\r".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␎' do
+      expect( "\x0E".display_width ).to eq 0
+    end
+
+    it 'returns 0 for ␏' do
+      expect( "\x0F".display_width ).to eq 0
+    end
+
+    it 'returns 1 for other C0 characters' do
+      expect( "\x10".display_width ).to eq 1
+    end
+
+    it 'returns 1 for SOFT HYPHEN' do
+      expect( "\u{00AD}".display_width ).to eq 1
+    end
+  end
+
 
   describe 'overwrite' do
     it 'can be passed a 3rd parameter that contains a hash with overwrites' do

@@ -6,8 +6,17 @@ module Unicode
       EAST_ASIAN_WIDTH_DATA_FILENAME = (DATA_DIRECTORY + 'EastAsianWidth.txt').freeze
       ZERO_WIDTH_CATEGORIES = %w[Mn Me Cf]
       SPECIAL_WIDTHS = {
-        0x0    => 0, # NULL
-        0x00AD => 1, # SOFT HYPHEN
+        0x0    =>  0, # \0 NULL
+        0x5    =>  0, #    ENQUIRY
+        0x7    =>  0, # \a BELL
+        0x8    => -1, # \b BACKSPACE
+        0xA    =>  0, # \n LINE FEED
+        0xB    =>  0, # \v LINE TABULATION
+        0xC    =>  0, # \f FORM FEED
+        0xD    =>  0, # \r CARRIAGE RETURN
+        0xE    =>  0, #    SHIFT OUT
+        0xF    =>  0, #    SHIFT IN
+        0x00AD =>  1, #    SOFT HYPHEN
       }
 
       def self.fetch!

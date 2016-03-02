@@ -5,7 +5,7 @@ module Unicode
     def self.of(string, ambiguous = 1, overwrite = {})
       require_relative 'display_width/index' unless defined? ::Unicode::DisplayWidth::INDEX
 
-      string.unpack('U*').inject(0){ |total_width, codepoint|
+      res = string.unpack('U*').inject(0){ |total_width, codepoint|
         total_width + (
           overwrite[codepoint] || case width = INDEX[codepoint]
                                   when Integer
@@ -19,6 +19,8 @@ module Unicode
                                   end
         )
       }
+
+      res < 0 ? 0 : res
     end
   end
 end
