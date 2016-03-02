@@ -2,30 +2,38 @@
 
 require 'unicode/display_width'
 
-describe 'Unicode::DisplayWidth.for' do
+describe 'Unicode::DisplayWidth.of' do
   describe '[east asian width]' do
-    it 'returns 2 for F chars' do
+    it 'returns 2 for F' do
       expect( '！'.display_width ).to eq 2
     end
 
-    it 'returns 2 for W chars' do
+    it 'returns 2 for W' do
       expect( '一'.display_width ).to eq 2
     end
 
-    it 'returns 1 for N chars' do
+    it 'returns 1 for N' do
       expect( 'À'.display_width ).to eq 1
     end
 
-    it 'returns 1 for Na chars' do
+    it 'returns 1 for Na' do
       expect( 'A'.display_width ).to eq 1
     end
 
-    it 'returns 1 for H chars' do
+    it 'returns 1 for H' do
       expect( '｡'.display_width ).to eq 1
     end
 
-    it 'returns first argument of display_width for A chars' do
+    it 'returns first argument of display_width for A' do
+      expect( '·'.display_width(1) ).to eq 1
+    end
+
+    it 'returns first argument of display_width for A' do
       expect( '·'.display_width(2) ).to eq 2
+    end
+
+    it 'returns 1 for A if no argument given' do
+      expect( '·'.display_width ).to eq 1
     end
   end
 
@@ -43,7 +51,7 @@ describe 'Unicode::DisplayWidth.for' do
     end
 
     it 'returns 0 for HANGUL JUNGSEONG chars' do
-      expect( '​'.display_width ).to eq 0
+      expect( 'ᅠ'.display_width ).to eq 0
     end
   end
 
@@ -100,14 +108,18 @@ describe 'Unicode::DisplayWidth.for' do
       expect( "­".display_width ).to eq 1
     end
 
+    it 'returns 2 for THREE-EM DASH' do
+      expect( "⸺".display_width ).to eq 2
+    end
+
     it 'returns 3 for THREE-EM DASH' do
       expect( "⸻".display_width ).to eq 3
     end
   end
 
 
-  describe 'overwrite' do
-    it 'can be passed a 3rd parameter that contains a hash with overwrites' do
+  describe '[overwrite]' do
+    it 'can be passed a 3rd parameter with overwrites' do
       expect( "\t".display_width(1, 0x09 => 12) ).to eq 12
     end
   end
