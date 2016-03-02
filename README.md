@@ -1,30 +1,28 @@
-## unicode/display_width [<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />](https://travis-ci.org/janlelis/unicode-display_width)
+## Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](http://badge.fury.io/rb/unicode-display_width) [<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />](https://travis-ci.org/janlelis/unicode-display_width)
 
-Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. You can also use [wcswidth-ruby](https://github.com/janlelis/wcswidth-ruby) for this purpose, but it is less often updated by OS vendors, so results may differ.
+Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. You can also use [wcswidth-ruby](https://github.com/janlelis/wcswidth-ruby) for the same purpose, but it is less often updated by OS vendors, so results may differ.
 
 ## Introduction to Character Widths
 
-Guesing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](http://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category) and hand-picked adjustments.
+Guesing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](http://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category), and hand-picked adjustments.
 
 ### How this Library Handles Widths
 
-As of version 1.0.0. Please expect changes to this algorithm with every MINOR version update ('1.X.0')
-
-Further above means higher precedence:
+As of version 1.0.0. Further at the top means higher precedence. Please expect changes to this algorithm with every MINOR version update (the X in 1.X.0)!
 
 Width  | Characters                   | Comment
 -------|------------------------------|--------------------------------------------------
 X      | (user defined)               | Overwrites any other values
--1     | "\b"                         | Backspace (total width never below 0)
-0      | "\0", "\x05", "\a", "\n", "\v", "\f", "\r", "\x0E", "\x0F" | [C0 control codes](https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_.28ASCII_and_derivatives.29) that do not change horizontal width
-1      | "\u{0x00AD}"                 | SOFT HYPHEN
-2      | "\u{0x2E3A}"                 | TWO-EM DASH
-3      | "\u{0x2E3B}"                 | THREE-EM DASH
+-1     | `"\b"`                       | Backspace (total width never below 0)
+0      | `"\0"`, `"\x05"`, `"\a"`, `"\n"`, `"\v"`, `"\f"`, `"\r"`, `"\x0E"`, `"\x0F"` | [C0 control codes](https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_.28ASCII_and_derivatives.29) that do not change horizontal width
+1      | `"\u{00AD}"`                 | SOFT HYPHEN
+2      | `"\u{2E3A}"`                 | TWO-EM DASH
+3      | `"\u{2E3B}"`                 | THREE-EM DASH
 0      | General Categories: Mn, Me, Cf (non-arabic) | Excludes ARABIC format characters
-0      | "\u{0x1160}".."\u{0x11FF}"   | HANGUL JUNGSEONG
+0      | `"\u{1160}".."\u{11FF}"`     | HANGUL JUNGSEONG
 2      | East Asian Width: F, W       | Full-width characters
-1 or 2 | East Asian Width: A          | Ambiguous characters, user defined, by default: 1
-1      | All other                    | -
+1 or 2 | East Asian Width: A          | Ambiguous characters, user defined, default: 1
+1      | All other codepoints         | -
 
 ## Install
 
@@ -77,13 +75,13 @@ You can actively opt-out from the string extension with: `require 'unicode/displ
 
 ### Usage From the CLI
 
-If you are not a Ruby developer, but want to use the library:
+If you are not a Ruby developer, but you still want to use this software to print out display widths for strings:
 
 ```
 $ gem install unicode-display_width
 $ ruby -r unicode/display_width -e 'puts Unicode::DisplayWidth.of $*[0]' -- "一"
 ```
-Replace "一" with your actual String to measure
+Replace "一" with the actual string to measure
 
 ## Other Implementations & Discussion
 
