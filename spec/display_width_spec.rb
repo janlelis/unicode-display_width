@@ -33,6 +33,18 @@ describe 'Unicode::DisplayWidth.for' do
     it 'returns 0 for Mn chars' do
       expect( 'ֿ'.display_width ).to eq 0
     end
+
+    it 'returns 0 for Me chars' do
+      expect( '҈'.display_width ).to eq 0
+    end
+
+    it 'returns 0 for Cf chars' do
+      expect( '​'.display_width ).to eq 0
+    end
+
+    it 'returns 0 for HANGUL JUNGSEONG chars' do
+      expect( '​'.display_width ).to eq 0
+    end
   end
 
   describe '[special characters]' do

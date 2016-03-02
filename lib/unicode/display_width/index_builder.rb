@@ -5,6 +5,7 @@ module Unicode
     module IndexBuilder
       EAST_ASIAN_WIDTH_DATA_FILENAME = (DATA_DIRECTORY + 'EastAsianWidth.txt').freeze
       ZERO_WIDTH_CATEGORIES = %w[Mn Me Cf]
+      ZERO_WIDTH_CODEPOINTS = [*0x1160..0x11FF]
       SPECIAL_WIDTHS = {
         0x0    =>  0, # \0 NULL
         0x5    =>  0, #    ENQUIRY
@@ -53,8 +54,9 @@ module Unicode
       end
 
       def self.is_zero_width?(category, cp)
-        ZERO_WIDTH_CATEGORIES.include?(category) &&
-            [cp].pack('U') !~ /\p{Cf}(?<=\p{Arabic})/
+        ( ZERO_WIDTH_CATEGORIES.include?(category) &&
+            [cp].pack('U') !~ /\p{Cf}(?<=\p{Arabic})/ ) ||
+          ZERO_WIDTH_CODEPOINTS.include?(cp)
       end
     end
   end
