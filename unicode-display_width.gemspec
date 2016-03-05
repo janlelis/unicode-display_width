@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.files = Dir.glob(%w[{lib,spec}/**/*.rb [A-Z]*.{txt,rdoc} data/unicode-width.index]) + %w{Rakefile unicode-display_width.gemspec}
   s.extra_rdoc_files = ["README.md", "MIT-LICENSE.txt", "CHANGELOG.txt"]
   s.license = 'MIT'
-  s.required_ruby_version = '~> 2.0'
+  s.required_ruby_version = '>= 1.9.3', '< 3.0.0'
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rake', '~> 10.4'
 end
