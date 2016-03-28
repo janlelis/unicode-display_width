@@ -1,4 +1,4 @@
-require_relative '../display_width'
+require_relative '../display_width' unless defined? Unicode::DisplayWidth
 
 class String
   def display_width(ambiguous = 1, overwrite = {})
