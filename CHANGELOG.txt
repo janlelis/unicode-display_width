@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## (master)
+## 1.0.3
 
 * Avoid circular dependency warning
 
