@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.4
+
+* New index format (much smaller) and internal API changes
+* Move index generation to a builder plugin for the unicoder gem
+* No public API changes
+
 ## 1.0.3
 
 * Avoid circular dependency warning
