@@ -1,6 +1,8 @@
 ## Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](http://badge.fury.io/rb/unicode-display_width) [<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />](https://travis-ci.org/janlelis/unicode-display_width)
 
-Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. You can also use [wcswidth-ruby](https://github.com/janlelis/wcswidth-ruby) for the same purpose, but it is less often updated by OS vendors, so results may differ.
+Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. Other than [wcwidth()](https://github.com/janlelis/wcswidth-ruby), which fulfills a similar purpose, it does not rely on the OS vendor to provide an up-to-date method for measuring string width.
+
+Unicode version: **9.0.0**
 
 ## Introduction to Character Widths
 
@@ -8,7 +10,7 @@ Guesing the correct space a character will consume on terminals is not easy. The
 
 ### How this Library Handles Widths
 
-As of version 1.0.0. Further at the top means higher precedence. Please expect changes to this algorithm with every MINOR version update (the X in 1.X.0)!
+Further at the top means higher precedence. Please expect changes to this algorithm with every MINOR version update (the X in 1.X.0)!
 
 Width  | Characters                   | Comment
 -------|------------------------------|--------------------------------------------------
@@ -75,7 +77,7 @@ You can actively opt-out from the string extension with: `require 'unicode/displ
 
 ### Usage From the CLI
 
-If you are not a Ruby developer, but you still want to use this software to print out display widths for strings:
+Use this one-liner to print out display widths for strings from the command-line:
 
 ```
 $ gem install unicode-display_width
@@ -89,6 +91,8 @@ Replace "一" with the actual string to measure
 - JavaScript: https://github.com/mycoboco/wcwidth.js
 - C: http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
 - C for Julia: https://github.com/JuliaLang/utf8proc/issues/2
+
+See [unicode-x](https://github.com/janlelis/unicode-x) for more Unicode related micro libraries.
 
 ## Copyright & Info
 
