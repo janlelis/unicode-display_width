@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.1
+
+* Always load index into memory, fixes #9
+
 ## 1.1.0
 
 * Support Unicode 9.0
