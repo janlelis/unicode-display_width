@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.2
+
+- Reduce memory consumption and increase performance, patch by @rrosenblum
+
 ## 1.1.1
 
 * Always load index into memory, fixes #9
