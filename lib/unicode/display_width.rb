@@ -6,7 +6,7 @@ module Unicode
     DEPTHS = [0x10000, 0x1000, 0x100, 0x10].freeze
 
     def self.of(string, ambiguous = 1, overwrite = {})
-      res = string.unpack('U*'.freeze).inject(0){ |total_width, codepoint|
+      res = string.codepoints.inject(0){ |total_width, codepoint|
         index_or_value = INDEX
         codepoint_depth_offset = codepoint
         DEPTHS.each{ |depth|
