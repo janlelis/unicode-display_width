@@ -123,4 +123,10 @@ describe 'Unicode::DisplayWidth.of' do
       expect( "\t".display_width(1, 0x09 => 12) ).to eq 12
     end
   end
+
+  describe '[encoding]' do
+    it 'works with non-utf8 Unicode encodings' do
+      expect( 'À'.encode("UTF-16LE").display_width ).to eq 1
+    end
+  end
 end
