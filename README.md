@@ -96,7 +96,7 @@ See [unicode-x](https://github.com/janlelis/unicode-x) for more Unicode related 
 
 ## Copyright & Info
 
-- Copyright (c) 2011, 2015-2016 Jan Lelis, http://janlelis.com, released under the MIT
+- Copyright (c) 2011, 2015-2017 Jan Lelis, http://janlelis.com, released under the MIT
 license
 - Early versions based on runpaint's unicode-data interface: Copyright (c) 2009 Run Paint Run Run
 - Unicode data: http://www.unicode.org/copyright.html#Exhibit1
