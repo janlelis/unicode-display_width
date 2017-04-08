@@ -64,6 +64,22 @@ You can overwrite how to handle specific code points by passing a hash (or even 
 Unicode::DisplayWidth.of("a\tb", 1, 0x09 => 10)) # => 12
 ```
 
+### Emoji Support
+
+Experimental emoji support is included. It will adjust the string's size for modifier and zero-width joiner sequences. You will need to add the [unicode-emoji](https://github.com/janlelis/unicode-emoji) gem to your Gemfile:
+
+```ruby
+gem 'unicode-display_width'
+gem 'unicode-emoji'
+```
+
+You can then activate the emoji string width adjustments by passing `emoji: true` as fourth parameter:
+
+```ruby
+Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 5
+Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: true # => 2
+```
+
 ### Usage with String Extension
 
 Activated by default. Will be deactivated in version 2.0:

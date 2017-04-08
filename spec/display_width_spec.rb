@@ -143,4 +143,10 @@ describe 'Unicode::DisplayWidth.of' do
       expect( 'À'.encode("UTF-16LE").display_width ).to eq 1
     end
   end
+
+  describe '[emoji]' do
+    it 'does not count modifiers and zjw sequences for valid emoji' do
+      expect( "🤾🏽‍♀️".display_width(1, {}, emoji: true) ).to eq 2
+    end
+  end
 end
