@@ -37,6 +37,7 @@ desc "#{gemspec.name} | Test"
 task :test do
   sh "rspec spec"
 end
+task :spec => :test
 task :default => :test
 
 # # #

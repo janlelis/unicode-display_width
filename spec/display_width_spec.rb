@@ -1,6 +1,4 @@
-# coding: utf-8
-
-require 'unicode/display_width'
+require_relative '../lib/unicode/display_width'
 
 describe 'Unicode::DisplayWidth.of' do
   describe '[east asian width]' do
@@ -10,6 +8,10 @@ describe 'Unicode::DisplayWidth.of' do
 
     it 'returns 2 for W' do
       expect( '一'.display_width ).to eq 2
+    end
+
+    it 'returns 2 for W (which are currently unassigned)' do
+      expect( "\u{3FFFD}".display_width ).to eq 2
     end
 
     it 'returns 1 for N' do
@@ -52,6 +54,18 @@ describe 'Unicode::DisplayWidth.of' do
 
     it 'returns 0 for HANGUL JUNGSEONG chars' do
       expect( 'ᅠ'.display_width ).to eq 0
+    end
+
+    it 'returns 0 for U+2060..U+206F' do
+      expect( "\u{2060}".display_width ).to eq 0
+    end
+
+    it 'returns 0 for U+FFF0..U+FFF8' do
+      expect( "\u{FFF0}".display_width ).to eq 0
+    end
+
+    it 'returns 0 for U+E0000..U+E0FFF' do
+      expect( "\u{E0000}".display_width ).to eq 0
     end
   end
 

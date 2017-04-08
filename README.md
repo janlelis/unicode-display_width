@@ -22,7 +22,9 @@ X      | (user defined)               | Overwrites any other values
 3      | `"\u{2E3B}"`                 | THREE-EM DASH
 0      | General Categories: Mn, Me, Cf (non-arabic) | Excludes ARABIC format characters
 0      | `"\u{1160}".."\u{11FF}"`     | HANGUL JUNGSEONG
+0      | `"\u{2060}".."\u{206F}"`, `"\u{FFF0}".."\u{FFF8}"`, `"\u{E0000}".."\u{E0FFF}"` | Ignorable ranges
 2      | East Asian Width: F, W       | Full-width characters
+2      | `"\u{3400}"`..`"\u{4DBF}"`, `"\u{4E00}"`..`"\u{9FFF}"`, `"\u{F900}"`..`"\u{FAFF}"`, `"\u{20000}"`..`"\u{2FFFD}"`, `"\u{30000}"`..`"\u{3FFFD}"` | Full-width ranges
 1 or 2 | East Asian Width: A          | Ambiguous characters, user defined, default: 1
 1      | All other codepoints         | -
 
