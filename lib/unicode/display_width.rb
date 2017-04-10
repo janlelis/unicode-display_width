@@ -31,7 +31,7 @@ module Unicode
       zwj_regex = /(?<=#{ [Unicode::Emoji::ZWJ].pack("U") })./
 
       string.scan(Unicode::Emoji::REGEX){ |emoji|
-        extra_width += 2 * emoji.match(modifier_regex).size
+        extra_width += 2 * emoji.scan(modifier_regex).size
 
         emoji.scan(zwj_regex){ |zwj_succ|
           extra_width += self.of(zwj_succ, ambiguous, overwrite)

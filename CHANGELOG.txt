@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.1
+
+- Fix bug that `emoji: true` would fail for emoji without modifier
+
 ## 1.2.0
 
 - Add zero-width codepoint ranges: U+2060..U+206F, U+FFF0..U+FFF8, U+E0000..U+E0FFF

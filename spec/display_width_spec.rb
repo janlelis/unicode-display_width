@@ -148,5 +148,9 @@ describe 'Unicode::DisplayWidth.of' do
     it 'does not count modifiers and zjw sequences for valid emoji' do
       expect( "🤾🏽‍♀️".display_width(1, {}, emoji: true) ).to eq 2
     end
+
+    it 'works with flags' do
+      expect( "🇵🇹".display_width(1, {}, emoji: true) ).to eq 2
+    end
   end
 end
