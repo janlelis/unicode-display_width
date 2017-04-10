@@ -3,7 +3,7 @@
 ## 1.2.0
 
 - Add zero-width codepoint ranges: U+2060..U+206F, U+FFF0..U+FFF8, U+E0000..U+E0FFF
-- Add full-witdh codepoint ranges: U+3400..U+4DBF, U+4E00..U+9FFF, U+F900..U+FAFF, U+20000..U+2FFFD, U+30000..U+3FFFD
+- Add full-width codepoint ranges: U+3400..U+4DBF, U+4E00..U+9FFF, U+F900..U+FAFF, U+20000..U+2FFFD, U+30000..U+3FFFD
 - Experimental emoji support using the [unicode-emoji](https://github.com/janlelis/unicode-emoji) gem
 - Fix minor bug in index compression scheme
 
