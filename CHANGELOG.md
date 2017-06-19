@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.0
+
+- Unicode 10
+
 ## 1.2.1
 
 - Fix bug that `emoji: true` would fail for emoji without modifier
