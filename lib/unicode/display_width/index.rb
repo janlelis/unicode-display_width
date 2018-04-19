@@ -1,3 +1,4 @@
+require 'rubygems/util'
 require_relative 'constants'
 
 module Unicode
