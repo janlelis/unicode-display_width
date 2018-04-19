@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.1
+
+- Use `Gem::Util` for `gunzip`, removes deprecation warning, patch by @Schwad
+
 ## 1.3.0
 
 - Unicode 10
