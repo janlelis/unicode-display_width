@@ -4,6 +4,10 @@ Determines the monospace display width of a string in Ruby. Implementation based
 
 Unicode version: **10.0.0**
 
+Supported Rubies: **2.5**, **2.4**, **2.3**
+
+Old Rubies that might still work: **2.2**, **2.1**, **2.0**, **1.9**
+
 ## Introduction to Character Widths
 
 Guesing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](http://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category), and hand-picked adjustments.
