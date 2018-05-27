@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Next
+
+- Replace Gem::Util.gunzip with direct zlib implementation
+  This removes the dependency on rubygems, fixes #17
+
 ## 1.3.2
 
 - Explicitly load rubygems/util, fixes regression in 1.3.1 (autoload issue)

@@ -1,8 +1,12 @@
-require 'rubygems/util'
+require 'zlib'
 require_relative 'constants'
 
 module Unicode
   module DisplayWidth
-    INDEX = Marshal.load(Gem::Util.gunzip(File.binread(INDEX_FILENAME)))
+    File.open(INDEX_FILENAME, "rb") do |file|
+      serialized_data = Zlib::GzipReader.new(file).read
+      serialized_data.force_encoding Encoding::BINARY
+      INDEX = Marshal.load(serialized_data)
+    end
   end
 end
