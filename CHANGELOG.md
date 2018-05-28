@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Next
+## 1.3.3
 
 - Replace Gem::Util.gunzip with direct zlib implementation
   This removes the dependency on rubygems, fixes #17
