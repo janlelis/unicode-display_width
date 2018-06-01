@@ -2,7 +2,7 @@
 
 Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. Other than [wcwidth()](https://github.com/janlelis/wcswidth-ruby), which fulfills a similar purpose, it does not rely on the OS vendor to provide an up-to-date method for measuring string width.
 
-Unicode version: **10.0.0**
+Unicode version: **11.0.0**
 
 Supported Rubies: **2.5**, **2.4**, **2.3**
 
@@ -118,7 +118,7 @@ See [unicode-x](https://github.com/janlelis/unicode-x) for more Unicode related 
 
 ## Copyright & Info
 
-- Copyright (c) 2011, 2015-2017 Jan Lelis, http://janlelis.com, released under the MIT
+- Copyright (c) 2011, 2015-2018 Jan Lelis, http://janlelis.com, released under the MIT
 license
 - Early versions based on runpaint's unicode-data interface: Copyright (c) 2009 Run Paint Run Run
 - Unicode data: http://www.unicode.org/copyright.html#Exhibit1
