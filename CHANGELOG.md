@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.1
+
+- Only bundle required lib/* and data/* files in actual rubygem, patch by @tas50
+
 ## 1.4.0
 
 - Unicode 11
