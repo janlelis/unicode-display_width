@@ -10,7 +10,7 @@ Old Rubies that might still work: **2.2**, **2.1**, **2.0**, **1.9**
 
 ## Introduction to Character Widths
 
-Guesing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](http://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category), and hand-picked adjustments.
+Guessing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](http://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category), and hand-picked adjustments.
 
 ### How this Library Handles Widths
 
@@ -53,7 +53,7 @@ Unicode::DisplayWidth.of("一") # => 2
 
 ### Ambiguous Characters
 
-The second parameter defines the value returned by characterrs defined as ambiguous:
+The second parameter defines the value returned by characters defined as ambiguous:
 
 ```ruby
 Unicode::DisplayWidth.of("·", 1) # => 1
