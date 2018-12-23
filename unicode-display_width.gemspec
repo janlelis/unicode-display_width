@@ -15,4 +15,10 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rake', '~> 10.4'
+
+  if s.respond_to?(:metadata)
+    s.metadata['changelog_uri'] = "https://github.com/janlelis/unicode-display_width/blob/master/CHANGELOG.md"
+    s.metadata['source_code_uri'] = "https://github.com/janlelis/unicode-display_width"
+    s.metadata['bug_tracker_uri'] = "https://github.com/janlelis/unicode-display_width/issues"
+  end
 end
