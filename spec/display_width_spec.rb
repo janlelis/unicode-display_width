@@ -1,4 +1,6 @@
-require_relative '../lib/unicode/display_width'
+# frozen_string_literal: true
+
+require_relative '../lib/unicode/display_width/string_ext'
 
 describe 'Unicode::DisplayWidth.of' do
   describe '[east asian width]' do

@@ -43,9 +43,3 @@ module Unicode
   end
 end
 
-# Allows you to opt-out of the default string extension. Will eventually be removed,
-# so you must opt-in for the core extension by requiring 'display_width/string_ext'
-unless defined?(Unicode::DisplayWidth::NO_STRING_EXT) && Unicode::DisplayWidth::NO_STRING_EXT
-  require_relative 'display_width/string_ext'
-end
-

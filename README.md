@@ -8,6 +8,20 @@ Supported Rubies: **2.7**, **2.6**, **2.5**, **2.4**
 
 Old Rubies that might still work: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
+## Version 2.0 Breaking Change
+
+If you are relying on the `String#display_width` string extension to be automatically loaded, please load the gem in this way:
+
+```ruby
+require "unicode-display_width/string_ext"
+```
+
+Alternatively, you could also change your `Gemfile` line to:
+
+```ruby
+gem "unicode-display_width", require: "unicode-display_width/string_ext"
+```
+
 ## Introduction to Character Widths
 
 Guessing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](https://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category), and hand-picked adjustments.
@@ -86,16 +100,12 @@ Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: true # => 2
 
 ### Usage with String Extension
 
-Activated by default. Will be deactivated in version 2.0:
-
 ```ruby
 require 'unicode/display_width/string_ext'
 
 "⚀".display_width #=> 1
 '一'.display_width #=> 2
 ```
-
-You can actively opt-out from the string extension with: `require 'unicode/display_width/no_string_ext'`
 
 ### Usage From the CLI
 

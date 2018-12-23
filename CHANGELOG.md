@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.0.0.pre.1
+
+- Remove auto-loading of string extension:
+  - You can: `require "unicode-display_width/string_ext"` to continue auto-loading the string extension
+  - The manual opt-out `require "unicode-display_width/no_string_ext"` is not needed anymore and will
+    issue a warning
+- Remove (already deprecated) String#display_size and String#display_width aliases
+- (Might be a problem for very old Rubies): Enable frozen string literals
+
 ## 1.6.0
 
 - Unicode 12.1
