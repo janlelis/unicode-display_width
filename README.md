@@ -1,6 +1,6 @@
-## Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](http://badge.fury.io/rb/unicode-display_width) [<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />](https://travis-ci.org/janlelis/unicode-display_width)
+## Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />](https://travis-ci.org/janlelis/unicode-display_width)
 
-Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](http://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. Other than [wcwidth()](https://github.com/janlelis/wcswidth-ruby), which fulfills a similar purpose, it does not rely on the OS vendor to provide an up-to-date method for measuring string width.
+Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. Other than [wcwidth()](https://github.com/janlelis/wcswidth-ruby), which fulfills a similar purpose, it does not rely on the OS vendor to provide an up-to-date method for measuring string width.
 
 Unicode version: **11.0.0**
 
@@ -10,7 +10,7 @@ Old Rubies that might still work: **2.2**, **2.1**, **2.0**, **1.9**
 
 ## Introduction to Character Widths
 
-Guessing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](http://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category), and hand-picked adjustments.
+Guessing the correct space a character will consume on terminals is not easy. There is no single standard. Most implementations combine data from [East Asian Width](https://www.unicode.org/reports/tr11/), some [General Categories](https://en.wikipedia.org/wiki/Unicode_character_property#General_Category), and hand-picked adjustments.
 
 ### How this Library Handles Widths
 
@@ -111,14 +111,14 @@ Replace "一" with the actual string to measure
 
 - Python: https://github.com/jquast/wcwidth
 - JavaScript: https://github.com/mycoboco/wcwidth.js
-- C: http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
+- C: https://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
 - C for Julia: https://github.com/JuliaLang/utf8proc/issues/2
 
 See [unicode-x](https://github.com/janlelis/unicode-x) for more Unicode related micro libraries.
 
 ## Copyright & Info
 
-- Copyright (c) 2011, 2015-2018 Jan Lelis, http://janlelis.com, released under the MIT
+- Copyright (c) 2011, 2015-2018 Jan Lelis, https://janlelis.com, released under the MIT
 license
 - Early versions based on runpaint's unicode-data interface: Copyright (c) 2009 Run Paint Run Run
-- Unicode data: http://www.unicode.org/copyright.html#Exhibit1
+- Unicode data: https://www.unicode.org/copyright.html#Exhibit1
