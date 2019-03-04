@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Next
+## 1.5.0
 
 - Unicode 12
 
