@@ -12,10 +12,11 @@ rvm:
 - 2.0
 - 1.9.3
 - jruby-head
-- jruby-9.2.5.0
+- jruby-9.2.6.0
 
 matrix:
   allow_failures:
+    - rvm: 2.3.8
     - rvm: 2.2
     - rvm: 2.1
     - rvm: 2.0

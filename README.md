@@ -4,9 +4,9 @@ Determines the monospace display width of a string in Ruby. Implementation based
 
 Unicode version: **11.0.0**
 
-Supported Rubies: **2.6**, **2.5**, **2.4**, **2.3**
+Supported Rubies: **2.6**, **2.5**, **2.4**
 
-Old Rubies that might still work: **2.2**, **2.1**, **2.0**, **1.9**
+Old Rubies that might still work: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
 ## Introduction to Character Widths
 
