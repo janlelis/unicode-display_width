@@ -2,7 +2,7 @@ language: ruby
 sudo: false
 
 rvm:
-- ruby-head
+- 2.7
 - 2.6
 - 2.5
 - 2.4
@@ -11,8 +11,9 @@ rvm:
 - 2.1
 - 2.0
 - 1.9.3
+- ruby-head
 - jruby-head
-- jruby-9.2.7.0
+- jruby-9.2.9.0
 
 matrix:
   allow_failures:
