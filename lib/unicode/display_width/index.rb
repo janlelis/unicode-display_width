@@ -1,5 +1,7 @@
-require 'zlib'
-require_relative 'constants'
+# frozen_string_literal: true
+
+require "zlib"
+require_relative "constants"
 
 module Unicode
   module DisplayWidth

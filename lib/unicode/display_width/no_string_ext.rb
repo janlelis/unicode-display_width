@@ -5,4 +5,4 @@ warn "You are loading 'unicode-display_width/no_string_ext'\n" \
      "You can just require 'unicode-display_width' now and no\n"\
      "string extension will be loaded"
 
-require_relative '../display_width'
+require_relative "../display_width"
