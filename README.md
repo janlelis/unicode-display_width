@@ -1,25 +1,30 @@
 ## Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://travis-ci.org/janlelis/unicode-display_width.png" />](https://travis-ci.org/janlelis/unicode-display_width)
 
-Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. Other than [wcwidth()](https://github.com/janlelis/wcswidth-ruby), which fulfills a similar purpose, it does not rely on the OS vendor to provide an up-to-date method for measuring string width.
+Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width.
 
 Unicode version: **12.1.0** (May 2019)
 
 Supported Rubies: **2.7**, **2.6**, **2.5**, **2.4**
 
-Old Rubies that might still work: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
+Old Rubies which might still work: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
-## Version 2.0 Breaking Change
+## Version 2.0.pre.1 -- Breaking Changes
 
-If you are relying on the `String#display_width` string extension to be automatically loaded, please load the gem in this way:
+Some features of this library have been marked deprecated for a long time and will be removed with Version 2.0 (which will be released December 2020):
+
+- Aliases of display_width (…\_size, …\_length) have been removed
+- Auto-loading of string core extension has been removed:
+
+If you are relying on the `String#display_width` string extension to be automatically loaded (old behavior), please load it explicitly now:
 
 ```ruby
 require "unicode-display_width/string_ext"
 ```
 
-Alternatively, you could also change your `Gemfile` line to:
+You could also change your `Gemfile` line to achieve this:
 
 ```ruby
-gem "unicode-display_width", require: "unicode-display_width/string_ext"
+gem "unicode-display_width", require: "unicode/display_width/string_ext"
 ```
 
 ## Introduction to Character Widths

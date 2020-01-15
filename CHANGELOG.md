@@ -1,9 +1,11 @@
 # CHANGELOG
 
-## 2.0.0.pre.1
+## 2.0.0.pre.1 (unreleased)
 
-- Remove auto-loading of string extension:
-  - You can: `require "unicode-display_width/string_ext"` to continue auto-loading the string extension
+(will be published as non-pre version on rubygems.org when Ruby 3.0 is released)
+
+- Remove auto-loading of string extension
+  - You can: `require "unicode-display_width/string_ext"` to continue to use the string extension
   - The manual opt-out `require "unicode-display_width/no_string_ext"` is not needed anymore and will
     issue a warning
 - Remove (already deprecated) String#display_size and String#display_width aliases
