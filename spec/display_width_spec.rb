@@ -156,3 +156,21 @@ describe 'Unicode::DisplayWidth.of' do
     end
   end
 end
+
+describe "Config object based API" do
+  let :display_width do
+    Unicode::DisplayWidth.new(
+      # ambiguous: 1,
+      overwrite: { "A".ord => 100 },
+      emoji: true
+    )
+  end
+
+  it "will respect given overwrite option" do
+    expect( display_width.of "A" ).to eq 100
+  end
+
+  it "will respect given emoji option" do
+    expect( display_width.of "🤾🏽‍♀️" ).to eq 2
+  end
+end

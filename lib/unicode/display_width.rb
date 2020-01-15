@@ -4,7 +4,7 @@ require_relative "display_width/constants"
 require_relative "display_width/index"
 
 module Unicode
-  module DisplayWidth
+  class DisplayWidth
     DEPTHS = [0x10000, 0x1000, 0x100, 0x10].freeze
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
@@ -41,6 +41,24 @@ module Unicode
       }
 
       extra_width
+    end
+
+    def initialize(ambiguous: 1, overwrite: {}, emoji: false)
+      @ambiguous = ambiguous
+      @overwrite = overwrite
+      @emoji     = emoji
+    end
+
+    def get_config(**kwargs)
+      [
+        kwargs[:ambiguous] || @ambiguous,
+        kwargs[:overwrite] || @overwrite,
+        { emoji: kwargs[:emoji] || @emoji },
+      ]
+    end
+
+    def of(string, **kwargs)
+      self.class.of(string, *get_config(**kwargs))
     end
   end
 end

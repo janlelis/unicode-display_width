@@ -63,6 +63,8 @@ Or add to your Gemfile:
 
 ## Usage
 
+### Classic API
+
 ```ruby
 require 'unicode/display_width'
 
@@ -70,7 +72,7 @@ Unicode::DisplayWidth.of("⚀") # => 1
 Unicode::DisplayWidth.of("一") # => 2
 ```
 
-### Ambiguous Characters
+#### Ambiguous Characters
 
 The second parameter defines the value returned by characters defined as ambiguous:
 
@@ -79,15 +81,15 @@ Unicode::DisplayWidth.of("·", 1) # => 1
 Unicode::DisplayWidth.of("·", 2) # => 2
 ```
 
-### Custom Overwrites
+#### Custom Overwrites
 
 You can overwrite how to handle specific code points by passing a hash (or even a proc) as third parameter:
 
 ```ruby
-Unicode::DisplayWidth.of("a\tb", 1, 0x09 => 10)) # => 12
+Unicode::DisplayWidth.of("a\tb", 1, "\t".ord => 10)) # => tab counted as 10, so result is 12
 ```
 
-### Emoji Support
+#### Emoji Support
 
 Experimental emoji support is included. It will adjust the string's size for modifier and zero-width joiner sequences. You will need to add the [unicode-emoji](https://github.com/janlelis/unicode-emoji) gem to your Gemfile:
 
@@ -103,13 +105,31 @@ Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 5
 Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: true # => 2
 ```
 
-### Usage with String Extension
+#### Usage with String Extension
 
 ```ruby
 require 'unicode/display_width/string_ext'
 
-"⚀".display_width #=> 1
-'一'.display_width #=> 2
+"⚀".display_width # => 1
+'一'.display_width # => 2
+```
+
+### Modern API: Keyword-arguments Based Config Object
+
+Version 2.0 introduces a keyword-argument based API, which allows you to save your configuration for later-reuse. This requires an extra line of code, but has the advantage that you'll need to define your string-width options only once:
+
+```ruby
+require 'unicode/display_width'
+
+display_width = Unicode::DisplayWidth.new(
+  # ambiguous: 1,
+  overwrite: { "A".ord => 100 },
+  emoji: true
+)
+
+display_width.of "⚀" # => 1
+display_width.of "🤾🏽‍♀️" # => 2
+display_width.of "A" # => 100
 ```
 
 ### Usage From the CLI
