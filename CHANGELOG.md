@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.6.1 (unreleased)
+## 1.6.1
 
 - Fix that ambiguous and overwrite options where ignored for emoji-measuring
 
