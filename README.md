@@ -8,7 +8,7 @@ Supported Rubies: **2.7**, **2.6**, **2.5**, **2.4**
 
 Old Rubies which might still work: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
-## Version 2.0.pre.1 -- Breaking Changes
+## (*unreleased*) Version 2.0.pre.1 -- Breaking Changes
 
 Some features of this library have been marked deprecated for a long time and will be removed with Version 2.0 (which will be released December 2020):
 
