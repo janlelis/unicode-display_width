@@ -149,6 +149,10 @@ describe 'Unicode::DisplayWidth.of' do
       expect( "🤾🏽‍♀️".display_width(1, {}, emoji: true) ).to eq 2
     end
 
+    it 'respects different ambiguous values' do
+      expect( "🤾🏽‍♀️".display_width(2, {}, emoji: true) ).to eq 2
+    end
+
     it 'works with flags' do
       expect( "🇵🇹".display_width(1, {}, emoji: true) ).to eq 2
     end

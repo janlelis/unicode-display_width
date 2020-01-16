@@ -19,7 +19,7 @@ module Unicode
         total_width + (overwrite[codepoint] || width || 1)
       }
 
-      res -= emoji_extra_width_of(string) if options[:emoji]
+      res -= emoji_extra_width_of(string, ambiguous, overwrite) if options[:emoji]
       res < 0 ? 0 : res
     end
 
