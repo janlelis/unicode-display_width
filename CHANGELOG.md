@@ -16,6 +16,10 @@ Refactorings / Internal Changes:
 - Freeze string literals
 - The Unicode::DisplayWidth now is class, instead of a module, this enables the new config-object API
 
+## 1.6.1
+
+- Fix that ambiguous and overwrite options where ignored for emoji-measuring
+
 ## 1.6.0
 
 - Unicode 12.1
