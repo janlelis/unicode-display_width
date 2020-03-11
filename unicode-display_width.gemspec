@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
   s.required_ruby_version = '>= 1.9.3'
   s.add_development_dependency 'rspec', '~> 3.4'
-  s.add_development_dependency 'rake', '~> 10.4'
+  s.add_development_dependency 'rake', '~> 13.0'
 
   if s.respond_to?(:metadata)
     s.metadata['changelog_uri'] = "https://github.com/janlelis/unicode-display_width/blob/master/CHANGELOG.md"
