@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## 2.0.0.pre.1 (unreleased)
+## 2.0.0.pre2
+
+- Update 2.0 branch to Unicode 13
+
+## 2.0.0.pre1
 
 Will be published as non-pre version on rubygems.org when Ruby 3.0 is released (December 2020)
 
