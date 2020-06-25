@@ -18,7 +18,7 @@ Some features of this library have been marked deprecated for a long time and wi
 If you are relying on the `String#display_width` string extension to be automatically loaded (old behavior), please load it explicitly now:
 
 ```ruby
-require "unicode-display_width/string_ext"
+require "unicode/display_width/string_ext"
 ```
 
 You could also change your `Gemfile` line to achieve this:
