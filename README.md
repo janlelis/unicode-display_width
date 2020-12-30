@@ -4,13 +4,13 @@ Determines the monospace display width of a string in Ruby. Implementation based
 
 Unicode version: **13.0.0** (March 2020)
 
-Supported Rubies: **2.7**, **2.6**, **2.5**
+Supported Rubies:  **3.0**, **2.7**, **2.6**, **2.5**
 
 Old Rubies which might still work: **2.4**, **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
-## Version 2.0.pre1 — Breaking Changes
+## Version 2.0 — Breaking Changes
 
-Some features of this library have been marked deprecated for a long time and will be removed with Version 2.0, which will be released December 2020:
+Some features of this library were marked deprecated for a long time and have been removed with Version 2.0:
 
 - Aliases of display_width (…\_size, …\_length) have been removed
 - Auto-loading of string core extension has been removed:
@@ -91,14 +91,14 @@ Unicode::DisplayWidth.of("a\tb", 1, "\t".ord => 10)) # => tab counted as 10, so 
 
 #### Emoji Support
 
-Experimental emoji support is included. It will adjust the string's size for modifier and zero-width joiner sequences. You will need to add the [unicode-emoji](https://github.com/janlelis/unicode-emoji) gem to your Gemfile:
+Emoji width support is included, but in must be activated manually. It will adjust the string's size for modifier and zero-width joiner sequences. You also need to add the [unicode-emoji](https://github.com/janlelis/unicode-emoji) gem to your Gemfile:
 
 ```ruby
 gem 'unicode-display_width'
 gem 'unicode-emoji'
 ```
 
-You can then activate the emoji string width adjustments by passing `emoji: true` as fourth parameter:
+Enable the emoji string width adjustments by passing `emoji: true` as fourth parameter:
 
 ```ruby
 Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 5
@@ -124,7 +124,7 @@ require 'unicode/display_width'
 display_width = Unicode::DisplayWidth.new(
   # ambiguous: 1,
   overwrite: { "A".ord => 100 },
-  emoji: true
+  emoji: true,
 )
 
 display_width.of "⚀" # => 1

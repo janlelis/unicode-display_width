@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.0.0
+
+- Release 2.0.0
+- Supports Ruby 3.0
+
 ## 2.0.0.pre2
 
 - Update 2.0 branch to Unicode 13
