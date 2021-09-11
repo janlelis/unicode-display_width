@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.1.0 (unreleased)
+
+- Unicode 14.0
+
 ## 2.0.0
 
 - Release 2.0.0
@@ -24,6 +28,10 @@ Refactorings / Internal Changes:
 
 - Freeze string literals
 - The Unicode::DisplayWidth now is class, instead of a module, this enables the new config-object API
+
+## 1.8.0 (unreleased)
+
+- Unicode 14.0 (last release of 1.x)
 
 ## 1.7.0
 
