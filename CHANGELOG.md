@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.8.0 (unreleased)
+## 1.8.0
  
 - Unicode 14.0 (last release of 1.x)
  
