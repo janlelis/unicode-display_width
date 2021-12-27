@@ -20,5 +20,6 @@ Gem::Specification.new do |s|
     s.metadata['changelog_uri'] = "https://github.com/janlelis/unicode-display_width/blob/master/CHANGELOG.md"
     s.metadata['source_code_uri'] = "https://github.com/janlelis/unicode-display_width"
     s.metadata['bug_tracker_uri'] = "https://github.com/janlelis/unicode-display_width/issues"
+    s.metadata['rubygems_mfa_required'] = "true"
   end
 end
