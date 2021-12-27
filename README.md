@@ -4,7 +4,7 @@ Determines the monospace display width of a string in Ruby. Implementation based
 
 Unicode version: **14.0.0** (September 2021)
 
-Supported Rubies: **3.0**, **2.7**
+Supported Rubies: **3.1**, **3.0**, **2.7**
 
 Old Rubies which might still work: **2.6**, **2.5**, **2.4**, **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
