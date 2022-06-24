@@ -56,6 +56,7 @@ describe 'Unicode::DisplayWidth.of' do
 
     it 'returns 0 for HANGUL JUNGSEONG chars' do
       expect( 'ᅠ'.display_width ).to eq 0
+      expect( 'ힰ'.display_width ).to eq 0
     end
 
     it 'returns 0 for U+2060..U+206F' do
