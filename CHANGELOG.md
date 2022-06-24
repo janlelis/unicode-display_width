@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## 2.2.0 (unreleased)
+## 2.2.0
 
-- Add *Hangul Jamo Extended-B* block to zero-width chars, thanks @ninjalj
+- Add *Hangul Jamo Extended-B* block to zero-width chars, thanks @ninjalj #22
 
 ## 2.1.0
 
