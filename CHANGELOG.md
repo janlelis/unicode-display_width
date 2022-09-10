@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.3.0 (unreleased)
+
+- Unicode 15.0
+
 ## 2.2.0
 
 - Add *Hangul Jamo Extended-B* block to zero-width chars, thanks @ninjalj #22
