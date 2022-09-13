@@ -148,6 +148,7 @@ Replace "一" with the actual string to measure
 - JavaScript: https://github.com/mycoboco/wcwidth.js
 - C: https://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
 - C for Julia: https://github.com/JuliaLang/utf8proc/issues/2
+- Golang: https://github.com/rivo/uniseg
 
 See [unicode-x](https://github.com/janlelis/unicode-x) for more Unicode related micro libraries.
 
