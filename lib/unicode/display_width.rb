@@ -8,6 +8,9 @@ module Unicode
     DEPTHS = [0x10000, 0x1000, 0x100, 0x10].freeze
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
+      # Optimization for ASCII-only strings without control symbols.
+      return string.size if overwrite.empty? && string.ascii_only? && !string.match?(/[[:cntrl:]]/)
+
       res = string.codepoints.inject(0){ |total_width, codepoint|
         index_or_value = INDEX
         codepoint_depth_offset = codepoint
