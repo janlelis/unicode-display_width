@@ -3,7 +3,9 @@
 ## 2.4.1 (unreleased)
 
 - Improve general performance!
-- Further improve performance for ASCII-only strings
+- Further improve performance for ASCII strings
+
+*You should really upgrade - it's much faster now!*
 
 ## 2.4.0
 - Improve performance for ASCII-only strings, by @fatkodima

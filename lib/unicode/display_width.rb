@@ -22,6 +22,7 @@ module Unicode
       # Sum of all chars widths
       res = string.codepoints.sum{ |codepoint|
         next overwrite[codepoint] if overwrite[codepoint]
+        next 1 if codepoint > 15 && codepoint < 161 # very common
 
         width = INDEX
         depth = INITIAL_DEPTH
