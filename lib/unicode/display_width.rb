@@ -9,9 +9,14 @@ module Unicode
     ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
-      # Optimization for ASCII-only strings without control symbols.
-      if overwrite.empty? && string.ascii_only? && !string.match?(ASCII_NON_ZERO_REGEX)
-        return string.size
+      # Optimization for ASCII-only strings without certain control symbols
+      if overwrite.empty? && string.ascii_only?
+        if string.match?(ASCII_NON_ZERO_REGEX)
+          res = string.gsub(ASCII_NON_ZERO_REGEX, "").size - string.count("\b")
+          return res < 0 ? 0 : res
+        else
+          return string.size
+        end
       end
 
       # Add width of each char
