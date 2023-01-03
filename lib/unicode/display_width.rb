@@ -6,10 +6,13 @@ require_relative "display_width/index"
 module Unicode
   class DisplayWidth
     DEPTHS = [0x10000, 0x1000, 0x100, 0x10].freeze
+    ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
       # Optimization for ASCII-only strings without control symbols.
-      return string.size if overwrite.empty? && string.ascii_only? && !string.match?(/[[:cntrl:]]/)
+      if overwrite.empty? && string.ascii_only? && !string.match?(ASCII_NON_ZERO_REGEX)
+        return string.size
+      end
 
       # Add width of each char
       res = string.codepoints.inject(0){ |total_width, codepoint|
