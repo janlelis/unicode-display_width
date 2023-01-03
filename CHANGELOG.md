@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.4.0 (unreleased)
+
+- Improve performance for ASCII-only strings, by @fatkodima
+- Require Ruby 2.4
+
 ## 2.3.0
 
 - Unicode 15.0

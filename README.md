@@ -1,12 +1,14 @@
 ## Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://github.com/janlelis/unicode-display_width/workflows/Test/badge.svg" />](https://github.com/janlelis/unicode-display_width/actions?query=workflow%3ATest)
 
-Determines the monospace display width of a string in Ruby. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width.
+Determines the monospace display width of a string in Ruby. Useful for all kinds of terminal-based applications. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width.
 
 Unicode version: **15.0.0** (September 2022)
 
 Supported Rubies: **3.1**, **3.0**, **2.7**
 
-Old Rubies which might still work: **2.6**, **2.5**, **2.4**, **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
+Old Rubies which might still work: **2.6**, **2.5**, **2.4**
+
+Even older Rubies, use version 2.3.0 of this gem: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
 ## Version 2.0 — Breaking Changes
 
@@ -39,7 +41,7 @@ Width  | Characters                   | Comment
 -------|------------------------------|--------------------------------------------------
 X      | (user defined)               | Overwrites any other values
 -1     | `"\b"`                       | Backspace (total width never below 0)
-0      | `"\0"`, `"\x05"`, `"\a"`, `"\n"`, `"\v"`, `"\f"`, `"\r"`, `"\x0E"`, `"\x0F"` | [C0 control codes](https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_.28ASCII_and_derivatives.29) that do not change horizontal width
+0      | `"\0"`, `"\x05"`, `"\a"`, `"\n"`, `"\v"`, `"\f"`, `"\r"`, `"\x0E"`, `"\x0F"` | [C0 control codes](https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_.28ASCII_and_derivatives.29) which do not change horizontal width
 1      | `"\u{00AD}"`                 | SOFT HYPHEN
 2      | `"\u{2E3A}"`                 | TWO-EM DASH
 3      | `"\u{2E3B}"`                 | THREE-EM DASH

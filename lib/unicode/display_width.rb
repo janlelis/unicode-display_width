@@ -11,6 +11,7 @@ module Unicode
       # Optimization for ASCII-only strings without control symbols.
       return string.size if overwrite.empty? && string.ascii_only? && !string.match?(/[[:cntrl:]]/)
 
+      # Add width of each char
       res = string.codepoints.inject(0){ |total_width, codepoint|
         index_or_value = INDEX
         codepoint_depth_offset = codepoint
@@ -24,7 +25,10 @@ module Unicode
         total_width + (overwrite[codepoint] || width || 1)
       }
 
+      # Substract emoji error
       res -= emoji_extra_width_of(string, ambiguous, overwrite) if options[:emoji]
+
+      # Return result + prevent negative lengths
       res < 0 ? 0 : res
     end
 
