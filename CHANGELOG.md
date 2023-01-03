@@ -1,7 +1,6 @@
 # CHANGELOG
 
-## 2.4.0 (unreleased)
-
+## 2.4.0
 - Improve performance for ASCII-only strings, by @fatkodima
 - Require Ruby 2.4
 

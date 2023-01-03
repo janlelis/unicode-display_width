@@ -8,7 +8,7 @@ Supported Rubies: **3.1**, **3.0**, **2.7**
 
 Old Rubies which might still work: **2.6**, **2.5**, **2.4**
 
-Even older Rubies, use version 2.3.0 of this gem: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
+For even older Rubies, use version 2.3.0 of this gem: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
 ## Version 2.0 — Breaking Changes
 
