@@ -118,7 +118,28 @@ describe 'Unicode::DisplayWidth.of' do
     end
 
     it 'returns 1 for other C0 characters' do
+      expect( "\x01".display_width ).to eq 1
+      expect( "\x02".display_width ).to eq 1
+      expect( "\x03".display_width ).to eq 1
+      expect( "\x04".display_width ).to eq 1
+      expect( "\x06".display_width ).to eq 1
       expect( "\x10".display_width ).to eq 1
+      expect( "\x11".display_width ).to eq 1
+      expect( "\x12".display_width ).to eq 1
+      expect( "\x13".display_width ).to eq 1
+      expect( "\x14".display_width ).to eq 1
+      expect( "\x15".display_width ).to eq 1
+      expect( "\x16".display_width ).to eq 1
+      expect( "\x17".display_width ).to eq 1
+      expect( "\x18".display_width ).to eq 1
+      expect( "\x19".display_width ).to eq 1
+      expect( "\x1a".display_width ).to eq 1
+      expect( "\x1b".display_width ).to eq 1
+      expect( "\x1c".display_width ).to eq 1
+      expect( "\x1d".display_width ).to eq 1
+      expect( "\x1e".display_width ).to eq 1
+      expect( "\x1f".display_width ).to eq 1
+      expect( "\x7f".display_width ).to eq 1
     end
 
     it 'returns 1 for SOFT HYPHEN' do
