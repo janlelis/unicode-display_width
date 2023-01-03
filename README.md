@@ -91,6 +91,9 @@ You can overwrite how to handle specific code points by passing a hash (or even 
 Unicode::DisplayWidth.of("a\tb", 1, "\t".ord => 10)) # => tab counted as 10, so result is 12
 ```
 
+Please note that using overwrites disables some perfomance optimizations of this gem.
+
+
 #### Emoji Support
 
 Emoji width support is included, but in must be activated manually. It will adjust the string's size for modifier and zero-width joiner sequences. You also need to add the [unicode-emoji](https://github.com/janlelis/unicode-emoji) gem to your Gemfile:

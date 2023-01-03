@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## Next (unreleased)
+## 2.4.1 (unreleased)
 
+- Improve general performance!
 - Further improve performance for ASCII-only strings
 
 ## 2.4.0

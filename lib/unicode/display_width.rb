@@ -5,7 +5,7 @@ require_relative "display_width/index"
 
 module Unicode
   class DisplayWidth
-    DEPTHS = [0x10000, 0x1000, 0x100, 0x10].freeze
+    INITIAL_DEPTH = 0x10000
     ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
@@ -19,18 +19,18 @@ module Unicode
         end
       end
 
-      # Add width of each char
-      res = string.codepoints.inject(0){ |total_width, codepoint|
-        index_or_value = INDEX
-        codepoint_depth_offset = codepoint
-        DEPTHS.each{ |depth|
-          index_or_value         = index_or_value[codepoint_depth_offset / depth]
-          codepoint_depth_offset = codepoint_depth_offset % depth
-          break unless index_or_value.is_a? Array
-        }
-        width = index_or_value.is_a?(Array) ? index_or_value[codepoint_depth_offset] : index_or_value
+      # Sum of all chars widths
+      res = string.codepoints.sum{ |codepoint|
+        next overwrite[codepoint] if overwrite[codepoint]
+
+        width = INDEX
+        depth = INITIAL_DEPTH
+        while (width = width[codepoint / depth]).is_a? Array
+          codepoint %= depth
+          depth /= 16
+        end
         width = ambiguous if width == :A
-        total_width + (overwrite[codepoint] || width || 1)
+        width || 1
       }
 
       # Substract emoji error
