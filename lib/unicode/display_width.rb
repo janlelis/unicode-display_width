@@ -31,7 +31,7 @@ module Unicode
         else
           width = INDEX
           depth = INITIAL_DEPTH
-          while (width = width[codepoint / depth]).is_a? Array
+          while (width = width[codepoint / depth]).instance_of? Array
             codepoint %= depth
             depth /= 16
           end
