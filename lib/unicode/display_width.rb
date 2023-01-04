@@ -37,8 +37,7 @@ module Unicode
           end
         end
 
-        width = ambiguous if width == :A
-        width || 1
+        width == :A ? ambiguous : (width || 1)
       }
 
       # Substract emoji error
