@@ -10,9 +10,9 @@ Old Rubies which might still work: **2.6**, **2.5**, **2.4**
 
 For even older Rubies, use version 2.3.0 of this gem: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
 
-## Version 2.4.1 — Performance Updates
+## Version 2.4.2 — Performance Updates
 
-**If you use this gem, you should really upgrade to 2.4.1. It's often 100x faster, sometimes even 1000x and more!**
+**If you use this gem, you should really upgrade to 2.4.2. It's often 100x faster, sometimes even 1000x and more!**
 
 This is possible because the gem now detects if you use very basic (and common) characters, like ASCII characters. Furthermore, the charachter width lookup code has been optimized, so even when full-width characters are involved, the gem is much faster now.
 
