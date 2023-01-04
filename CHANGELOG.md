@@ -2,7 +2,10 @@
 
 ## 2.4.2 (unreleased)
 
+More performance improvements:
+
 - Optimize lookup of first 4096 codepoints
+- Avoid overwrite lookup if no overwrites are set
 
 ## 2.4.1
 
