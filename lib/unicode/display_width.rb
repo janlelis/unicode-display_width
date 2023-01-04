@@ -7,6 +7,7 @@ module Unicode
   class DisplayWidth
     INITIAL_DEPTH = 0x10000
     ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
+    FIRST_4096 = decompress_index(INDEX[0][0], 1)
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
       # Optimization for ASCII-only strings without certain control symbols
@@ -22,14 +23,20 @@ module Unicode
       # Sum of all chars widths
       res = string.codepoints.sum{ |codepoint|
         next overwrite[codepoint] if overwrite[codepoint]
-        next 1 if codepoint > 15 && codepoint < 161 # very common
 
-        width = INDEX
-        depth = INITIAL_DEPTH
-        while (width = width[codepoint / depth]).is_a? Array
-          codepoint %= depth
-          depth /= 16
+        if codepoint > 15 && codepoint < 161 # very common
+          next 1
+        elsif codepoint < 0x1001
+          width = FIRST_4096[codepoint]
+        else
+          width = INDEX
+          depth = INITIAL_DEPTH
+          while (width = width[codepoint / depth]).is_a? Array
+            codepoint %= depth
+            depth /= 16
+          end
         end
+
         width = ambiguous if width == :A
         width || 1
       }

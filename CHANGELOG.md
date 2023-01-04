@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.4.2 (unreleased)
+
+- Optimize lookup of first 4096 codepoints
+
 ## 2.4.1
 
 - Improve general performance!
