@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.5.0 (unreleased)
+
+- Unicode 15.1
+
 ## 2.4.2
 
 More performance improvements:
