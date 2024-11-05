@@ -40,8 +40,26 @@ More performance improvements:
 
 ## 2.0.0
 
-- Release 2.0.0
-- Supports Ruby 3.0
+Add Support for Ruby 3.0
+
+### Breaking Changes
+
+Some features of this library were marked deprecated for a long time and have been removed with Version 2.0:
+
+- Aliases of display\_width (…\_size, …\_length) have been removed
+- Auto-loading of string core extension has been removed:
+
+If you are relying on the `String#display_width` string extension to be automatically loaded (old behavior), please load it explicitly now:
+
+```ruby
+require "unicode/display_width/string_ext"
+```
+
+You could also change your `Gemfile` line to achieve this:
+
+```ruby
+gem "unicode-display_width", require: "unicode/display_width/string_ext"
+```
 
 ## 2.0.0.pre2
 

@@ -4,36 +4,11 @@ Determines the monospace display width of a string in Ruby. Useful for all kinds
 
 Unicode version: **16.0.0** (September 2024)
 
-Supported Rubies: **3.3**, **3.2**, **3.1**, **3.0**
-
-Old Rubies which might still work: **2.7**, **2.6**, **2.5**, **2.4**, **2.3**
-
-For even older Rubies, use version 2.3.0 of this gem: **2.3**, **2.2**, **2.1**, **2.0**, **1.9**
-
 ## Version 2.4.2 — Performance Updates
 
 **If you use this gem, you should really upgrade to 2.4.2 or newer. It's often 100x faster, sometimes even 1000x and more!**
 
 This is possible because the gem now detects if you use very basic (and common) characters, like ASCII characters. Furthermore, the charachter width lookup code has been optimized, so even when full-width characters are involved, the gem is much faster now.
-
-## Version 2.0 — Breaking Changes
-
-Some features of this library were marked deprecated for a long time and have been removed with Version 2.0:
-
-- Aliases of display_width (…\_size, …\_length) have been removed
-- Auto-loading of string core extension has been removed:
-
-If you are relying on the `String#display_width` string extension to be automatically loaded (old behavior), please load it explicitly now:
-
-```ruby
-require "unicode/display_width/string_ext"
-```
-
-You could also change your `Gemfile` line to achieve this:
-
-```ruby
-gem "unicode-display_width", require: "unicode/display_width/string_ext"
-```
 
 ## Introduction to Character Widths
 
