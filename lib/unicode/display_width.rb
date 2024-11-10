@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "unicode/emoji"
+
 require_relative "display_width/constants"
 require_relative "display_width/index"
 
@@ -8,28 +10,61 @@ module Unicode
     INITIAL_DEPTH = 0x10000
     ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
     FIRST_4096 = decompress_index(INDEX[0][0], 1)
+    DEFAULT_EMOJI_OPTIONS = {
+      sequences: :rgi_fqe,
+      wide_text_presentation: false,
+    }
+    EMOJI_SEQUENCES_REGEX_MAPPING = {
+      rgi_fqe: :REGEX,
+      rgi_mqe: :REGEX_INCLUDE_MQE,
+      rgi_uqe: :REGEX_INCLUDE_MQE_UQE,
+      all: :REGEX_WELL_FORMED,
+    }
+    EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
-      if overwrite.empty?
-        # Optimization for ASCII-only strings without certain control symbols
-        if string.ascii_only?
-          if string.match?(ASCII_NON_ZERO_REGEX)
-            res = string.gsub(ASCII_NON_ZERO_REGEX, "").size - string.count("\b")
-            res < 0 ? 0 : res
-          else
-            string.size
-          end
-        else
-          width_no_overwrite(string, ambiguous, options)
+      if !overwrite.empty?
+        return width_frame(string, options) do |string|
+          width_all_features(string, ambiguous, overwrite)
         end
-      else
-        width_all_features(string, ambiguous, overwrite, options)
       end
+
+      if !string.ascii_only?
+        return width_frame(string, options) do |string|
+          width_no_overwrite(string, ambiguous)
+        end
+      end
+
+      # Optimization for ASCII-only strings without certain control symbols
+      if string.match?(ASCII_NON_ZERO_REGEX)
+        res = string.gsub(ASCII_NON_ZERO_REGEX, "").size - string.count("\b")
+        return res < 0 ? 0 : res
+      end
+
+      # Pure ASCII
+      string.size
     end
 
-    def self.width_no_overwrite(string, ambiguous, options = {})
-      # Sum of all chars widths
-      res = string.codepoints.sum{ |codepoint|
+    def self.width_frame(string, options)
+      # Retrieve Emoji width
+      if options[:emoji] == false
+        res = 0
+      else
+        emoji_options = ( options[:emoji] == true || !options ) ?
+          DEFAULT_EMOJI_OPTIONS :
+          options[:emoji]
+        res, string = emoji_width(string, **emoji_options)
+      end
+
+      # Get general width
+      res += yield(string)
+
+      # Return result + prevent negative lengths
+      res < 0 ? 0 : res
+    end
+
+    def self.width_no_overwrite(string, ambiguous, _ = {})
+      string.codepoints.sum{ |codepoint|
         if codepoint > 15 && codepoint < 161 # very common
           next 1
         elsif codepoint < 0x1001
@@ -45,18 +80,11 @@ module Unicode
 
         width == :A ? ambiguous : (width || 1)
       }
-
-      # Substract emoji error
-      res -= emoji_extra_width_of(string, ambiguous) if options[:emoji]
-
-      # Return result + prevent negative lengths
-      res < 0 ? 0 : res
     end
 
     # Same as .width_no_overwrite - but with applying overwrites for each char
-    def self.width_all_features(string, ambiguous, overwrite, options)
-      # Sum of all chars widths
-      res = string.codepoints.sum{ |codepoint|
+    def self.width_all_features(string, ambiguous, overwrite)
+      string.codepoints.sum{ |codepoint|
         next overwrite[codepoint] if overwrite[codepoint]
 
         if codepoint > 15 && codepoint < 161 # very common
@@ -74,31 +102,54 @@ module Unicode
 
         width == :A ? ambiguous : (width || 1)
       }
-
-      # Substract emoji error
-      res -= emoji_extra_width_of(string, ambiguous, overwrite) if options[:emoji]
-
-      # Return result + prevent negative lengths
-      res < 0 ? 0 : res
     end
 
 
-    def self.emoji_extra_width_of(string, ambiguous = 1, overwrite = {}, _ = {})
-      require "unicode/emoji"
+    def self.emoji_width(string, sequences: :rgi_fqe, wide_text_presentation: false)
+      adjustments = 0
 
-      extra_width = 0
-      modifier_regex = /[#{ Unicode::Emoji::EMOJI_MODIFIERS.pack("U*") }]/
-      zwj_regex = /(?<=#{ [Unicode::Emoji::ZWJ].pack("U") })./
+      if regex = EMOJI_SEQUENCES_REGEX_MAPPING[sequences]
+        emoji_sequence_regex = Unicode::Emoji.const_get(regex)
+      else # sequences == :none
+        emoji_sequence_regex = /$^/
+      end
 
-      string.scan(Unicode::Emoji::REGEX){ |emoji|
-        extra_width += 2 * emoji.scan(modifier_regex).size
+      # For each string possibly an emoji
+      no_emoji_string = string.encode("utf-8").gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
+        # Skip notorious false positives
+        if EMOJI_NOT_POSSIBLE.match?(emoji_candidate)
+          emoji_candidate
 
-        emoji.scan(zwj_regex){ |zwj_succ|
-          extra_width += self.of(zwj_succ, ambiguous, overwrite)
-        }
+        # Check if we have a combined Emoji with width 2
+        elsif emoji_candidate == emoji_candidate[emoji_sequence_regex]
+          adjustments += 2
+          ""
+
+        # We are dealing with a default text presentation emoji or a well-formed sequence not matching the above Emoji set
+        else
+          # Ensure all explicit VS16 sequences have width 2
+          emoji_candidate.gsub!(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
+            if basic_emoji.size == 2 # VS16 present
+              adjustments += 2
+              ""
+            else
+              basic_emoji
+            end
+          }
+
+          # Apply wide_text_presentation option if present
+          if wide_text_presentation
+            emoji_candidate.gsub!(Unicode::Emoji::REGEX_TEXT){ |text_emoji|
+              adjustments += 2
+              ""
+            }
+          end
+
+          emoji_candidate
+        end
       }
 
-      extra_width
+      [adjustments, no_emoji_string]
     end
 
     def initialize(ambiguous: 1, overwrite: {}, emoji: false)

@@ -1,14 +1,18 @@
-## Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://github.com/janlelis/unicode-display_width/workflows/Test/badge.svg" />](https://github.com/janlelis/unicode-display_width/actions?query=workflow%3ATest)
+# Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://github.com/janlelis/unicode-display_width/workflows/Test/badge.svg" />](https://github.com/janlelis/unicode-display_width/actions?query=workflow%3ATest)
 
 Determines the monospace display width of a string in Ruby. Useful for all kinds of terminal-based applications. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width.
 
 Unicode version: **16.0.0** (September 2024)
 
-## Version 2.4.2 — Performance Updates
+## Gem Version 3.0 — Improved Emoji Support
+
+**Emoji support is now enabled by default.** See below for description and configuration possibilities.
+
+## Gem Version 2.4.2 — Performance Updates
 
 **If you use this gem, you should really upgrade to 2.4.2 or newer. It's often 100x faster, sometimes even 1000x and more!**
 
-This is possible because the gem now detects if you use very basic (and common) characters, like ASCII characters. Furthermore, the charachter width lookup code has been optimized, so even when full-width characters are involved, the gem is much faster now.
+This is possible because the gem now detects if you use very basic (and common) characters, like ASCII characters. Furthermore, the charachter width lookup code has been optimized, so even when full-width or ambiguous characters are involved, the gem is much faster now.
 
 ## Introduction to Character Widths
 
@@ -20,7 +24,8 @@ Further at the top means higher precedence. Please expect changes to this algori
 
 Width  | Characters                   | Comment
 -------|------------------------------|--------------------------------------------------
-X      | (user defined)               | Overwrites any other values
+?      | (user defined)               | Overwrites any other values
+?      | Emoji                        | See "How this Library Handles Emoji Width" below
 -1     | `"\b"`                       | Backspace (total width never below 0)
 0      | `"\0"`, `"\x05"`, `"\a"`, `"\n"`, `"\v"`, `"\f"`, `"\r"`, `"\x0E"`, `"\x0F"` | [C0 control codes](https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_.28ASCII_and_derivatives.29) which do not change horizontal width
 1      | `"\u{00AD}"`                 | SOFT HYPHEN
@@ -46,8 +51,6 @@ Or add to your Gemfile:
 
 ## Usage
 
-### Classic API
-
 ```ruby
 require 'unicode/display_width'
 
@@ -55,7 +58,7 @@ Unicode::DisplayWidth.of("⚀") # => 1
 Unicode::DisplayWidth.of("一") # => 2
 ```
 
-#### Ambiguous Characters
+### Ambiguous Characters
 
 The second parameter defines the value returned by characters defined as ambiguous:
 
@@ -64,7 +67,7 @@ Unicode::DisplayWidth.of("·", 1) # => 1
 Unicode::DisplayWidth.of("·", 2) # => 2
 ```
 
-#### Custom Overwrites
+### Custom Overwrites
 
 You can overwrite how to handle specific code points by passing a hash (or even a proc) as third parameter:
 
@@ -75,23 +78,53 @@ Unicode::DisplayWidth.of("a\tb", 1, "\t".ord => 10)) # => tab counted as 10, so 
 Please note that using overwrites disables some perfomance optimizations of this gem.
 
 
-#### Emoji Support
+### Emoji Options
 
-Emoji width support is included, but in must be activated manually. It will adjust the string's size for modifier and zero-width joiner sequences. You also need to add the [unicode-emoji](https://github.com/janlelis/unicode-emoji) gem to your Gemfile:
-
-```ruby
-gem 'unicode-display_width'
-gem 'unicode-emoji'
-```
-
-Enable the emoji string width adjustments by passing `emoji: true` as fourth parameter:
+The RGI Emoji set is automatically detected to adjust the width of the string. This can be disabled by passing `emoji: false` as fourth parameter:
 
 ```ruby
-Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 5
-Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: true # => 2
+Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 2
+Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: false # => 5
 ```
 
-#### Usage with String Extension
+Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation by ~30%.
+
+You can configure Emoji options by passing a Hash like this:
+
+```ruby
+Unicode::DisplayWidth.of "string", 1, {}, emoji: { wide_text_presentation: false, sequences: :rgi_fqe }
+```
+
+#### How this Library Handles Emoji Width
+
+There are many Emoji which get constructed by combining other Emoji in a sequence. This makes measuring the width complicated, since terminals might either display the combined Emoji or the separate parts of the Emoji individually.
+
+**Char Width** = No special handling, uses mechanism from table above
+
+Emoji Type  | Width / Comment | Configuration Options
+------------|-----------------|----------------------
+Basic/Single Emoji character without Variation Selector or with VS15 (Text) | Char Width | Use option `wide_text_presentation: true` to force textual Emoji to always be of width 2
+Basic/Single Emoji character with VS16 (Emoji) | 2 | -
+Emoji Sequence | Recommended Emoji sequences: 2, above rules otherwise | Option `sequences:` explained below
+
+The `sequences:` option can be used to configure which type of Emoji should be considered to have a width of 2. Other sequences are treated as non-combined Emoji, so the widths of all partial Emoji add up (e.g. width of one basic Emoji + one skin tone modifier + another basic Emoji)
+
+The value passed to the `sequences:` option can be one of:
+
+- `:none`: No width adjustments for Emoji sequences: all partial Emoji treated separately
+- `:rgi_fqe` (default): All fully-qualified RGI Emoji sequences are considered to have a width of 2
+- `:rgi_mqe`: All fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2
+- `:rgi_uqe`: All RGI Emoji sequences, regardless of qualification status are considered to have a width of 2
+- `:all`: All possible/well-formed Emoji sequences are considered to have a width of 2
+
+*RGI Emoji:* Emoji Recommended for General Interchange
+
+*Qualfication:* Whether an Emoji sequence has all required VS16 codepoints
+
+See [emoji-test.txt](https://www.unicode.org/Public/emoji/16.0/emoji-test.txt), the [unicode-emoji gem](https://github.com/janlelis/unicode-emoji) and [UTS-51](https://www.unicode.org/reports/tr51/#def_qualified_emoji_character) for more details about qualified and unqualified Emoji sequences.
+
+
+### Usage with String Extension
 
 ```ruby
 require 'unicode/display_width/string_ext'
@@ -110,11 +143,11 @@ require 'unicode/display_width'
 display_width = Unicode::DisplayWidth.new(
   # ambiguous: 1,
   overwrite: { "A".ord => 100 },
-  emoji: true,
+  emoji: { wide_text_presentation: true },
 )
 
 display_width.of "⚀" # => 1
-display_width.of "🤾🏽‍♀️" # => 2
+display_width.of "⏱" # => 2
 display_width.of "A" # => 100
 ```
 

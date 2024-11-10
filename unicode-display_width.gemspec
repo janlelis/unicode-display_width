@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.md", "MIT-LICENSE.txt", "CHANGELOG.md"]
   s.license = 'MIT'
   s.required_ruby_version = '>= 2.4.0'
+  s.add_dependency 'unicode-emoji', '>= 3.8', '< 5.0'
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rake', '~> 13.0'
 
