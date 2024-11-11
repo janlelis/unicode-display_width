@@ -9,7 +9,10 @@ module Unicode
   class DisplayWidth
     INITIAL_DEPTH = 0x10000
     ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
-    FIRST_4096 = decompress_index(INDEX[0][0], 1)
+    FIRST_4096 = {
+      WIDTH_ONE: decompress_index(INDEX[:WIDTH_ONE][0][0], 1),
+      WIDTH_TWO: decompress_index(INDEX[:WIDTH_TWO][0][0], 1),
+    }
     DEFAULT_EMOJI_OPTIONS = {
       sequences: :rgi_fqe,
       wide_text_presentation: false,
@@ -21,17 +24,29 @@ module Unicode
       all: :REGEX_WELL_FORMED,
     }
     EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
+    AMBIGUOUS_MAP = {
+      1 => :WIDTH_ONE,
+      2 => :WIDTH_TWO,
+    }
+    FIRST_AMBIGUOUS = {
+      WIDTH_ONE: 768,
+      WIDTH_TWO: 161,
+    }
 
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
+      if ambiguous != 1 && ambiguous != 2
+        raise ArgumentError, "Unicode::DisplayWidth: ambiguous width must be 1 or 2"
+      end
+
       if !overwrite.empty?
-        return width_frame(string, options) do |string|
-          width_all_features(string, ambiguous, overwrite)
+        return width_frame(string, options.merge(ambiguous:)) do |string, index_full, index_low, first_ambiguous|
+          width_all_features(string, index_full, index_low, first_ambiguous, overwrite)
         end
       end
 
       if !string.ascii_only?
-        return width_frame(string, options) do |string|
-          width_no_overwrite(string, ambiguous)
+        return width_frame(string, options.merge(ambiguous:)) do |string, index_full, index_low, first_ambiguous|
+          width_no_overwrite(string, index_full, index_low, first_ambiguous)
         end
       end
 
@@ -56,21 +71,24 @@ module Unicode
         res, string = emoji_width(string, **emoji_options)
       end
 
+      # Prepare indexes
+      ambiguous_index_name = AMBIGUOUS_MAP[options[:ambiguous]]
+
       # Get general width
-      res += yield(string)
+      res += yield(string, INDEX[ambiguous_index_name], FIRST_4096[ambiguous_index_name], FIRST_AMBIGUOUS[ambiguous_index_name])
 
       # Return result + prevent negative lengths
       res < 0 ? 0 : res
     end
 
-    def self.width_no_overwrite(string, ambiguous, _ = {})
+    def self.width_no_overwrite(string, index_full, index_low, first_ambiguous, _ = {})
       string.codepoints.sum{ |codepoint|
-        if codepoint > 15 && codepoint < 161 # very common
+        if codepoint > 15 && codepoint < first_ambiguous
           next 1
         elsif codepoint < 0x1001
-          width = FIRST_4096[codepoint]
+          width = index_low[codepoint]
         else
-          width = INDEX
+          width = index_full
           depth = INITIAL_DEPTH
           while (width = width[codepoint / depth]).instance_of? Array
             codepoint %= depth
@@ -78,21 +96,21 @@ module Unicode
           end
         end
 
-        width == :A ? ambiguous : (width || 1)
+        width || 1
       }
     end
 
     # Same as .width_no_overwrite - but with applying overwrites for each char
-    def self.width_all_features(string, ambiguous, overwrite)
+    def self.width_all_features(string, index_full, index_low, first_ambiguous, overwrite)
       string.codepoints.sum{ |codepoint|
         next overwrite[codepoint] if overwrite[codepoint]
 
-        if codepoint > 15 && codepoint < 161 # very common
+        if codepoint > 15 && codepoint < first_ambiguous
           next 1
         elsif codepoint < 0x1001
-          width = FIRST_4096[codepoint]
+          width = index_low[codepoint]
         else
-          width = INDEX
+          width = index_full
           depth = INITIAL_DEPTH
           while (width = width[codepoint / depth]).instance_of? Array
             codepoint %= depth
@@ -100,7 +118,7 @@ module Unicode
           end
         end
 
-        width == :A ? ambiguous : (width || 1)
+        width || 1
       }
     end
 
@@ -118,7 +136,7 @@ module Unicode
       string = string.encode("utf-8") unless string.encoding.name == "utf-8"
 
       # For each string possibly an emoji
-      no_emoji_string = string.encode("utf-8").gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
+      no_emoji_string = string.gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
         # Skip notorious false positives
         if EMOJI_NOT_POSSIBLE.match?(emoji_candidate)
           emoji_candidate

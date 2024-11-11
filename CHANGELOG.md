@@ -14,6 +14,11 @@ Index fixes and updates:
 - Private-use characters are considered ambiguous (were given width 1 before)
 - Fix that some zero-width ignorable codepoints from recent Unicode were missing
 
+Other
+
+- Gem raises ArgumentError for ambiguous values other than 1 or 2
+- Performance optimizations
+
 ## 2.6.0
 
 - Unicode 16
