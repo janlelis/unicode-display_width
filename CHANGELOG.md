@@ -9,10 +9,10 @@ Rework Emoji support:
 - Add option to make Text Presentation Emoji full-width
 - Emoji widths are now enabled by default
 
-Index updates:
+Index fixes and updates:
 
-- Fix that some ignorable codepoints from recent Unicode
-  were missing
+- Private-use characters are considered ambiguous (were given width 1 before)
+- Fix that some zero-width ignorable codepoints from recent Unicode were missing
 
 ## 2.6.0
 

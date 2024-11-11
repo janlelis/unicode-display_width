@@ -114,6 +114,9 @@ module Unicode
         emoji_sequence_regex = /$^/
       end
 
+      # Make sure we have UTF-8
+      string = string.encode("utf-8") unless string.encoding.name == "utf-8"
+
       # For each string possibly an emoji
       no_emoji_string = string.encode("utf-8").gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
         # Skip notorious false positives

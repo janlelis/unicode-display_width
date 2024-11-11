@@ -153,6 +153,11 @@ describe 'Unicode::DisplayWidth.of' do
     it 'returns 3 for THREE-EM DASH' do
       expect( "⸻".display_width ).to eq 3
     end
+
+    it 'returns ambiguous for private-use' do
+      expect( "󰀀".display_width(1) ).to eq 1
+      expect( "󰀀".display_width(2) ).to eq 2
+    end
   end
 
 
