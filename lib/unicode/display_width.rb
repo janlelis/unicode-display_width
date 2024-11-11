@@ -9,6 +9,16 @@ module Unicode
   class DisplayWidth
     INITIAL_DEPTH = 0x10000
     ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
+    ASCII_NON_ZERO_STRING = "\0\x05\a\b\n\v\f\r\x0E\x0F"
+    ASCII_BACKSPACE = "\b"
+    AMBIGUOUS_MAP = {
+      1 => :WIDTH_ONE,
+      2 => :WIDTH_TWO,
+    }
+    FIRST_AMBIGUOUS = {
+      WIDTH_ONE: 768,
+      WIDTH_TWO: 161,
+    }
     FIRST_4096 = {
       WIDTH_ONE: decompress_index(INDEX[:WIDTH_ONE][0][0], 1),
       WIDTH_TWO: decompress_index(INDEX[:WIDTH_TWO][0][0], 1),
@@ -24,15 +34,8 @@ module Unicode
       all: :REGEX_WELL_FORMED,
     }
     EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
-    AMBIGUOUS_MAP = {
-      1 => :WIDTH_ONE,
-      2 => :WIDTH_TWO,
-    }
-    FIRST_AMBIGUOUS = {
-      WIDTH_ONE: 768,
-      WIDTH_TWO: 161,
-    }
 
+    # Returns monospace display width of string
     def self.of(string, ambiguous = 1, overwrite = {}, options = {})
       if ambiguous != 1 && ambiguous != 2
         raise ArgumentError, "Unicode::DisplayWidth: ambiguous width must be 1 or 2"
@@ -50,9 +53,13 @@ module Unicode
         end
       end
 
+      width_ascii(string)
+    end
+
+    def self.width_ascii(string)
       # Optimization for ASCII-only strings without certain control symbols
       if string.match?(ASCII_NON_ZERO_REGEX)
-        res = string.gsub(ASCII_NON_ZERO_REGEX, "").size - string.count("\b")
+        res = string.delete(ASCII_NON_ZERO_STRING).size - string.count(ASCII_BACKSPACE)
         return res < 0 ? 0 : res
       end
 
@@ -82,49 +89,61 @@ module Unicode
     end
 
     def self.width_no_overwrite(string, index_full, index_low, first_ambiguous, _ = {})
-      string.codepoints.sum{ |codepoint|
-        if codepoint > 15 && codepoint < first_ambiguous
-          next 1
-        elsif codepoint < 0x1001
-          width = index_low[codepoint]
-        else
-          width = index_full
-          depth = INITIAL_DEPTH
-          while (width = width[codepoint / depth]).instance_of? Array
-            codepoint %= depth
-            depth /= 16
-          end
-        end
+      res = 0
 
-        width || 1
+      string.scan(/.{,80}/m){ |batch|
+        if batch.ascii_only?
+          res += batch.size
+        else
+          batch.each_codepoint{ |codepoint|
+            if codepoint > 15 && codepoint < first_ambiguous
+              res += 1
+            elsif codepoint < 0x1001
+              res += index_low[codepoint] || 1
+            else
+              d = INITIAL_DEPTH
+              w = index_full[codepoint / d]
+              while w.instance_of? Array
+                w = w[(codepoint %= d) / (d /= 16)]
+              end
+
+              res += w || 1
+            end
+          }
+        end
       }
+
+      res
     end
 
     # Same as .width_no_overwrite - but with applying overwrites for each char
     def self.width_all_features(string, index_full, index_low, first_ambiguous, overwrite)
-      string.codepoints.sum{ |codepoint|
-        next overwrite[codepoint] if overwrite[codepoint]
+      res = 0
 
-        if codepoint > 15 && codepoint < first_ambiguous
-          next 1
+      string.each_codepoint{ |codepoint|
+        if overwrite[codepoint]
+          res += overwrite[codepoint]
+        elsif codepoint > 15 && codepoint < first_ambiguous
+          res += 1
         elsif codepoint < 0x1001
-          width = index_low[codepoint]
+          res += index_low[codepoint] || 1
         else
-          width = index_full
-          depth = INITIAL_DEPTH
-          while (width = width[codepoint / depth]).instance_of? Array
-            codepoint %= depth
-            depth /= 16
+          d = INITIAL_DEPTH
+          w = index_full[codepoint / d]
+          while w.instance_of? Array
+            w = w[(codepoint %= d) / (d /= 16)]
           end
-        end
 
-        width || 1
+          res += w || 1
+        end
       }
+
+      res
     end
 
 
     def self.emoji_width(string, sequences: :rgi_fqe, wide_text_presentation: false)
-      adjustments = 0
+      res = 0
 
       if regex = EMOJI_SEQUENCES_REGEX_MAPPING[sequences]
         emoji_sequence_regex = Unicode::Emoji.const_get(regex)
@@ -143,7 +162,7 @@ module Unicode
 
         # Check if we have a combined Emoji with width 2
         elsif emoji_candidate == emoji_candidate[emoji_sequence_regex]
-          adjustments += 2
+          res += 2
           ""
 
         # We are dealing with a default text presentation emoji or a well-formed sequence not matching the above Emoji set
@@ -151,7 +170,7 @@ module Unicode
           # Ensure all explicit VS16 sequences have width 2
           emoji_candidate.gsub!(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
             if basic_emoji.size == 2 # VS16 present
-              adjustments += 2
+              res += 2
               ""
             else
               basic_emoji
@@ -161,7 +180,7 @@ module Unicode
           # Apply wide_text_presentation option if present
           if wide_text_presentation
             emoji_candidate.gsub!(Unicode::Emoji::REGEX_TEXT){ |text_emoji|
-              adjustments += 2
+              res += 2
               ""
             }
           end
@@ -170,7 +189,7 @@ module Unicode
         end
       }
 
-      [adjustments, no_emoji_string]
+      [res, no_emoji_string]
     end
 
     def initialize(ambiguous: 1, overwrite: {}, emoji: false)

@@ -87,7 +87,7 @@ Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 2
 Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: false # => 5
 ```
 
-Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation by ~30%.
+Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation.
 
 You can configure Emoji options by passing a Hash like this:
 
