@@ -9,6 +9,11 @@ Rework Emoji support:
 - Add option to make Text Presentation Emoji full-width
 - Emoji widths are now enabled by default
 
+Index updates:
+
+- Fix that some ignorable codepoints from recent Unicode
+  were missing
+
 ## 2.6.0
 
 - Unicode 16
