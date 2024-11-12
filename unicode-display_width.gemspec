@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.dirname(__FILE__) + "/lib/unicode/display_width"
+require File.dirname(__FILE__) + "/lib/unicode/display_width/constants"
 
 Gem::Specification.new do |s|
   s.name        = "unicode-display_width"
