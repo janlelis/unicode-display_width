@@ -142,6 +142,14 @@ describe 'Unicode::DisplayWidth.of' do
       expect( "\x7f".display_width ).to eq 1
     end
 
+    it 'returns 0 for LINE SEPARATOR' do
+      expect( "\u{2028}".display_width ).to eq 0
+    end
+
+    it 'returns 0 for PARAGRAPH SEPARATOR' do
+      expect( "\u{2029}".display_width ).to eq 0
+    end
+
     it 'returns 1 for SOFT HYPHEN' do
       expect( "­".display_width ).to eq 1
     end

@@ -15,6 +15,9 @@ Index fixes and updates:
 
 - Private-use characters are considered ambiguous (were given width 1 before)
 - Fix that some zero-width ignorable codepoints from recent Unicode were missing
+- Consider the following separators to be zero-width:
+  - U+2028 - LINE SEPARATOR - Zl
+  - U+2029 - PARAGRAPH SEPARATOR - Zp
 
 Other:
 

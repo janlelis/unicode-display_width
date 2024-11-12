@@ -1,6 +1,6 @@
 # Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://github.com/janlelis/unicode-display_width/workflows/Test/badge.svg" />](https://github.com/janlelis/unicode-display_width/actions?query=workflow%3ATest)
 
-Determines the monospace display width of a string in Ruby. Useful for all kinds of terminal-based applications. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width.
+Determines the monospace display width of a string in Ruby. Useful for all kinds of terminal-based applications. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width in terminals.
 
 Unicode version: **16.0.0** (September 2024)
 
@@ -12,7 +12,7 @@ Unicode version: **16.0.0** (September 2024)
 
 **If you use this gem, you should really upgrade to 2.4.2 or newer. It's often 100x faster, sometimes even 1000x and more!**
 
-This is possible because the gem now detects if you use very basic (and common) characters, like ASCII characters. Furthermore, the charachter width lookup code has been optimized, so even when full-width or ambiguous characters are involved, the gem is much faster now.
+This is possible because the gem now detects if you use very basic (and common) characters, like ASCII characters. Furthermore, the character width lookup code has been optimized, so even when the string involves full-width or ambiguous characters, the gem is much faster now.
 
 ## Introduction to Character Widths
 
@@ -31,7 +31,7 @@ Width  | Characters                   | Comment
 1      | `"\u{00AD}"`                 | SOFT HYPHEN
 2      | `"\u{2E3A}"`                 | TWO-EM DASH
 3      | `"\u{2E3B}"`                 | THREE-EM DASH
-0      | General Categories: Mn, Me, Cf (non-arabic)        | Excludes ARABIC format characters
+0      | General Categories: Mn, Me, Zl, Zp, Cf (non-arabic)| Excludes ARABIC format characters
 0      | Derived Property: Default_Ignorable_Code_Point     | Ignorable ranges
 0      | `"\u{1160}".."\u{11FF}"`, `"\u{D7B0}".."\u{D7FF}"` | HANGUL JUNGSEONG
 2      | East Asian Width: F, W       | Full-width characters
