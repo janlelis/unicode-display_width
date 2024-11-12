@@ -8,6 +8,8 @@ Unicode version: **16.0.0** (September 2024)
 
 **Emoji support is now enabled by default.** See below for description and configuration possibilities.
 
+**Unicode::DisplayWidth.of now takes keyword arguments:** { ambiguous:, emoji:, overwrite: }
+
 ## Gem Version 2.4.2 — Performance Updates
 
 **If you use this gem, you should really upgrade to 2.4.2 or newer. It's often 100x faster, sometimes even 1000x and more!**
@@ -69,7 +71,7 @@ Unicode::DisplayWidth.of("·", 2) # => 2
 
 ### Custom Overwrites
 
-You can overwrite how to handle specific code points by passing a hash (or even a proc) as third parameter:
+You can overwrite how to handle specific code points by passing a hash (or even a proc) as `overwrite:` parameter:
 
 ```ruby
 Unicode::DisplayWidth.of("a\tb", 1, overwrite: { "\t".ord => 10 })) # => TAB counted as 10, result is 12
@@ -80,11 +82,11 @@ Please note that using overwrites disables some perfomance optimizations of this
 
 ### Emoji Options
 
-The [RGI Emoji set](https://www.unicode.org/reports/tr51/#def_rgi_set) is automatically detected to adjust the width of the string. This can be disabled by passing `emoji: false` as fourth parameter:
+The [RGI Emoji set](https://www.unicode.org/reports/tr51/#def_rgi_set) is automatically detected to adjust the width of the string. This can be disabled by passing the `emoji: false` argument:
 
 ```ruby
 Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 2
-Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: false # => 5
+Unicode::DisplayWidth.of "🤾🏽‍♀️", emoji: false # => 5
 ```
 
 Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation.
@@ -92,7 +94,8 @@ Disabling Emoji support yields wrong results, as illustrated in the example abov
 You can configure the Emoji set to match for by passing a symbol as value:
 
 ```ruby
-Unicode::DisplayWidth.of "string", 1, {}, emoji: :rgi_fqe
+Unicode::DisplayWidth.of "🐻‍❄", emoji: :rgi_mqe # => 3
+Unicode::DisplayWidth.of "🐻‍❄", emoji: :rgi_uqe # => 2
 ```
 
 #### How this Library Handles Emoji Width

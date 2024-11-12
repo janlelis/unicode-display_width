@@ -33,17 +33,28 @@ module Unicode
     EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
 
     # Returns monospace display width of string
-    def self.of(string, ambiguous = nil, overwrite = nil, options = { ambiguous: 1, overwrite: {}, emoji: DEFAULT_EMOJI_SET })
+    def self.of(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
+      unless old_options.empty?
+        warn ArgumentError, "Unicode::DisplayWidth: Please migrate to keyword arguments: #{old_options.inspect}"
+        options.merge! old_options
+      end
+
       options[:ambiguous] = ambiguous if ambiguous
+      options[:ambiguous] ||= 1
 
       if options[:ambiguous] != 1 && options[:ambiguous] != 2
-        raise ArgumentError, "Unicode::DisplayWidth: ambiguous width must be 1 or 2"
+        raise ArgumentError, "Unicode::DisplayWidth: Ambiguous width must be 1 or 2"
       end
 
       if overwrite
         # warn "Unicode::DisplayWidth: Deprecated, please use overwrite: {} keyword options instead of passing overwrites as third parameter"
         options[:overwrite] = overwrite
       end
+      options[:overwrite] ||= {}
+
+      options[:emoji] = DEFAULT_EMOJI_SET if options[:emoji] == nil
+
+      # # #
 
       if !options[:overwrite].empty?
         return width_frame(string, options) do |string, index_full, index_low, first_ambiguous|
@@ -220,7 +231,7 @@ module Unicode
     end
 
     def of(string, **kwargs)
-      self.class.of(string, nil, nil, get_config(**kwargs))
+      self.class.of(string, **get_config(**kwargs))
     end
   end
 end

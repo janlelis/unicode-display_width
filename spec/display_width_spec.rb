@@ -171,11 +171,11 @@ describe 'Unicode::DisplayWidth.of' do
 
   describe '[overwrite]' do
     it 'can be passed a 3rd parameter with overwrites (old format)' do
-      expect( "\t".display_width(1, 0x09 => 12) ).to eq 12
+      expect( "\t".display_width(1, { 0x09 => 12 }) ).to eq 12
     end
 
     it 'can be passed as :overwrite option' do
-      expect( "\t".display_width(1, nil, overwrite: { 0x09 => 12 }) ).to eq 12
+      expect( "\t".display_width(1, overwrite: { 0x09 => 12 }) ).to eq 12
     end
   end
 
@@ -188,7 +188,7 @@ describe 'Unicode::DisplayWidth.of' do
   describe '[emoji]' do
     describe '(disable)' do
       it 'has no adjustments when emoji suport is disabled' do
-        expect( "🤾🏽‍♀️".display_width(1, {}, emoji: false) ).to eq 5
+        expect( "🤾🏽‍♀️".display_width(1, emoji: false) ).to eq 5
       end
     end
 
@@ -246,43 +246,43 @@ describe 'Unicode::DisplayWidth.of' do
         it 'will ignore shorter width of all Emoji sequences' do
           # Please note that this is different from emoji: false
           # -> Basic Emoji with VS16 still get normalized
-          expect( "🤾🏽‍♀️".display_width(1, {}, emoji: :basic) ).to eq 6
+          expect( "🤾🏽‍♀️".display_width(1, emoji: :basic) ).to eq 6
         end
       end
 
       describe ':rgi_fqe' do
         it 'will ignore shorter width of MQE / UQE / non-RQI sequences' do
-          expect( "🤾🏽‍♀️".display_width(1, {}, emoji: :rgi_fqe) ).to eq 2 # FQE
-          expect( "🤾🏽‍♀".display_width(1, {}, emoji: :rgi_fqe) ).to eq 5 # MQE
-          expect( "❤‍🩹".display_width(1, {}, emoji: :rgi_fqe) ).to eq 3 # UQE
-          expect( "🤠‍🤢".display_width(1, {}, emoji: :rgi_fqe) ).to eq 4 # Non-RGI / well-formed
+          expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_fqe) ).to eq 2 # FQE
+          expect( "🤾🏽‍♀".display_width(1, emoji: :rgi_fqe) ).to eq 5 # MQE
+          expect( "❤‍🩹".display_width(1, emoji: :rgi_fqe) ).to eq 3 # UQE
+          expect( "🤠‍🤢".display_width(1, emoji: :rgi_fqe) ).to eq 4 # Non-RGI / well-formed
         end
       end
 
       describe ':rgi_mqe' do
         it 'will ignore shorter width of UQE / non-RQI sequences' do
-          expect( "🤾🏽‍♀️".display_width(1, {}, emoji: :rgi_mqe) ).to eq 2 # FQE
-          expect( "🤾🏽‍♀".display_width(1, {}, emoji: :rgi_mqe) ).to eq 2 # MQE
-          expect( "❤‍🩹".display_width(1, {}, emoji: :rgi_mqe) ).to eq 3 # UQE
-          expect( "🤠‍🤢".display_width(1, {}, emoji: :rgi_mqe) ).to eq 4 # Non-RGI / well-formed
+          expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_mqe) ).to eq 2 # FQE
+          expect( "🤾🏽‍♀".display_width(1, emoji: :rgi_mqe) ).to eq 2 # MQE
+          expect( "❤‍🩹".display_width(1, emoji: :rgi_mqe) ).to eq 3 # UQE
+          expect( "🤠‍🤢".display_width(1, emoji: :rgi_mqe) ).to eq 4 # Non-RGI / well-formed
         end
       end
 
       describe ':rgi_uqe' do
         it 'will ignore shorter width of non-RQI sequences' do
-          expect( "🤾🏽‍♀️".display_width(1, {}, emoji: :rgi_uqe) ).to eq 2 # FQE
-          expect( "🤾🏽‍♀".display_width(1, {}, emoji: :rgi_uqe) ).to eq 2 # MQE
-          expect( "❤‍🩹".display_width(1, {}, emoji: :rgi_uqe) ).to eq 2 # UQE
-          expect( "🤠‍🤢".display_width(1, {}, emoji: :rgi_uqe) ).to eq 4 # Non-RGI / well-formed
+          expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_uqe) ).to eq 2 # FQE
+          expect( "🤾🏽‍♀".display_width(1, emoji: :rgi_uqe) ).to eq 2 # MQE
+          expect( "❤‍🩹".display_width(1, emoji: :rgi_uqe) ).to eq 2 # UQE
+          expect( "🤠‍🤢".display_width(1, emoji: :rgi_uqe) ).to eq 4 # Non-RGI / well-formed
         end
       end
 
       describe ':all' do
         it 'will treat any sequence as width 2' do
-          expect( "🤾🏽‍♀️".display_width(1, {}, emoji: :all) ).to eq 2 # FQE
-          expect( "🤾🏽‍♀".display_width(1, {}, emoji: :all) ).to eq 2 # MQE
-          expect( "❤‍🩹".display_width(1, {}, emoji: :all) ).to eq 2 # UQE
-          expect( "🤠‍🤢".display_width(1, {}, emoji: :all) ).to eq 2 # Non-RGI / well-formed
+          expect( "🤾🏽‍♀️".display_width(1, emoji: :all) ).to eq 2 # FQE
+          expect( "🤾🏽‍♀".display_width(1, emoji: :all) ).to eq 2 # MQE
+          expect( "❤‍🩹".display_width(1, emoji: :all) ).to eq 2 # UQE
+          expect( "🤠‍🤢".display_width(1, emoji: :all) ).to eq 2 # Non-RGI / well-formed
         end
       end
     end

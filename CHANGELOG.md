@@ -20,6 +20,8 @@ Index fixes and updates:
 
 Other:
 
+- Add keyword arguments to `Unicode::DisplayWidth.of`. If you are using a hash
+  with overwrite value, be sure to put it in curly braces.
 - Gem raises ArgumentError for ambiguous values other than 1 or 2
 - Performance optimizations
 
