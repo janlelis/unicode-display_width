@@ -10,6 +10,8 @@ Unicode version: **16.0.0** (September 2024)
 
 **Unicode::DisplayWidth.of now takes keyword arguments:** { ambiguous:, emoji:, overwrite: }
 
+See [CHANGELOG](/CHANGELOG.md) for details.
+
 ## Gem Version 2.4.2 — Performance Updates
 
 **If you use this gem, you should really upgrade to 2.4.2 or newer. It's often 100x faster, sometimes even 1000x and more!**
@@ -138,7 +140,7 @@ require 'unicode/display_width/string_ext'
 
 ### Usage with Config Object
 
-Version 2.0 introduces a keyword-argument based config object which allows you to save your configuration for later-reuse. This requires an extra line of code, but has the advantage that you'll need to define your string-width options only once:
+You can use a config object that allows you to save your configuration for later-reuse. This requires an extra line of code, but has the advantage that you'll need to define your string-width options only once:
 
 ```ruby
 require 'unicode/display_width'
