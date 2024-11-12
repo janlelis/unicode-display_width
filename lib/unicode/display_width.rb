@@ -31,6 +31,7 @@ module Unicode
       all:     :REGEX_WELL_FORMED,
     }
     EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
+    REGEX_EMOJI_BASIC_OR_KEYCAP = Regexp.union(Unicode::Emoji::REGEX_BASIC, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
 
     # Returns monospace display width of string
     def self.of(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
@@ -205,8 +206,8 @@ module Unicode
         # Only consider basic emoji
 
         # Ensure all explicit VS16 sequences have width 2
-        no_emoji_string = string.gsub(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
-          if basic_emoji.size == 2 # VS16 present
+        no_emoji_string = string.gsub(REGEX_EMOJI_BASIC_OR_KEYCAP){ |basic_emoji|
+          if basic_emoji.size >= 2 # VS16 present
             res += 2
             ""
           else
