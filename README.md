@@ -89,38 +89,40 @@ Unicode::DisplayWidth.of "🤾🏽‍♀️", 1, {}, emoji: false # => 5
 
 Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation.
 
-You can configure Emoji options by passing a Hash like this:
+You can configure the Emoji set to match for by passing a symbol as value:
 
 ```ruby
-Unicode::DisplayWidth.of "string", 1, {}, emoji: { wide_text_presentation: false, sequences: :rgi_fqe }
+Unicode::DisplayWidth.of "string", 1, {}, emoji: :rgi_fqe
 ```
 
 #### How this Library Handles Emoji Width
 
 There are many Emoji which get constructed by combining other Emoji in a sequence. This makes measuring the width complicated, since terminals might either display the combined Emoji or the separate parts of the Emoji individually.
 
-Emoji Type  | Width / Comment | Configuration Options
-------------|-----------------|----------------------
-Basic/Single Emoji character without Variation Selector<br><br>Basic/Single Emoji character with VS15 (Text) | No special handling, uses mechanism from table above | Use option `wide_text_presentation: true` to force textual Emoji to always be of width 2
-Basic/Single Emoji character with VS16 (Emoji) | 2 | -
-Emoji Sequence | Recommended Emoji sequences: 2, above rules otherwise | Option `sequences:` explained below
+Emoji Type  | Width / Comment
+------------|----------------
+Basic/Single Emoji character without Variation Selector | No special handling, uses mechanism from table above
+Basic/Single Emoji character with VS15 (Text)           | No special handling, uses mechanism from table above
+Basic/Single Emoji character with VS16 (Emoji)          | 2
+Emoji Sequence                                          | 2 (only if sequence belongs to configured Emoji set)
 
-The `sequences:` option can be used to configure which type of Emoji should be considered to have a width of 2. Other sequences are treated as non-combined Emoji, so the widths of all partial Emoji add up (e.g. width of one basic Emoji + one skin tone modifier + another basic Emoji)
+The `emoji:` option can be used to configure which type of Emoji should be considered to have a width of 2. Other sequences are treated as non-combined Emoji, so the widths of all partial Emoji add up (e.g. width of one basic Emoji + one skin tone modifier + another basic Emoji). The following Emoji sets can be used:
 
-The value passed to the `sequences:` option can be one of:
-
-- `:none`: No width adjustments for Emoji sequences: all partial Emoji treated separately
-- `:rgi_fqe` (default): All fully-qualified RGI Emoji sequences are considered to have a width of 2
-- `:rgi_mqe`: All fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2
-- `:rgi_uqe`: All RGI Emoji sequences, regardless of qualification status are considered to have a width of 2
-- `:all`: All possible/well-formed Emoji sequences are considered to have a width of 2
+Option | Descriptions
+-------|-------------
+- `emoji: :basic`   | No width adjustments for Emoji sequences: all partial Emoji treated separately
+- `emoji: :rgi_fqe` | All fully-qualified RGI Emoji sequences are considered to have a width of 2
+- `emoji: :rgi_mqe` | All fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2
+- `emoji: :rgi_uqe` | All RGI Emoji sequences, regardless of qualification status are considered to have a width of 2
+- `emoji: :all`     | All possible/well-formed Emoji sequences are considered to have a width of 2
+- `emoji: true`     | Use recommended Emoji set on your platform (see below)
+- `emoji: false`    | No Emoji adjustments, Emoji characters with VS16 not handled
 
 *RGI Emoji:* Emoji Recommended for General Interchange
 
 *Qualfication:* Whether an Emoji sequence has all required VS16 codepoints
 
 See [emoji-test.txt](https://www.unicode.org/Public/emoji/16.0/emoji-test.txt), the [unicode-emoji gem](https://github.com/janlelis/unicode-emoji) and [UTS-51](https://www.unicode.org/reports/tr51/#def_qualified_emoji_character) for more details about qualified and unqualified Emoji sequences.
-
 
 ### Usage with String Extension
 
@@ -141,11 +143,11 @@ require 'unicode/display_width'
 display_width = Unicode::DisplayWidth.new(
   # ambiguous: 1,
   overwrite: { "A".ord => 100 },
-  emoji: { wide_text_presentation: true },
+  emoji: :all,
 )
 
 display_width.of "⚀" # => 1
-display_width.of "⏱" # => 2
+display_width.of "🤠‍🤢" # => 2
 display_width.of "A" # => 100
 ```
 

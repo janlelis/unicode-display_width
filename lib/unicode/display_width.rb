@@ -23,20 +23,17 @@ module Unicode
       WIDTH_ONE: decompress_index(INDEX[:WIDTH_ONE][0][0], 1),
       WIDTH_TWO: decompress_index(INDEX[:WIDTH_TWO][0][0], 1),
     }
-    DEFAULT_EMOJI_OPTIONS = {
-      sequences: :rgi_fqe,
-      wide_text_presentation: false,
-    }
+    DEFAULT_EMOJI_SET = :rgi_fqe
     EMOJI_SEQUENCES_REGEX_MAPPING = {
       rgi_fqe: :REGEX,
       rgi_mqe: :REGEX_INCLUDE_MQE,
       rgi_uqe: :REGEX_INCLUDE_MQE_UQE,
-      all: :REGEX_WELL_FORMED,
+      all:     :REGEX_WELL_FORMED,
     }
     EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
 
     # Returns monospace display width of string
-    def self.of(string, ambiguous = 1, overwrite = {}, options = {})
+    def self.of(string, ambiguous = 1, overwrite = {}, options = { emoji: DEFAULT_EMOJI_SET })
       if ambiguous != 1 && ambiguous != 2
         raise ArgumentError, "Unicode::DisplayWidth: ambiguous width must be 1 or 2"
       end
@@ -69,13 +66,13 @@ module Unicode
 
     def self.width_frame(string, options)
       # Retrieve Emoji width
-      if options[:emoji] == false
+      if !options[:emoji]
         res = 0
-      else
-        emoji_options = ( options[:emoji] == true || !options || !options[:emoji] ) ?
-          DEFAULT_EMOJI_OPTIONS :
-          options[:emoji]
-        res, string = emoji_width(string, **emoji_options)
+      else options[:emoji]
+        res, string = emoji_width(
+          string,
+          options[:emoji] == true ? DEFAULT_EMOJI_SET : options[:emoji]
+        )
       end
 
       # Prepare indexes
@@ -90,6 +87,9 @@ module Unicode
 
     def self.width_no_overwrite(string, index_full, index_low, first_ambiguous, _ = {})
       res = 0
+
+      # Make sure we have UTF-8
+      string = string.encode(Encoding::UTF_8) unless string.encoding.name == "utf-8"
 
       string.scan(/.{,80}/m){ |batch|
         if batch.ascii_only?
@@ -142,7 +142,7 @@ module Unicode
     end
 
 
-    def self.emoji_width(string, sequences: :rgi_fqe, wide_text_presentation: false)
+    def self.emoji_width(string, sequences = :rgi_fqe)
       res = 0
 
       if regex = EMOJI_SEQUENCES_REGEX_MAPPING[sequences]
@@ -152,7 +152,7 @@ module Unicode
       end
 
       # Make sure we have UTF-8
-      string = string.encode("utf-8") unless string.encoding.name == "utf-8"
+      string = string.encode(Encoding::UTF_8) unless string.encoding.name == "utf-8"
 
       # For each string possibly an emoji
       no_emoji_string = string.gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
@@ -177,14 +177,6 @@ module Unicode
             end
           }
 
-          # Apply wide_text_presentation option if present
-          if wide_text_presentation
-            emoji_candidate.gsub!(Unicode::Emoji::REGEX_TEXT){ |text_emoji|
-              res += 2
-              ""
-            }
-          end
-
           emoji_candidate
         end
       }
@@ -192,7 +184,7 @@ module Unicode
       [res, no_emoji_string]
     end
 
-    def initialize(ambiguous: 1, overwrite: {}, emoji: false)
+    def initialize(ambiguous: 1, overwrite: {}, emoji: DEFAULT_EMOJI_SET)
       @ambiguous = ambiguous
       @overwrite = overwrite
       @emoji     = emoji

@@ -4,10 +4,9 @@
 
 Rework Emoji support:
 
-- Only reduce Emoji width of RGI Emoji (configurable)
-- VS16 turns Emoji characters of width 1 into full-width
-- Add option to make Text Presentation Emoji full-width
 - Emoji widths are now enabled by default
+- Only reduce Emoji width to 2 when RGI Emoji detected (configurable)
+- VS16 turns Emoji characters of width 1 into full-width (width 2)
 - Please note that Emoji parsing has a notable impact on performance
   You can use the `emoji: false` option to disable Emoji adjustments
 
