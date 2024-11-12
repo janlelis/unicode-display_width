@@ -9,6 +9,7 @@
 - VS16 turns Emoji characters of width 1 into full-width
 - Please note that Emoji parsing has a notable impact on performance.
   You can use the `emoji: false` option to disable Emoji adjustments
+- Tries to detect terminal's Emoji support level automatically (from ENV vars)
 
 **Index fixes and updates:**
 

@@ -4,6 +4,7 @@ require "unicode/emoji"
 
 require_relative "display_width/constants"
 require_relative "display_width/index"
+require_relative "display_width/emoji_support"
 
 module Unicode
   class DisplayWidth
@@ -23,7 +24,6 @@ module Unicode
       WIDTH_ONE: decompress_index(INDEX[:WIDTH_ONE][0][0], 1),
       WIDTH_TWO: decompress_index(INDEX[:WIDTH_TWO][0][0], 1),
     }
-    DEFAULT_EMOJI_SET = :rgi_fqe
     EMOJI_SEQUENCES_REGEX_MAPPING = {
       rgi_fqe: :REGEX,
       rgi_mqe: :REGEX_INCLUDE_MQE,
@@ -52,7 +52,9 @@ module Unicode
       end
       options[:overwrite] ||= {}
 
-      options[:emoji] = DEFAULT_EMOJI_SET if options[:emoji] == nil
+      if options[:emoji] == nil || options[:emoji] == true
+        options[:emoji] = EmojiSupport.recommended
+      end
 
       # # #
 
@@ -89,7 +91,7 @@ module Unicode
       else options[:emoji]
         res, string = emoji_width(
           string,
-          options[:emoji] == true ? DEFAULT_EMOJI_SET : options[:emoji]
+          options[:emoji],
         )
       end
 
@@ -216,7 +218,7 @@ module Unicode
       [res, no_emoji_string]
     end
 
-    def initialize(ambiguous: 1, overwrite: {}, emoji: DEFAULT_EMOJI_SET)
+    def initialize(ambiguous: 1, overwrite: {}, emoji: true)
       @ambiguous = ambiguous
       @overwrite = overwrite
       @emoji     = emoji

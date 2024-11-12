@@ -235,11 +235,11 @@ describe 'Unicode::DisplayWidth.of' do
 
     describe '(modifiers and zwj sequences)' do
       it 'counts RGI Emoji ZWJ sequence as width 2' do
-        expect( "🤾🏽‍♀️".display_width(1) ).to eq 2
+        expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_fqe) ).to eq 2
       end
 
       it 'works for emoji involving characters which are east asian ambiguous' do
-        expect( "🤾🏽‍♀️".display_width(2) ).to eq 2
+        expect( "🤾🏽‍♀️".display_width(2, emoji: :rgi_fqe) ).to eq 2
       end
 
       describe ':basic' do

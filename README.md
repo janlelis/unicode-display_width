@@ -1,6 +1,6 @@
 # Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://github.com/janlelis/unicode-display_width/workflows/Test/badge.svg" />](https://github.com/janlelis/unicode-display_width/actions?query=workflow%3ATest)
 
-Determines the monospace display width of a string in Ruby. Useful for all kinds of terminal-based applications. Implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width in terminals.
+Determines the monospace display width of a string in Ruby. Useful for all kinds of terminal-based applications. The implementation based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt), [the Emoji specfication](https://www.unicode.org/reports/tr51/) and other data, 100% in Ruby. It does not rely on the OS vendor (like [wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width in terminals.
 
 Unicode version: **16.0.0** (September 2024)
 
@@ -81,19 +81,16 @@ Unicode::DisplayWidth.of("a\tb", 1, overwrite: { "\t".ord => 10 })) # => TAB cou
 
 Please note that using overwrites disables some perfomance optimizations of this gem.
 
+### Emoji Option
 
-### Emoji Options
-
-The [RGI Emoji set](https://www.unicode.org/reports/tr51/#def_rgi_set) is automatically detected to adjust the width of the string. This can be disabled by passing the `emoji: false` argument:
+The gem detects Emoji and Emoji sequences and adjusts the width of the measured string. This can be disabled by passing `emoji: false` as an argument:
 
 ```ruby
 Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 2
 Unicode::DisplayWidth.of "🤾🏽‍♀️", emoji: false # => 5
 ```
 
-Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation.
-
-You can configure the Emoji set to match for by passing a symbol as value:
+Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation. You can configure [the Emoji set to match for](https://www.unicode.org/reports/tr51/#def_rgi_set) by passing a symbol as value:
 
 ```ruby
 Unicode::DisplayWidth.of "🐻‍❄", emoji: :rgi_mqe # => 3
@@ -115,19 +112,27 @@ The `emoji:` option can be used to configure which type of Emoji should be consi
 
 Option | Descriptions
 -------|-------------
+`emoji: true`     | Use recommended Emoji set on your platform, see section below
 `emoji: :basic`   | No width adjustments for Emoji sequences: all partial Emoji treated separately
 `emoji: :rgi_fqe` | All fully-qualified RGI Emoji sequences are considered to have a width of 2
 `emoji: :rgi_mqe` | All fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2
 `emoji: :rgi_uqe` | All RGI Emoji sequences, regardless of qualification status are considered to have a width of 2
 `emoji: :all`     | All possible/well-formed Emoji sequences are considered to have a width of 2
-`emoji: true`     | Use recommended Emoji set on your platform (see below)
 `emoji: false`    | No Emoji adjustments, Emoji characters with VS16 not handled
 
 *RGI Emoji:* Emoji Recommended for General Interchange
 
-*Qualfication:* Whether an Emoji sequence has all required VS16 codepoints
+*Qualification:* Whether an Emoji sequence has all required VS16 codepoints
 
 See [emoji-test.txt](https://www.unicode.org/Public/emoji/16.0/emoji-test.txt), the [unicode-emoji gem](https://github.com/janlelis/unicode-emoji) and [UTS-51](https://www.unicode.org/reports/tr51/#def_qualified_emoji_character) for more details about qualified and unqualified Emoji sequences.
+
+#### Emoji Support in Terminals
+
+Unfortunately, the level of Emoji support varies a lot between terminals. While some of them are able to display (almost) all Emoji sequences correctly, others fall back to displaying sequences of basic Emoji. When `emoji: true` is used, the gem will attempt to set the best fitting Emoji set for you (e.g. `:rgi_uqe` on "Apple_Terminal" or `:basic` on Gnome's terminal widget).
+
+Please [open an issue](https://github.com/janlelis/unicode-display_width/issues/new) if you notice your terminal application could use a better default value.
+
+You are encouraged to give your users the option to configure the level of Emoji support in your library or application and for the best developer experience in their terminals. (same is true for ambigouos width).
 
 ### Usage with String Extension
 
