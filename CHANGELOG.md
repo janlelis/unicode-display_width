@@ -2,29 +2,29 @@
 
 ## 3.0.0 (unreleased)
 
-Rework Emoji support:
+**Rework Emoji support:**
 
 - Emoji widths are now enabled by default
 - Only reduce Emoji width to 2 when RGI Emoji detected (configurable)
-- VS16 turns Emoji characters of width 1 into full-width (width 2)
-- Please note that Emoji parsing has a notable impact on performance
+- VS16 turns Emoji characters of width 1 into full-width
+- Please note that Emoji parsing has a notable impact on performance.
   You can use the `emoji: false` option to disable Emoji adjustments
 
-Index fixes and updates:
+**Index fixes and updates:**
 
 - Private-use characters are considered ambiguous (were given width 1 before)
-- Fix that some zero-width ignorable codepoints from recent Unicode were missing
+- Fix that a few zero-width ignorable codepoints from recent Unicode were missing
 - Consider the following separators to be zero-width:
   - U+2028 - LINE SEPARATOR - Zl
   - U+2029 - PARAGRAPH SEPARATOR - Zp
 
-Other:
+**Other:**
 
 - Add keyword arguments to `Unicode::DisplayWidth.of`. If you are using a hash
-  with overwrite value, be sure to put it in curly braces.
+  with overwrite values as third parameter, be sure to put it in curly braces.
 - Using third parameter or explicit hash as fourth parameter is deprecated,
   please migrate to the keyword arguments API
-- Gem raises ArgumentError for ambiguous values other than 1 or 2
+- Gem raises `ArgumentError` for ambiguous values other than 1 or 2
 - Performance optimizations
 
 ## 2.6.0
