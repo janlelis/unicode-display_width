@@ -80,7 +80,7 @@ Please note that using overwrites disables some perfomance optimizations of this
 
 ### Emoji Options
 
-The RGI Emoji set is automatically detected to adjust the width of the string. This can be disabled by passing `emoji: false` as fourth parameter:
+The [RGI Emoji set](https://www.unicode.org/reports/tr51/#def_rgi_set) is automatically detected to adjust the width of the string. This can be disabled by passing `emoji: false` as fourth parameter:
 
 ```ruby
 Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 2
@@ -99,11 +99,9 @@ Unicode::DisplayWidth.of "string", 1, {}, emoji: { wide_text_presentation: false
 
 There are many Emoji which get constructed by combining other Emoji in a sequence. This makes measuring the width complicated, since terminals might either display the combined Emoji or the separate parts of the Emoji individually.
 
-**Char Width** = No special handling, uses mechanism from table above
-
 Emoji Type  | Width / Comment | Configuration Options
 ------------|-----------------|----------------------
-Basic/Single Emoji character without Variation Selector or with VS15 (Text) | Char Width | Use option `wide_text_presentation: true` to force textual Emoji to always be of width 2
+Basic/Single Emoji character without Variation Selector<br><br>Basic/Single Emoji character with VS15 (Text) | No special handling, uses mechanism from table above | Use option `wide_text_presentation: true` to force textual Emoji to always be of width 2
 Basic/Single Emoji character with VS16 (Emoji) | 2 | -
 Emoji Sequence | Recommended Emoji sequences: 2, above rules otherwise | Option `sequences:` explained below
 
