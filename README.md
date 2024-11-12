@@ -72,7 +72,7 @@ Unicode::DisplayWidth.of("·", 2) # => 2
 You can overwrite how to handle specific code points by passing a hash (or even a proc) as third parameter:
 
 ```ruby
-Unicode::DisplayWidth.of("a\tb", 1, "\t".ord => 10)) # => tab counted as 10, so result is 12
+Unicode::DisplayWidth.of("a\tb", 1, overwrite: { "\t".ord => 10 })) # => TAB counted as 10, result is 12
 ```
 
 Please note that using overwrites disables some perfomance optimizations of this gem.
@@ -110,13 +110,13 @@ The `emoji:` option can be used to configure which type of Emoji should be consi
 
 Option | Descriptions
 -------|-------------
-- `emoji: :basic`   | No width adjustments for Emoji sequences: all partial Emoji treated separately
-- `emoji: :rgi_fqe` | All fully-qualified RGI Emoji sequences are considered to have a width of 2
-- `emoji: :rgi_mqe` | All fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2
-- `emoji: :rgi_uqe` | All RGI Emoji sequences, regardless of qualification status are considered to have a width of 2
-- `emoji: :all`     | All possible/well-formed Emoji sequences are considered to have a width of 2
-- `emoji: true`     | Use recommended Emoji set on your platform (see below)
-- `emoji: false`    | No Emoji adjustments, Emoji characters with VS16 not handled
+`emoji: :basic`   | No width adjustments for Emoji sequences: all partial Emoji treated separately
+`emoji: :rgi_fqe` | All fully-qualified RGI Emoji sequences are considered to have a width of 2
+`emoji: :rgi_mqe` | All fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2
+`emoji: :rgi_uqe` | All RGI Emoji sequences, regardless of qualification status are considered to have a width of 2
+`emoji: :all`     | All possible/well-formed Emoji sequences are considered to have a width of 2
+`emoji: true`     | Use recommended Emoji set on your platform (see below)
+`emoji: false`    | No Emoji adjustments, Emoji characters with VS16 not handled
 
 *RGI Emoji:* Emoji Recommended for General Interchange
 
@@ -133,9 +133,9 @@ require 'unicode/display_width/string_ext'
 '一'.display_width # => 2
 ```
 
-### Modern API: Keyword-arguments Based Config Object
+### Usage with Config Object
 
-Version 2.0 introduces a keyword-argument based API, which allows you to save your configuration for later-reuse. This requires an extra line of code, but has the advantage that you'll need to define your string-width options only once:
+Version 2.0 introduces a keyword-argument based config object which allows you to save your configuration for later-reuse. This requires an extra line of code, but has the advantage that you'll need to define your string-width options only once:
 
 ```ruby
 require 'unicode/display_width'
@@ -151,7 +151,7 @@ display_width.of "🤠‍🤢" # => 2
 display_width.of "A" # => 100
 ```
 
-### Usage From the CLI
+### Usage from the Command-Line
 
 Use this one-liner to print out display widths for strings from the command-line:
 
