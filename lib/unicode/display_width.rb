@@ -33,19 +33,26 @@ module Unicode
     EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
 
     # Returns monospace display width of string
-    def self.of(string, ambiguous = 1, overwrite = {}, options = { emoji: DEFAULT_EMOJI_SET })
-      if ambiguous != 1 && ambiguous != 2
+    def self.of(string, ambiguous = nil, overwrite = nil, options = { ambiguous: 1, overwrite: {}, emoji: DEFAULT_EMOJI_SET })
+      options[:ambiguous] = ambiguous if ambiguous
+
+      if options[:ambiguous] != 1 && options[:ambiguous] != 2
         raise ArgumentError, "Unicode::DisplayWidth: ambiguous width must be 1 or 2"
       end
 
-      if !overwrite.empty?
-        return width_frame(string, options.merge(ambiguous: ambiguous)) do |string, index_full, index_low, first_ambiguous|
-          width_all_features(string, index_full, index_low, first_ambiguous, overwrite)
+      if overwrite
+        # warn "Unicode::DisplayWidth: Deprecated, please use overwrite: {} keyword options instead of passing overwrites as third parameter"
+        options[:overwrite] = overwrite
+      end
+
+      if !options[:overwrite].empty?
+        return width_frame(string, options) do |string, index_full, index_low, first_ambiguous|
+          width_all_features(string, index_full, index_low, first_ambiguous, options[:overwrite])
         end
       end
 
       if !string.ascii_only?
-        return width_frame(string, options.merge(ambiguous: ambiguous)) do |string, index_full, index_low, first_ambiguous|
+        return width_frame(string, options) do |string, index_full, index_low, first_ambiguous|
           width_no_overwrite(string, index_full, index_low, first_ambiguous)
         end
       end
@@ -205,15 +212,15 @@ module Unicode
     end
 
     def get_config(**kwargs)
-      [
-        kwargs[:ambiguous] || @ambiguous,
-        kwargs[:overwrite] || @overwrite,
-        { emoji: kwargs[:emoji] || @emoji },
-      ]
+      {
+        ambiguous: kwargs[:ambiguous] || @ambiguous,
+        overwrite: kwargs[:overwrite] || @overwrite,
+        emoji:     kwargs[:emoji]     || @emoji,
+      }
     end
 
     def of(string, **kwargs)
-      self.class.of(string, *get_config(**kwargs))
+      self.class.of(string, nil, nil, get_config(**kwargs))
     end
   end
 end

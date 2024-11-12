@@ -170,8 +170,12 @@ describe 'Unicode::DisplayWidth.of' do
 
 
   describe '[overwrite]' do
-    it 'can be passed a 3rd parameter with overwrites' do
+    it 'can be passed a 3rd parameter with overwrites (old format)' do
       expect( "\t".display_width(1, 0x09 => 12) ).to eq 12
+    end
+
+    it 'can be passed as :overwrite option' do
+      expect( "\t".display_width(1, nil, overwrite: { 0x09 => 12 }) ).to eq 12
     end
   end
 
