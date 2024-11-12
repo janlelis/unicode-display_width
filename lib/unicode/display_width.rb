@@ -147,39 +147,53 @@ module Unicode
 
       if regex = EMOJI_SEQUENCES_REGEX_MAPPING[sequences]
         emoji_sequence_regex = Unicode::Emoji.const_get(regex)
-      else # sequences == :none
-        emoji_sequence_regex = /$^/
+      else # sequences == :basic
+        emoji_sequence_regex = nil
       end
 
       # Make sure we have UTF-8
       string = string.encode(Encoding::UTF_8) unless string.encoding.name == "utf-8"
 
-      # For each string possibly an emoji
-      no_emoji_string = string.gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
-        # Skip notorious false positives
-        if EMOJI_NOT_POSSIBLE.match?(emoji_candidate)
-          emoji_candidate
+      if emoji_sequence_regex
+        # For each string possibly an emoji
+        no_emoji_string = string.gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
+          # Skip notorious false positives
+          if EMOJI_NOT_POSSIBLE.match?(emoji_candidate)
+            emoji_candidate
 
-        # Check if we have a combined Emoji with width 2
-        elsif emoji_candidate == emoji_candidate[emoji_sequence_regex]
-          res += 2
-          ""
+          # Check if we have a combined Emoji with width 2
+          elsif emoji_candidate == emoji_candidate[emoji_sequence_regex]
+            res += 2
+            ""
 
-        # We are dealing with a default text presentation emoji or a well-formed sequence not matching the above Emoji set
-        else
-          # Ensure all explicit VS16 sequences have width 2
-          emoji_candidate.gsub!(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
-            if basic_emoji.size == 2 # VS16 present
-              res += 2
-              ""
-            else
-              basic_emoji
-            end
-          }
+          # We are dealing with a default text presentation emoji or a well-formed sequence not matching the above Emoji set
+          else
+            # Ensure all explicit VS16 sequences have width 2
+            emoji_candidate.gsub!(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
+              if basic_emoji.size == 2 # VS16 present
+                res += 2
+                ""
+              else
+                basic_emoji
+              end
+            }
 
-          emoji_candidate
-        end
-      }
+            emoji_candidate
+          end
+        }
+      else
+        # Only consider basic emoji
+
+        # Ensure all explicit VS16 sequences have width 2
+        no_emoji_string = string.gsub(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
+          if basic_emoji.size == 2 # VS16 present
+            res += 2
+            ""
+          else
+            basic_emoji
+          end
+        }
+      end
 
       [res, no_emoji_string]
     end
