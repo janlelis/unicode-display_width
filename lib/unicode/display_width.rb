@@ -72,7 +72,7 @@ module Unicode
       if options[:emoji] == false
         res = 0
       else
-        emoji_options = ( options[:emoji] == true || !options ) ?
+        emoji_options = ( options[:emoji] == true || !options || !options[:emoji] ) ?
           DEFAULT_EMOJI_OPTIONS :
           options[:emoji]
         res, string = emoji_width(string, **emoji_options)
