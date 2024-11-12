@@ -42,13 +42,13 @@ module Unicode
       end
 
       if !overwrite.empty?
-        return width_frame(string, options.merge(ambiguous:)) do |string, index_full, index_low, first_ambiguous|
+        return width_frame(string, options.merge(ambiguous: ambiguous)) do |string, index_full, index_low, first_ambiguous|
           width_all_features(string, index_full, index_low, first_ambiguous, overwrite)
         end
       end
 
       if !string.ascii_only?
-        return width_frame(string, options.merge(ambiguous:)) do |string, index_full, index_low, first_ambiguous|
+        return width_frame(string, options.merge(ambiguous: ambiguous)) do |string, index_full, index_low, first_ambiguous|
           width_no_overwrite(string, index_full, index_low, first_ambiguous)
         end
       end
