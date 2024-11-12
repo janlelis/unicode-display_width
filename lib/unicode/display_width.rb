@@ -35,7 +35,7 @@ module Unicode
     # Returns monospace display width of string
     def self.of(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
       unless old_options.empty?
-        warn ArgumentError, "Unicode::DisplayWidth: Please migrate to keyword arguments: #{old_options.inspect}"
+        warn "Unicode::DisplayWidth: Please migrate to keyword arguments - #{old_options.inspect}"
         options.merge! old_options
       end
 
@@ -46,8 +46,8 @@ module Unicode
         raise ArgumentError, "Unicode::DisplayWidth: Ambiguous width must be 1 or 2"
       end
 
-      if overwrite
-        # warn "Unicode::DisplayWidth: Deprecated, please use overwrite: {} keyword options instead of passing overwrites as third parameter"
+      if overwrite && !overwrite.empty?
+        warn "Unicode::DisplayWidth: Please migrate to keyword arguments - overwrite: #{overwrite.inspect}"
         options[:overwrite] = overwrite
       end
       options[:overwrite] ||= {}
