@@ -14,7 +14,7 @@ module Unicode
         end
 
         case ENV["TERM_PROGRAM"]
-        when "iTerm.app"
+        when "iTerm.app", "WezTerm"
           return :all
         when "Apple_Terminal"
           return :rgi_uqe
