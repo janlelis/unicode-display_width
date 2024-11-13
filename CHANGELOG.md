@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.0.1
+
+- Add WezTerm and foot as good Emoji terminals
+
 ## 3.0.0
 
 **Rework Emoji support:**
