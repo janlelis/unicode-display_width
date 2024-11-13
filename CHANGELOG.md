@@ -27,6 +27,7 @@
   please migrate to the keyword arguments API
 - Gem raises `ArgumentError` for ambiguous values other than 1 or 2
 - Performance optimizations
+- Require Ruby 2.5
 
 ## 2.6.0
 

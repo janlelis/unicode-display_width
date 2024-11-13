@@ -8,12 +8,12 @@ Gem::Specification.new do |s|
   s.email       = ["hi@ruby.consulting"]
   s.homepage    = "https://github.com/janlelis/unicode-display_width"
   s.summary     = "Determines the monospace display width of a string in Ruby."
-  s.description =  "[Unicode #{Unicode::DisplayWidth::UNICODE_VERSION}] Determines the monospace display width of a string using EastAsianWidth.txt, Unicode general category, and other data."
+  s.description =  "[Unicode #{Unicode::DisplayWidth::UNICODE_VERSION}] Determines the monospace display width of a string using EastAsianWidth.txt, Unicode general category, Emoji specification, and other data."
   s.files = Dir.glob(%w[{lib,data}/**/*])
   s.extra_rdoc_files = ["README.md", "MIT-LICENSE.txt", "CHANGELOG.md"]
   s.license = 'MIT'
-  s.required_ruby_version = '>= 2.4.0'
-  s.add_dependency 'unicode-emoji', '>= 3.8', '< 5.0'
+  s.required_ruby_version = '>= 2.5.0'
+  s.add_dependency 'unicode-emoji', '~> 4.0'
   s.add_development_dependency 'rspec', '~> 3.4'
   s.add_development_dependency 'rake', '~> 13.0'
 
