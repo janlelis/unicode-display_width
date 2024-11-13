@@ -21,6 +21,8 @@ module Unicode
         end
 
         case ENV["TERM"]
+        when "foot"
+          return :all
         when "contour"
           return :rgi_uqe
         when /kitty/
