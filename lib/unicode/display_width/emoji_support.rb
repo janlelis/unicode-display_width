@@ -21,7 +21,7 @@ module Unicode
         when "iTerm.app"
           return :all
         when "Apple_Terminal" # Also: If first Emoji part is EAW 1, gives whole ZWJ seqs width 1
-          return :rgi_uqe
+          return :rgi
         when "WezTerm"
           return :all_no_vs16
         end

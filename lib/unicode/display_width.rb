@@ -25,9 +25,7 @@ module Unicode
       WIDTH_TWO: decompress_index(INDEX[:WIDTH_TWO][0][0], 1),
     }
     EMOJI_SEQUENCES_REGEX_MAPPING = {
-      rgi_fqe:  :REGEX,
-      rgi_mqe:  :REGEX_INCLUDE_MQE,
-      rgi_uqe:  :REGEX_INCLUDE_MQE_UQE,
+      rgi: :REGEX_INCLUDE_MQE_UQE,
       possible: :REGEX_WELL_FORMED,
     }
     REGEX_EMOJI_BASIC_OR_KEYCAP = Regexp.union(Unicode::Emoji::REGEX_BASIC, Unicode::Emoji::REGEX_EMOJI_KEYCAP)

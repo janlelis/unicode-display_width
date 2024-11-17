@@ -201,7 +201,7 @@ describe 'Unicode::DisplayWidth.of' do
       end
 
       it 'counts default-text presentation Emoji with Emoji Presentation (VS16) as 2 (in a sequence)' do
-        expect( "❣️‍❣️".display_width(emoji: :rgi_fqe) ).to eq 4
+        expect( "❣️‍❣️".display_width(emoji: :rgi) ).to eq 4
       end
 
       it 'counts default-emoji presentation Emoji according to EAW (always 2)' do
@@ -229,11 +229,11 @@ describe 'Unicode::DisplayWidth.of' do
 
     describe '(modifiers and zwj sequences)' do
       it 'counts RGI Emoji ZWJ sequence as width 2' do
-        expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_fqe) ).to eq 2
+        expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi) ).to eq 2
       end
 
       it 'works for emoji involving characters which are east asian ambiguous' do
-        expect( "🤾🏽‍♀️".display_width(2, emoji: :rgi_fqe) ).to eq 2
+        expect( "🤾🏽‍♀️".display_width(2, emoji: :rgi) ).to eq 2
       end
     end
 
@@ -253,33 +253,13 @@ describe 'Unicode::DisplayWidth.of' do
         end
       end
 
-      describe ':rgi_fqe' do
-        it 'will ignore shorter width of MQE / UQE / non-RQI sequences' do
-          expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_fqe) ).to eq 2 # FQE
-          expect( "🤾🏽‍♀".display_width(1, emoji: :rgi_fqe) ).to eq 5 # MQE
-          expect( "❤‍🩹".display_width(1, emoji: :rgi_fqe) ).to eq 3 # UQE
-          expect( "🤠‍🤢".display_width(1, emoji: :rgi_fqe) ).to eq 4 # Non-RGI/well-formed
-          expect( "🚄🏾‍▶️".display_width(1, emoji: :rgi_fqe) ).to eq 6 # Invalid/non-Emoji sequence
-        end
-      end
-
-      describe ':rgi_mqe' do
-        it 'will ignore shorter width of UQE / non-RQI sequences' do
-          expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_mqe) ).to eq 2 # FQE
-          expect( "🤾🏽‍♀".display_width(1, emoji: :rgi_mqe) ).to eq 2 # MQE
-          expect( "❤‍🩹".display_width(1, emoji: :rgi_mqe) ).to eq 3 # UQE
-          expect( "🤠‍🤢".display_width(1, emoji: :rgi_mqe) ).to eq 4 # Non-RGI/well-formed
-          expect( "🚄🏾‍▶️".display_width(1, emoji: :rgi_mqe) ).to eq 6 # Invalid/non-Emoji sequence
-        end
-      end
-
-      describe ':rgi_uqe' do
+      describe ':rgi' do
         it 'will ignore shorter width of non-RQI sequences' do
-          expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi_uqe) ).to eq 2 # FQE
-          expect( "🤾🏽‍♀".display_width(1, emoji: :rgi_uqe) ).to eq 2 # MQE
-          expect( "❤‍🩹".display_width(1, emoji: :rgi_uqe) ).to eq 2 # UQE
-          expect( "🤠‍🤢".display_width(1, emoji: :rgi_uqe) ).to eq 4 # Non-RGI/well-formed
-          expect( "🚄🏾‍▶️".display_width(1, emoji: :rgi_uqe) ).to eq 6 # Invalid/non-Emoji sequence
+          expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi) ).to eq 2 # FQE
+          expect( "🤾🏽‍♀".display_width(1, emoji: :rgi) ).to eq 2 # MQE
+          expect( "❤‍🩹".display_width(1, emoji: :rgi) ).to eq 2 # UQE
+          expect( "🤠‍🤢".display_width(1, emoji: :rgi) ).to eq 4 # Non-RGI/well-formed
+          expect( "🚄🏾‍▶️".display_width(1, emoji: :rgi) ).to eq 6 # Invalid/non-Emoji sequence
         end
       end
 

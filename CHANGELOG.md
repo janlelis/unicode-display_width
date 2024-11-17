@@ -8,6 +8,9 @@
   ZWJ/modifier sequence (`:all`). The latter is more common and more efficient
   to implement.
 - Add alias `emoji: :auto` for `emoji: true` and `emoji: :none` for `emoji: false`
+- Unify `rgi_*` options to just `rgi` to keep things simpler (corresponds to
+  the former `:rgi_uqe` option). Most terminals that want to support the RGI set
+  will probably want to catch Emoji sequences with missing VS16s.
 - Add new `:all_no_vs16` mode
 - Only consider terminal cells needed when recommending Emoji support level
   (Emoji themselves might display differently)
