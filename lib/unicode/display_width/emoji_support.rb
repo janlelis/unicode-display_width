@@ -7,15 +7,21 @@ module Unicode
       # Tries to find out which terminal emulator is used to
       # set emoji: config to best suiting value
       #
-      # Please note: Many terminals do not set any ENV vars
+      # Please also see section in README.md and
+      # misc/terminal-emoji-width.rb
+      #
+      # Please note: Many terminals do not set any ENV vars,
+      # maybe CSI queries can help?
       def self.recommended
         if ENV["CI"]
           return :rqi_uqe
         end
 
         case ENV["TERM_PROGRAM"]
-        when "Apple_Terminal", "iTerm.app"
+        when "iTerm.app"
           return :all
+        when "Apple_Terminal" # Also: If first Emoji part is EAW 1, gives whole ZWJ seqs width 1
+          return :rgi_uqe
         when "WezTerm"
           return :all_no_vs16
         end
@@ -25,6 +31,10 @@ module Unicode
           # konsole: all, how to detect?
           return :all
         when /kitty/
+          return :basic
+        end
+
+        if ENV["WT_SESSION"] # Windows Terminal
           return :basic
         end
 

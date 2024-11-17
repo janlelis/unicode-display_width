@@ -100,8 +100,8 @@ Emoji Type  | Width / Comment
 ------------|----------------
 Basic/Single Emoji character without Variation Selector | No special handling
 Basic/Single Emoji character with VS15 (Text)           | No special handling
-Basic/Single Emoji character with VS16 (Emoji)          | 2 (except with `emoji: :none` or `emoji: :all_no_vs16`
-Emoji Sequence                                          | 2 (only) if Emoji belongs to configured Emoji set
+Basic/Single Emoji character with VS16 (Emoji)          | 2 (except with `emoji: :none` or `emoji: :all_no_vs16`)
+Emoji Sequence                                          | 2 if Emoji belongs to configured Emoji set
 
 The `emoji:` option can be used to configure which type of Emoji should be considered to have a width of 2 and if VS16-Emoji should be widened. Other sequences are treated as non-combined Emoji, so the widths of all partial Emoji add up (e.g. width of one basic Emoji + one skin tone modifier + another basic Emoji). The following Emoji settings can be used:
 
@@ -112,10 +112,10 @@ Option | Description | Example Terminals
 `emoji: :basic`   | Full-width VS16-Emoji, but no width adjustments for Emoji sequences: All partial Emoji treated separately with a width of 2 | ?
 `emoji: :rgi_fqe` | Full-width VS16-Emoji, all fully-qualified RGI Emoji sequences are considered to have a width of 2 | ?
 `emoji: :rgi_mqe` | Full-width VS16-Emoji, all fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2 | ?
-`emoji: :rgi_uqe` | Full-width VS16-Emoji, all RGI Emoji sequences, regardless of qualification status are considered to have a width of 2 | ?
+`emoji: :rgi_uqe` | Full-width VS16-Emoji, all RGI Emoji sequences, regardless of qualification status are considered to have a width of 2 | Apple Terminal
 `emoji: :possible`| Full-width VS16-Emoji, all possible/well-formed Emoji sequences are considered to have a width of 2 | ?
-`emoji: :all`     | Full-width VS16-Emoji, all ZWJ/modifier/keycap sequences have a width of 2, even if they are not well-formed Emoji sequences | foot, Contour, WezTerm
-`emoji: :all_no_vs16` | VS16-Emoji not handled, all ZWJ/modifier/keycap sequences to have a width of 2, even if they are not well-formed Emoji sequences | -
+`emoji: :all`     | Full-width VS16-Emoji, all ZWJ/modifier/keycap sequences have a width of 2, even if they are not well-formed Emoji sequences | foot, Contour
+`emoji: :all_no_vs16` | VS16-Emoji not handled, all ZWJ/modifier/keycap sequences to have a width of 2, even if they are not well-formed Emoji sequences | WezTerm
 
 - *RGI Emoji:* Emoji Recommended for General Interchange
 - *Qualification:* Whether an Emoji sequence has all required VS16 codepoints

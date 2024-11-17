@@ -7,7 +7,7 @@
 - Emoji modes: Differentiate between well-formed Emoji (`:possible`) and any
   ZWJ/modifier sequence (`:all`). The latter is more common and more efficient
   to implement.
-- Add alias `emoji: :auto` for `emoji: true` and `emoji: :none` for `emodi: false`
+- Add alias `emoji: :auto` for `emoji: true` and `emoji: :none` for `emoji: false`
 - Add new `:all_no_vs16` mode
 - Only consider terminal cells needed when recommending Emoji support level
   (Emoji themselves might display differently)
