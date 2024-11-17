@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 3.1.0 (unreleased)
+
+**Further Emoji improvements:**
+
+- Emoji modes: Differentiate between well-formed Emoji (`:possible`) and any
+  ZWJ/modifier sequence (`:all`). The latter is more common and more efficient
+  to implement.
+- Add alias `emoji: :auto` for `emoji: true` and `emoji: :none` for `emodi: false`
+- Add new `:all_no_vs16` mode
+- Only consider terminal cells needed when recommending Emoji support level
+  (Emoji themselves might display differently)
+- Set default Emoji mode for unknown/unsupported terminals to `:none`
+  (instead of `:basic`)
+
+
 ## 3.0.1
 
 - Add WezTerm and foot as good Emoji terminals

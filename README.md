@@ -4,7 +4,7 @@ Determines the monospace display width of a string in Ruby, which is useful for 
 
 Unicode version: **16.0.0** (September 2024)
 
-## Gem Version 3.0 — Improved Emoji Support
+## Gem Version 3 — Improved Emoji Support
 
 **Emoji support is now enabled by default.** See below for description and configuration possibilities.
 
@@ -81,58 +81,66 @@ Unicode::DisplayWidth.of("a\tb", 1, overwrite: { "\t".ord => 10 })) # => TAB cou
 
 Please note that using overwrites disables some perfomance optimizations of this gem.
 
-### Emoji Option
+### Emoji
 
-The gem detects Emoji and Emoji sequences and adjusts the width of the measured string. This can be disabled by passing `emoji: false` as an argument:
+If your terminal supports it, the gem detects Emoji and Emoji sequences and adjusts the width of the measured string. This can be disabled by passing `emoji: false` as an argument:
 
 ```ruby
-Unicode::DisplayWidth.of "🤾🏽‍♀️" # => 2
+Unicode::DisplayWidth.of "🤾🏽‍♀️", emoji: :all # => 2
 Unicode::DisplayWidth.of "🤾🏽‍♀️", emoji: false # => 5
-```
-
-Disabling Emoji support yields wrong results, as illustrated in the example above, but increases performance of display width calculation. You can configure [the Emoji set to match for](https://www.unicode.org/reports/tr51/#def_rgi_set) by passing a symbol as value:
-
-```ruby
-Unicode::DisplayWidth.of "🐻‍❄", emoji: :rgi_mqe # => 3
-Unicode::DisplayWidth.of "🐻‍❄", emoji: :rgi_uqe # => 2
 ```
 
 #### How this Library Handles Emoji Width
 
 There are many Emoji which get constructed by combining other Emoji in a sequence. This makes measuring the width complicated, since terminals might either display the combined Emoji or the separate parts of the Emoji individually.
 
+Another aspect where terminals disagree is whether Emoji characters which have a text presentation by default (width 1) should be turned into full-width (width 2) when combined with Variation Selector 16 (*U+FEOF*).
+
 Emoji Type  | Width / Comment
 ------------|----------------
-Basic/Single Emoji character without Variation Selector | No special handling, uses mechanism from table above
-Basic/Single Emoji character with VS15 (Text)           | No special handling, uses mechanism from table above
-Basic/Single Emoji character with VS16 (Emoji)          | 2
-Emoji Sequence                                          | 2 (only if sequence belongs to configured Emoji set)
+Basic/Single Emoji character without Variation Selector | No special handling
+Basic/Single Emoji character with VS15 (Text)           | No special handling
+Basic/Single Emoji character with VS16 (Emoji)          | 2 (except with `emoji: :none` or `emoji: :all_no_vs16`
+Emoji Sequence                                          | 2 (only) if Emoji belongs to configured Emoji set
 
-The `emoji:` option can be used to configure which type of Emoji should be considered to have a width of 2. Other sequences are treated as non-combined Emoji, so the widths of all partial Emoji add up (e.g. width of one basic Emoji + one skin tone modifier + another basic Emoji). The following Emoji sets can be used:
+The `emoji:` option can be used to configure which type of Emoji should be considered to have a width of 2 and if VS16-Emoji should be widened. Other sequences are treated as non-combined Emoji, so the widths of all partial Emoji add up (e.g. width of one basic Emoji + one skin tone modifier + another basic Emoji). The following Emoji settings can be used:
 
-Option | Descriptions
--------|-------------
-`emoji: true`     | Use recommended Emoji set on your platform, see section below
-`emoji: :basic`   | No width adjustments for Emoji sequences: all partial Emoji treated separately
-`emoji: :rgi_fqe` | All fully-qualified RGI Emoji sequences are considered to have a width of 2
-`emoji: :rgi_mqe` | All fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2
-`emoji: :rgi_uqe` | All RGI Emoji sequences, regardless of qualification status are considered to have a width of 2
-`emoji: :all`     | All possible/well-formed Emoji sequences are considered to have a width of 2
-`emoji: false`    | No Emoji adjustments, Emoji characters with VS16 not handled
+Option | Description | Example Terminals
+-------|-------------|------------------
+`emoji: true` or `emoji: :auto`   | Automatically use recommended Emoji setting for your terminal | -
+`emoji: false` or  `emoji: :none` | No Emoji adjustments, Emoji characters with VS16 not handled | Gnome Terminal, many older terminals
+`emoji: :basic`   | Full-width VS16-Emoji, but no width adjustments for Emoji sequences: All partial Emoji treated separately with a width of 2 | ?
+`emoji: :rgi_fqe` | Full-width VS16-Emoji, all fully-qualified RGI Emoji sequences are considered to have a width of 2 | ?
+`emoji: :rgi_mqe` | Full-width VS16-Emoji, all fully- and minimally-qualified RGI Emoji sequences are considered to have a width of 2 | ?
+`emoji: :rgi_uqe` | Full-width VS16-Emoji, all RGI Emoji sequences, regardless of qualification status are considered to have a width of 2 | ?
+`emoji: :possible`| Full-width VS16-Emoji, all possible/well-formed Emoji sequences are considered to have a width of 2 | ?
+`emoji: :all`     | Full-width VS16-Emoji, all ZWJ/modifier/keycap sequences have a width of 2, even if they are not well-formed Emoji sequences | foot, Contour, WezTerm
+`emoji: :all_no_vs16` | VS16-Emoji not handled, all ZWJ/modifier/keycap sequences to have a width of 2, even if they are not well-formed Emoji sequences | -
 
-*RGI Emoji:* Emoji Recommended for General Interchange
+- *RGI Emoji:* Emoji Recommended for General Interchange
+- *Qualification:* Whether an Emoji sequence has all required VS16 codepoints
+- *ZWJ:* Zero-width Joiner: Codepoint `U+200D`,used in many Emoji sequences
 
-*Qualification:* Whether an Emoji sequence has all required VS16 codepoints
+Example:
+
+```ruby
+Unicode::DisplayWidth.of "🐻‍❄", emoji: :rgi_mqe # => 3 (2 for U+1f43b, 1 for U+2744)
+Unicode::DisplayWidth.of "🐻‍❄", emoji: :rgi_uqe # => 2
+```
 
 See [emoji-test.txt](https://www.unicode.org/Public/emoji/16.0/emoji-test.txt), the [unicode-emoji gem](https://github.com/janlelis/unicode-emoji) and [UTS-51](https://www.unicode.org/reports/tr51/#def_qualified_emoji_character) for more details about qualified and unqualified Emoji sequences.
 
 #### Emoji Support in Terminals
 
-Unfortunately, the level of Emoji support varies a lot between terminals. While some of them are able to display (almost) all Emoji sequences correctly, others fall back to displaying sequences of basic Emoji. When `emoji: true` is used, the gem will attempt to set the best fitting Emoji set for you (e.g. `:rgi_uqe` on "Apple_Terminal" or `:basic` on Gnome's terminal widget).
+Unfortunately, the level of Emoji support varies a lot between terminals. While some of them are able to display (almost) all Emoji sequences correctly, others fall back to displaying sequences of basic Emoji. When `emoji: true` or `emoji: :auto` is used, the gem will attempt to set the best fitting Emoji setting for you (e.g. `:rgi_uqe` on "Apple_Terminal" or `:none` on Gnome's terminal widget).
 
-Please [open an issue](https://github.com/janlelis/unicode-display_width/issues/new) if you notice your terminal application could use a better default value.
+Note that Emoji display and number of terminal columns used might differs a lot. For example, it might be the case that a terminal does not understand which Emoji to display, but still manages to calculate the proper amount of terminal cells. The automatic Emoji support level per terminal only considers the latter (cursor position), not the actual Emoji image(s) displayed. Please [open an issue](https://github.com/janlelis/unicode-display_width/issues/new) if you notice your terminal application could use a better default value. Also see the [ucs-detect project], which is a great resource that compares various terminal's Unicode/Emoji capabilities.
 
-You are encouraged to give your users the option to configure the level of Emoji support in your library or application and for the best developer experience in their terminals. (same is true for ambigouos width).
+---
+
+To terminal implementors reading this: Although handling Emoji/ZWJ sequences as always having a width of 2 (`:all` mode described above) has some advantages, it does not lead to a particularly good developer experience. Since there is always the possibility of well-formed Emoji that are currently not supported (non-RGI / future Unicode) appearing, those sequences will take more cells. Instead of overflowing, cutting off sequences or displaying placeholder-Emoji, could it be worthwile to implement the `:rgi_uqe` option (see table above) and just give those unknown Emoji the space they need? It is painful to implement, I know, but it kind of underlines the idea that the meaning of an unknown Emoji sequence can still be conveyed (without messing up the terminal at the same time). Just a thought…
+
+---
 
 ### Usage with String Extension
 

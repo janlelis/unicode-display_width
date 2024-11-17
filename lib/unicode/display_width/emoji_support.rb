@@ -14,23 +14,22 @@ module Unicode
         end
 
         case ENV["TERM_PROGRAM"]
-        when "iTerm.app", "WezTerm"
+        when "Apple_Terminal", "iTerm.app"
           return :all
-        when "Apple_Terminal"
-          return :rgi_uqe
+        when "WezTerm"
+          return :all_no_vs16
         end
 
         case ENV["TERM"]
-        when "foot"
+        when "contour","foot"
+          # konsole: all, how to detect?
           return :all
-        when "contour"
-          return :rgi_uqe
         when /kitty/
-          return :rgi_fqe
+          return :basic
         end
 
-        # As of last time checked: gnome-terminal, vscode, alacritty, konsole
-        :basic
+        # As of last time checked: gnome-terminal, vscode, alacritty
+        :none
       end
 
       # Maybe: Implement something like https://github.com/jquast/ucs-detect
