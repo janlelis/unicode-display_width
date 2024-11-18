@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.1 (unreleased)
+
+- Performance improvements
+
 ## 3.1.0
 
 **Improve Emoji support:**
