@@ -2,22 +2,21 @@
 
 ## 3.1.0 (unreleased)
 
-**Further Emoji improvements:**
+**Improve Emoji support:**
 
 - Emoji modes: Differentiate between well-formed Emoji (`:possible`) and any
   ZWJ/modifier sequence (`:all`). The latter is more common and more efficient
   to implement.
-- Add alias `emoji: :auto` for `emoji: true` and `emoji: :none` for `emoji: false`
-- Unify `rgi_*` options to just `rgi` to keep things simpler (corresponds to
+- Unify `rgi_{fqe,mqe,uqe}` options to just `:rgi` to keep things simpler (corresponds to
   the former `:rgi_uqe` option). Most terminals that want to support the RGI set
   will probably want to catch Emoji sequences with missing VS16s.
-- Add new `:all_no_vs16` mode
-- Only consider terminal cells needed when recommending Emoji support level
+- Add new `:all_no_vs16` and `:rgi_at` modes to be able to support some terminals
+  that needs these quirks
+- Add alias `emoji: :auto` for `emoji: true` and `emoji: :none` for `emoji: false`
+- `:auto` mode: Only consider terminal cells when recommending Emoji support level
   (Emoji themselves might display differently)
-- Set default Emoji mode for unknown/unsupported terminals to `:none`
-  (instead of `:basic`)
+- `:auto` mode: Set default Emoji mode for unknown/unsupported terminals to `:none`
 - Rename `:basic` mode to `:vs16`
-
 
 ## 3.0.1
 

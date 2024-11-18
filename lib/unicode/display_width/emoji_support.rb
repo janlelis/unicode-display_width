@@ -20,8 +20,8 @@ module Unicode
         case ENV["TERM_PROGRAM"]
         when "iTerm.app"
           return :all
-        when "Apple_Terminal" # Also: If first Emoji part is EAW 1, gives whole ZWJ seqs width 1
-          return :rgi
+        when "Apple_Terminal"
+          return :rgi_at
         when "WezTerm"
           return :all_no_vs16
         end

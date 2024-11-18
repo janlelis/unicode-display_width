@@ -8,6 +8,7 @@ require_relative "display_width/emoji_support"
 
 module Unicode
   class DisplayWidth
+    DEFAULT_AMBIGUOUS = 1
     INITIAL_DEPTH = 0x10000
     ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
     ASCII_NON_ZERO_STRING = "\0\x05\a\b\n\v\f\r\x0E\x0F"
@@ -26,6 +27,7 @@ module Unicode
     }
     EMOJI_SEQUENCES_REGEX_MAPPING = {
       rgi: :REGEX_INCLUDE_MQE_UQE,
+      rgi_at: :REGEX_INCLUDE_MQE_UQE,
       possible: :REGEX_WELL_FORMED,
     }
     REGEX_EMOJI_BASIC_OR_KEYCAP = Regexp.union(Unicode::Emoji::REGEX_BASIC, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
@@ -40,7 +42,7 @@ module Unicode
       end
 
       options[:ambiguous] = ambiguous if ambiguous
-      options[:ambiguous] ||= 1
+      options[:ambiguous] ||= DEFAULT_AMBIGUOUS
 
       if options[:ambiguous] != 1 && options[:ambiguous] != 2
         raise ArgumentError, "Unicode::DisplayWidth: Ambiguous width must be 1 or 2"
@@ -92,6 +94,7 @@ module Unicode
         res, string = emoji_width(
           string,
           options[:emoji],
+          options[:ambiguous],
         )
       end
 
@@ -162,13 +165,18 @@ module Unicode
     end
 
 
-    def self.emoji_width(string, mode = :all)
+    def self.emoji_width(string, mode = :all, ambiguous = DEFAULT_AMBIGUOUS)
       res = 0
 
       string = string.encode(Encoding::UTF_8) unless string.encoding.name == "utf-8"
 
       if emoji_set_regex = EMOJI_SEQUENCES_REGEX_MAPPING[mode]
-        emoji_width_via_possible(string, Unicode::Emoji.const_get(emoji_set_regex))
+        emoji_width_via_possible(
+          string,
+          Unicode::Emoji.const_get(emoji_set_regex),
+          mode == :rgi_at,
+          ambiguous,
+        )
       elsif mode == :all_no_vs16
         emoji_width_all(string)
       elsif mode == :vs16
@@ -211,7 +219,7 @@ module Unicode
     end
 
     # Match possible Emoji first, then refine
-    def self.emoji_width_via_possible(string, emoji_set_regex)
+    def self.emoji_width_via_possible(string, emoji_set_regex, strict_eaw = false, ambiguous = DEFAULT_AMBIGUOUS)
       res = 0
 
       # For each string possibly an emoji
@@ -220,22 +228,28 @@ module Unicode
         if REGEX_EMOJI_NOT_POSSIBLE.match?(emoji_candidate)
           emoji_candidate
 
-        # Check if we have a combined Emoji with width 2
+        # Check if we have a combined Emoji with width 2 (or EAW an Apple Terminal)
         elsif emoji_candidate == emoji_candidate[emoji_set_regex]
-          res += 2
+          if strict_eaw
+            res += self.of(emoji_candidate[0], ambiguous, emoji: false)
+          else
+            res += 2
+          end
           ""
 
         # We are dealing with a default text presentation emoji or a well-formed sequence not matching the above Emoji set
         else
-          # Ensure all explicit VS16 sequences have width 2
-          emoji_candidate.gsub!(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
-            if basic_emoji.size == 2 # VS16 present
-              res += 2
-              ""
-            else
-              basic_emoji
-            end
-          }
+          if !strict_eaw
+            # Ensure all explicit VS16 sequences have width 2
+            emoji_candidate.gsub!(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
+              if basic_emoji.size == 2 # VS16 present
+                res += 2
+                ""
+              else
+                basic_emoji
+              end
+            }
+          end
 
           emoji_candidate
         end
@@ -244,7 +258,7 @@ module Unicode
       [res, no_emoji_string]
     end
 
-    def initialize(ambiguous: 1, overwrite: {}, emoji: true)
+    def initialize(ambiguous: DEFAULT_AMBIGUOUS, overwrite: {}, emoji: true)
       @ambiguous = ambiguous
       @overwrite = overwrite
       @emoji     = emoji

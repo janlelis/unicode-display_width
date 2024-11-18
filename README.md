@@ -110,12 +110,12 @@ The `emoji:` option can be used to configure which type of Emoji should be consi
 `emoji:` Option | VS16-Emoji Width | Emoji Sequences Width / Comment | Example Terminals
 ----------------|------------------|---------------------------------|------------------
 `true` or `:auto`  | - | Automatically use recommended Emoji setting for your terminal | -
-`:all`     | 2                | 2 for all ZWJ/modifier/keycap sequences, even if they are not well-formed Emoji sequences | iTerm, foot, Contour
+`:all`     | 2                | 2 for all ZWJ/modifier/keycap sequences, even if they are not well-formed Emoji sequences | iTerm, foot
 `:all_no_vs16` | EAW (1 or 2) | 2 for all ZWJ/modifier/keycap sequences, even if they are not well-formed Emoji sequences | WezTerm
 `:possible`| 2                | 2 for all possible/well-formed Emoji sequences | ?
 `:rgi`     | 2                | 2 for all [RGI Emoji](https://www.unicode.org/reports/tr51/#def_rgi_set) sequences | ?
 `:rgi_at`  | EAW (1 or 2)     | 1 or 2: Like `:rgi`, but Emoji sequences starting with a default-text Emoji have width 1 | Apple Terminal
-`:vs16`    | 2                | 2 * number of partial Emoji (sequences never considered to represent a combined Emoji) | kitty
+`:vs16`    | 2                | 2 * number of partial Emoji (sequences never considered to represent a combined Emoji) | kitty?
 `false` or  `:none` | EAW (1 or 2) | No Emoji adjustments | gnome-terminal, many older terminals
 
 - *RGI Emoji:* Emoji Recommended for General Interchange
@@ -123,7 +123,7 @@ The `emoji:` option can be used to configure which type of Emoji should be consi
 
 #### Emoji Support in Terminals
 
-Unfortunately, the level of Emoji support varies a lot between terminals. While some of them are able to display (almost) all Emoji sequences correctly, others fall back to displaying sequences of basic Emoji. When `emoji: true` or `emoji: :auto` is used, the gem will attempt to set the best fitting Emoji setting for you (e.g. `:rgi_at` on "Apple_Terminal" or `:none` on Gnome's terminal widget).
+Unfortunately, the level of Emoji support varies a lot between terminals. While some of them are able to display (almost) all Emoji sequences correctly, others fall back to displaying sequences of basic Emoji. When `emoji: true` or `emoji: :auto` is used, the gem will attempt to set the best fitting Emoji setting for you (e.g. `:rgi_at` on "Apple_Terminal" or `false` on Gnome's terminal widget).
 
 Please note that Emoji display and number of terminal columns used might differs a lot. For example, it might be the case that a terminal does not understand which Emoji to display, but still manages to calculate the proper amount of terminal cells. The automatic Emoji support level per terminal only considers the latter (cursor position), not the actual Emoji image(s) displayed. Please [open an issue](https://github.com/janlelis/unicode-display_width/issues/new) if you notice your terminal application could use a better default value. Also see the [ucs-detect project](https://ucs-detect.readthedocs.io/results.html), which is a great resource that compares various terminal's Unicode/Emoji capabilities.
 
