@@ -245,11 +245,15 @@ describe 'Unicode::DisplayWidth.of' do
         end
       end
 
-      describe ':basic' do
+      describe ':vs16' do
         it 'will ignore shorter width of all Emoji sequences' do
           # Please note that this is different from emoji: false / emoji: :none
           # -> Basic Emoji with VS16 still get normalized
-          expect( "🤾🏽‍♀️".display_width(1, emoji: :basic) ).to eq 6
+          expect( "🤾🏽‍♀️".display_width(1, emoji: :vs16) ).to eq 6
+        end
+
+        it 'counts default-text presentation Emoji with Emoji Presentation (VS16) as 2' do
+          expect( "❣️".display_width(emoji: :vs16) ).to eq 2
         end
       end
 
@@ -261,6 +265,10 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "🤠‍🤢".display_width(1, emoji: :rgi) ).to eq 4 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(1, emoji: :rgi) ).to eq 6 # Invalid/non-Emoji sequence
         end
+
+        it 'counts default-text presentation Emoji with Emoji Presentation (VS16) as 2' do
+          expect( "❣️".display_width(emoji: :rgi) ).to eq 2
+        end
       end
 
       describe ':possible' do
@@ -271,6 +279,10 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "🤠‍🤢".display_width(1, emoji: :possible) ).to eq 2 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(1, emoji: :possible) ).to eq 6 # Invalid/non-Emoji sequence
         end
+
+        it 'counts default-text presentation Emoji with Emoji Presentation (VS16) as 2' do
+          expect( "❣️".display_width(emoji: :possible) ).to eq 2
+        end
       end
 
       describe ':all' do
@@ -280,7 +292,10 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "❤‍🩹".display_width(1, emoji: :all) ).to eq 2 # UQE
           expect( "🤠‍🤢".display_width(1, emoji: :all) ).to eq 2 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(1, emoji: :all) ).to eq 2 # Invalid/non-Emoji sequence
-          expect( "❣️".display_width(emoji: :all) ).to eq 2 # VS16
+        end
+
+        it 'counts default-text presentation Emoji with Emoji Presentation (VS16) as 2' do
+          expect( "❣️".display_width(emoji: :all) ).to eq 2
         end
       end
 
@@ -291,7 +306,10 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "❤‍🩹".display_width(1, emoji: :all_no_vs16) ).to eq 2 # UQE
           expect( "🤠‍🤢".display_width(1, emoji: :all_no_vs16) ).to eq 2 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(1, emoji: :all_no_vs16) ).to eq 2 # Invalid/non-Emoji sequence
-          expect( "❣️".display_width(emoji: :all_no_vs16) ).to eq 1 # No VS16
+        end
+
+        it 'uses EAW for default-text presentation Emoji with Emoji Presentation (VS16)' do
+          expect( "❣️".display_width(emoji: :all_no_vs16) ).to eq 1
         end
       end
     end

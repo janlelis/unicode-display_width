@@ -171,7 +171,7 @@ module Unicode
         emoji_width_via_possible(string, Unicode::Emoji.const_get(emoji_set_regex))
       elsif mode == :all_no_vs16
         emoji_width_all(string)
-      elsif mode == :basic
+      elsif mode == :vs16
         emoji_width_basic(string)
       elsif mode == :all
         res_all, string = emoji_width_all(string)

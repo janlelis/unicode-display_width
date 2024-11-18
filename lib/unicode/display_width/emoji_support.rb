@@ -31,11 +31,11 @@ module Unicode
           # konsole: all, how to detect?
           return :all
         when /kitty/
-          return :basic
+          return :vs16
         end
 
         if ENV["WT_SESSION"] # Windows Terminal
-          return :basic
+          return :vs16
         end
 
         # As of last time checked: gnome-terminal, vscode, alacritty
