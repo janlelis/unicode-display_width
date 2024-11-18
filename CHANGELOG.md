@@ -16,6 +16,7 @@
   (Emoji themselves might display differently)
 - Set default Emoji mode for unknown/unsupported terminals to `:none`
   (instead of `:basic`)
+- Rename `:basic` mode to `:vs16`
 
 
 ## 3.0.1

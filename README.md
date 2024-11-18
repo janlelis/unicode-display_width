@@ -100,35 +100,34 @@ Emoji Type  | Width / Comment
 ------------|----------------
 Basic/Single Emoji character without Variation Selector | No special handling
 Basic/Single Emoji character with VS15 (Text)           | No special handling
-Basic/Single Emoji character with VS16 (Emoji)          | 2 (except with `emoji: :none` or `emoji: :all_no_vs16`)
-Emoji Sequence                                          | 2 if Emoji belongs to configured Emoji set
+Basic/Single Emoji character with VS16 (Emoji)          | 2 or East Asian Width (see table below)
+Emoji Sequence                                          | 2 if Emoji belongs to configured Emoji set (see table below)
+
+#### Emoji Modes
 
 The `emoji:` option can be used to configure which type of Emoji should be considered to have a width of 2 and if VS16-Emoji should be widened. Other sequences are treated as non-combined Emoji, so the widths of all partial Emoji add up (e.g. width of one basic Emoji + one skin tone modifier + another basic Emoji). The following Emoji settings can be used:
 
-Option | Description | Example Terminals
--------|-------------|------------------
-`emoji: true` or `emoji: :auto`   | Automatically use recommended Emoji setting for your terminal | -
-`emoji: false` or  `emoji: :none` | No Emoji adjustments, Emoji characters with VS16 not handled | Gnome Terminal, many older terminals
-`emoji: :basic`   | Full-width VS16-Emoji, but no width adjustments for Emoji sequences: All partial Emoji treated separately with a width of 2 | ?
-`emoji: :rgi` | Full-width VS16-Emoji, all RGI Emoji sequences are considered to have a width of 2 | Apple Terminal
-`emoji: :possible`| Full-width VS16-Emoji, all possible/well-formed Emoji sequences are considered to have a width of 2 | ?
-`emoji: :all`     | Full-width VS16-Emoji, all ZWJ/modifier/keycap sequences have a width of 2, even if they are not well-formed Emoji sequences | foot, Contour
-`emoji: :all_no_vs16` | VS16-Emoji not handled, all ZWJ/modifier/keycap sequences to have a width of 2, even if they are not well-formed Emoji sequences | WezTerm
+`emoji:` Option | VS16-Emoji Width | Emoji Sequences Width / Comment | Example Terminals
+----------------|------------------|---------------------------------|------------------
+`true` or `:auto`  | - | Automatically use recommended Emoji setting for your terminal | -
+`:all`     | 2                | 2 for all ZWJ/modifier/keycap sequences, even if they are not well-formed Emoji sequences | iTerm, foot, Contour
+`:all_no_vs16` | EAW (1 or 2) | 2 for all ZWJ/modifier/keycap sequences, even if they are not well-formed Emoji sequences | WezTerm
+`:possible`| 2                | 2 for all possible/well-formed Emoji sequences | ?
+`:rgi`     | 2                | 2 for all [RGI Emoji](https://www.unicode.org/reports/tr51/#def_rgi_set) sequences | ?
+`:rgi_at`  | EAW (1 or 2)     | 1 or 2: Like `:rgi`, but Emoji sequences starting with a default-text Emoji have width 1 | Apple Terminal
+`:vs16`    | 2                | 2 * number of partial Emoji (sequences never considered to represent a combined Emoji) | kitty
+`false` or  `:none` | EAW (1 or 2) | No Emoji adjustments | gnome-terminal, many older terminals
 
 - *RGI Emoji:* Emoji Recommended for General Interchange
 - *ZWJ:* Zero-width Joiner: Codepoint `U+200D`,used in many Emoji sequences
 
 #### Emoji Support in Terminals
 
-Unfortunately, the level of Emoji support varies a lot between terminals. While some of them are able to display (almost) all Emoji sequences correctly, others fall back to displaying sequences of basic Emoji. When `emoji: true` or `emoji: :auto` is used, the gem will attempt to set the best fitting Emoji setting for you (e.g. `:rgi` on "Apple_Terminal" or `:none` on Gnome's terminal widget).
+Unfortunately, the level of Emoji support varies a lot between terminals. While some of them are able to display (almost) all Emoji sequences correctly, others fall back to displaying sequences of basic Emoji. When `emoji: true` or `emoji: :auto` is used, the gem will attempt to set the best fitting Emoji setting for you (e.g. `:rgi_at` on "Apple_Terminal" or `:none` on Gnome's terminal widget).
 
-Note that Emoji display and number of terminal columns used might differs a lot. For example, it might be the case that a terminal does not understand which Emoji to display, but still manages to calculate the proper amount of terminal cells. The automatic Emoji support level per terminal only considers the latter (cursor position), not the actual Emoji image(s) displayed. Please [open an issue](https://github.com/janlelis/unicode-display_width/issues/new) if you notice your terminal application could use a better default value. Also see the [ucs-detect project], which is a great resource that compares various terminal's Unicode/Emoji capabilities.
+Please note that Emoji display and number of terminal columns used might differs a lot. For example, it might be the case that a terminal does not understand which Emoji to display, but still manages to calculate the proper amount of terminal cells. The automatic Emoji support level per terminal only considers the latter (cursor position), not the actual Emoji image(s) displayed. Please [open an issue](https://github.com/janlelis/unicode-display_width/issues/new) if you notice your terminal application could use a better default value. Also see the [ucs-detect project](https://ucs-detect.readthedocs.io/results.html), which is a great resource that compares various terminal's Unicode/Emoji capabilities.
 
----
-
-To terminal implementors reading this: Although handling Emoji/ZWJ sequences as always having a width of 2 (`:all` mode described above) has some advantages, it does not lead to a particularly good developer experience. Since there is always the possibility of well-formed Emoji that are currently not supported (non-RGI / future Unicode) appearing, those sequences will take more cells. Instead of overflowing, cutting off sequences or displaying placeholder-Emoji, could it be worthwile to implement the `:rgi` option (see table above) and just give those unknown Emoji the space they need? It is painful to implement, I know, but it kind of underlines the idea that the meaning of an unknown Emoji sequence can still be conveyed (without messing up the terminal at the same time). Just a thought…
-
----
+**To terminal implementors reading this:** Although the practice of giving all Emoji/ZWJ sequences a width of 2 (`:all` mode described above) has some advantages, it does not lead to a particularly good developer experience. Since there is always the possibility of well-formed Emoji that are currently not supported (non-RGI / future Unicode) appearing, those sequences will take more cells. Instead of overflowing, cutting off sequences or displaying placeholder-Emoji, could it be worthwile to implement the `:rgi` option (only known Emoji get width 2) and give those unknown Emoji the space they need? This would support the idea that the meaning of an unknown Emoji sequence can still be conveyed (without messing up the terminal at the same time). Just a thought…
 
 ### Usage with String Extension
 

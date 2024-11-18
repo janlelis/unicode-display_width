@@ -14,7 +14,7 @@ module Unicode
       # maybe CSI queries can help?
       def self.recommended
         if ENV["CI"]
-          return :rqi_uqe
+          return :rqi
         end
 
         case ENV["TERM_PROGRAM"]
