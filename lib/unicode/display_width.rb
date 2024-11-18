@@ -31,7 +31,7 @@ module Unicode
       possible: :REGEX_WELL_FORMED,
     }
     REGEX_EMOJI_BASIC_OR_KEYCAP = Regexp.union(Unicode::Emoji::REGEX_BASIC, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
-    REGEX_EMOJI_ALL_SEQUENCES = Regexp.union(/.[🏻-🏿\u{FE0F}]?(\u{200D}.[🏻-🏿\u{FE0F}]?)+/, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
+    REGEX_EMOJI_ALL_SEQUENCES = Regexp.union(/.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?(\u{200D}.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?)+/, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
     REGEX_EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
 
     # Returns monospace display width of string
