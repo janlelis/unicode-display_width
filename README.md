@@ -114,10 +114,11 @@ The `emoji:` option can be used to configure which type of Emoji should be consi
 `:all_no_vs16` | EAW (1 or 2) | 2 for all ZWJ/modifier/keycap sequences, even if they are not well-formed Emoji sequences | WezTerm
 `:possible`| 2                | 2 for all possible/well-formed Emoji sequences | ?
 `:rgi`     | 2                | 2 for all [RGI Emoji](https://www.unicode.org/reports/tr51/#def_rgi_set) sequences | ?
-`:rgi_at`  | EAW (1 or 2)     | 1 or 2: Like `:rgi`, but Emoji sequences starting with a default-text Emoji have width 1 | Apple Terminal
+`:rgi_at`  | EAW (1 or 2)     | 1 or 2: Like `:rgi`, but Emoji sequences starting with a default-text Emoji have EAW | Apple Terminal
 `:vs16`    | 2                | 2 * number of partial Emoji (sequences never considered to represent a combined Emoji) | kitty?
 `false` or  `:none` | EAW (1 or 2) | No Emoji adjustments | gnome-terminal, many older terminals
 
+- *EAW:* East Asian Width
 - *RGI Emoji:* Emoji Recommended for General Interchange
 - *ZWJ:* Zero-width Joiner: Codepoint `U+200D`,used in many Emoji sequences
 
