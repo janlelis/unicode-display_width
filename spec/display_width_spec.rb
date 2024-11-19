@@ -255,6 +255,10 @@ describe 'Unicode::DisplayWidth.of' do
         it 'counts default-text presentation Emoji with Emoji Presentation (VS16) as 2' do
           expect( "❣️".display_width(emoji: :vs16) ).to eq 2
         end
+
+        it 'works with keycaps: width 2' do
+          expect( "1️⃣".display_width(emoji: :vs16) ).to eq 2
+        end
       end
 
       describe ':rgi' do

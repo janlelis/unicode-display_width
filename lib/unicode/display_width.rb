@@ -30,9 +30,17 @@ module Unicode
       rgi_at: :REGEX_INCLUDE_MQE_UQE,
       possible: :REGEX_WELL_FORMED,
     }
-    REGEX_EMOJI_BASIC_OR_KEYCAP = Regexp.union(Unicode::Emoji::REGEX_BASIC, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
-    REGEX_EMOJI_ALL_SEQUENCES = Regexp.union(/.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?(\u{200D}.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?)+/, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
     REGEX_EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
+    REGEX_EMOJI_VS16 = Regexp.union(
+      Regexp.compile(
+        Unicode::Emoji::REGEX_TEXT_PRESENTATION.source +
+        "(?<![#*0-9])" +
+        "\u{FE0F}"
+      ),
+      Unicode::Emoji::REGEX_EMOJI_KEYCAP
+    )
+    REGEX_EMOJI_ALL_SEQUENCES = Regexp.union(/.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?(\u{200D}.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?)+/, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
+    REGEX_EMOJI_ALL_SEQUENCES_AND_VS16 = Regexp.union(REGEX_EMOJI_ALL_SEQUENCES, REGEX_EMOJI_VS16)
 
     # Returns monospace display width of string
     def self.of(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
@@ -177,45 +185,23 @@ module Unicode
           mode == :rgi_at,
           ambiguous,
         )
+
       elsif mode == :all_no_vs16
-        emoji_width_all(string)
+        no_emoji_string = string.gsub(REGEX_EMOJI_ALL_SEQUENCES){ res += 2; "" }
+        [res, no_emoji_string]
+
       elsif mode == :vs16
-        emoji_width_basic(string)
+        no_emoji_string = string.gsub(REGEX_EMOJI_VS16){ res += 2; "" }
+        [res, no_emoji_string]
+
       elsif mode == :all
-        res_all, string = emoji_width_all(string)
-        res_basic, string = emoji_width_basic(string)
-        [res_all + res_basic, string]
+        no_emoji_string = string.gsub(REGEX_EMOJI_ALL_SEQUENCES_AND_VS16){ res += 2; "" }
+        [res, no_emoji_string]
+
       else
         [0, string]
+
       end
-    end
-
-    # Ensure all explicit VS16 sequences have width 2
-    def self.emoji_width_basic(string)
-      res = 0
-
-      no_emoji_string = string.gsub(REGEX_EMOJI_BASIC_OR_KEYCAP){ |basic_emoji|
-        if basic_emoji.size >= 2 # VS16 present
-          res += 2
-          ""
-        else
-          basic_emoji
-        end
-      }
-
-      [res, no_emoji_string]
-    end
-
-    # Use simplistic ZWJ/modifier/kecap sequence matching
-    def self.emoji_width_all(string)
-      res = 0
-
-      no_emoji_string = string.gsub(REGEX_EMOJI_ALL_SEQUENCES){
-        res += 2
-        ""
-      }
-
-      [res, no_emoji_string]
     end
 
     # Match possible Emoji first, then refine
@@ -241,14 +227,7 @@ module Unicode
         else
           if !strict_eaw
             # Ensure all explicit VS16 sequences have width 2
-            emoji_candidate.gsub!(Unicode::Emoji::REGEX_BASIC){ |basic_emoji|
-              if basic_emoji.size == 2 # VS16 present
-                res += 2
-                ""
-              else
-                basic_emoji
-              end
-            }
+            emoji_candidate.gsub!(REGEX_EMOJI_VS16){ res += 2; "" }
           end
 
           emoji_candidate
