@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 3.1.2 (unreleased)
+## 3.1.2
 
 - Performance improvements
 
@@ -15,7 +15,7 @@
 - Emoji modes: Differentiate between well-formed Emoji (`:possible`) and any
   ZWJ/modifier sequence (`:all`). The latter is more common and more efficient
   to implement.
-- Unify `rgi_{fqe,mqe,uqe}` options to just `:rgi` to keep things simpler (corresponds to
+- Unify `:rgi_{fqe,mqe,uqe}` options to just `:rgi` to keep things simpler (corresponds to
   the former `:rgi_uqe` option). Most terminals that want to support the RGI set
   will probably want to catch Emoji sequences with missing VS16s.
 - Add new `:all_no_vs16` and `:rgi_at` modes to be able to support some terminals
