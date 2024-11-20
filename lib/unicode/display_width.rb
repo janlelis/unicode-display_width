@@ -34,8 +34,6 @@ module Unicode
       rgi_at: :REGEX_INCLUDE_MQE_UQE,
       possible: :REGEX_WELL_FORMED,
     }
-    # REGEX_NEEDS_EMOJI_HANDLING: ZWJ, VS16, MODIFIER, KEYCAP
-    REGEX_EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
     REGEX_EMOJI_VS16 = Regexp.union(
       Regexp.compile(
         Unicode::Emoji::REGEX_TEXT_PRESENTATION.source +
@@ -68,7 +66,7 @@ module Unicode
         return width + string.size
       end
 
-      # Retrieve Emoji width, maybe: add quick check using REGEX_NEEDS_EMOJI_HANDLING
+      # Retrieve Emoji width
       if options[:emoji] != :none
         e_width, string = emoji_width(
           string,
@@ -167,13 +165,9 @@ module Unicode
       res = 0
 
       # For each string possibly an emoji
-      no_emoji_string = string.gsub(Unicode::Emoji::REGEX_POSSIBLE){ |emoji_candidate|
-        # Skip notorious false positives
-        if REGEX_EMOJI_NOT_POSSIBLE.match?(emoji_candidate)
-          emoji_candidate
-
+      no_emoji_string = string.gsub(REGEX_EMOJI_ALL_SEQUENCES_AND_VS16){ |emoji_candidate|
         # Check if we have a combined Emoji with width 2 (or EAW an Apple Terminal)
-        elsif emoji_candidate == emoji_candidate[emoji_set_regex]
+        if emoji_candidate == emoji_candidate[emoji_set_regex]
           if strict_eaw
             res += self.of(emoji_candidate[0], ambiguous, emoji: false)
           else
