@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.2 (unreleased)
+
+- Performance improvements
+
 ## 3.1.1
 
 - Performance improvements

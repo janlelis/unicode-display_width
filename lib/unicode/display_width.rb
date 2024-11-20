@@ -34,7 +34,7 @@ module Unicode
       rgi_at: :REGEX_INCLUDE_MQE_UQE,
       possible: :REGEX_WELL_FORMED,
     }
-    # REGEX_NEEDS_EMOJI_HANDLING: ZWJ, VS16, MODIFIER, keycaps
+    # REGEX_NEEDS_EMOJI_HANDLING: ZWJ, VS16, MODIFIER, KEYCAP
     REGEX_EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
     REGEX_EMOJI_VS16 = Regexp.union(
       Regexp.compile(
@@ -68,8 +68,7 @@ module Unicode
         return width + string.size
       end
 
-      # Retrieve Emoji width
-      # TODO add quick emoji check
+      # Retrieve Emoji width, maybe: add quick check using REGEX_NEEDS_EMOJI_HANDLING
       if options[:emoji] != :none
         e_width, string = emoji_width(
           string,
@@ -126,11 +125,11 @@ module Unicode
     # Returns width for ASCII-only strings. Will consider zero-width control symbols.
     def self.width_ascii(string)
       if string.match?(ASCII_NON_ZERO_REGEX)
-        res = string.delete(ASCII_NON_ZERO_STRING).size - string.count(ASCII_BACKSPACE)
+        res = string.delete(ASCII_NON_ZERO_STRING).bytesize - string.count(ASCII_BACKSPACE)
         return res < 0 ? 0 : res
       end
 
-      string.size
+      string.bytesize
     end
 
     # Returns width of all considered Emoji and remaining string
