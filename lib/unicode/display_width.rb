@@ -21,6 +21,10 @@ module Unicode
       WIDTH_ONE: 768,
       WIDTH_TWO: 161,
     }
+    NOT_COMMON_NARROW_REGEX = {
+     WIDTH_ONE: /[^\u{10}-\u{2FF}]/m,
+     WIDTH_TWO: /[^\u{10}-\u{A1}]/m,
+    }
     FIRST_4096 = {
       WIDTH_ONE: decompress_index(INDEX[:WIDTH_ONE][0][0], 1),
       WIDTH_TWO: decompress_index(INDEX[:WIDTH_TWO][0][0], 1),
@@ -30,7 +34,7 @@ module Unicode
       rgi_at: :REGEX_INCLUDE_MQE_UQE,
       possible: :REGEX_WELL_FORMED,
     }
-    # REGEX_NEEDS_EMOJI_HANDLING: ZWJ, VS16, MODIFIER
+    # REGEX_NEEDS_EMOJI_HANDLING: ZWJ, VS16, MODIFIER, keycaps
     REGEX_EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
     REGEX_EMOJI_VS16 = Regexp.union(
       Regexp.compile(
@@ -58,6 +62,12 @@ module Unicode
         return width + width_ascii(string)
       end
 
+      ambiguous_index_name = AMBIGUOUS_MAP[options[:ambiguous]]
+
+      unless string.match?(NOT_COMMON_NARROW_REGEX[ambiguous_index_name])
+        return width + string.size
+      end
+
       # Retrieve Emoji width
       # TODO add quick emoji check
       if options[:emoji] != :none
@@ -67,32 +77,29 @@ module Unicode
           options[:ambiguous],
         )
         width += e_width
+
+        unless string.match?(NOT_COMMON_NARROW_REGEX[ambiguous_index_name])
+          return width + string.size
+        end
       end
 
-      ambiguous_index_name = AMBIGUOUS_MAP[options[:ambiguous]]
       index_full = INDEX[ambiguous_index_name]
       index_low = FIRST_4096[ambiguous_index_name]
       first_ambiguous = FIRST_AMBIGUOUS[ambiguous_index_name]
 
-      string.scan(/.{,80}/m){ |batch|
-        if batch.ascii_only?
-          width += width_ascii(batch)
+      string.each_codepoint{ |codepoint|
+        if codepoint > 15 && codepoint < first_ambiguous
+          width += 1
+        elsif codepoint < 0x1001
+          width += index_low[codepoint] || 1
         else
-          batch.each_codepoint{ |codepoint|
-            if codepoint > 15 && codepoint < first_ambiguous
-              width += 1
-            elsif codepoint < 0x1001
-              width += index_low[codepoint] || 1
-            else
-              d = INITIAL_DEPTH
-              w = index_full[codepoint / d]
-              while w.instance_of? Array
-                w = w[(codepoint %= d) / (d /= 16)]
-              end
+          d = INITIAL_DEPTH
+          w = index_full[codepoint / d]
+          while w.instance_of? Array
+            w = w[(codepoint %= d) / (d /= 16)]
+          end
 
-              width += w || 1
-            end
-          }
+          width += w || 1
         end
       }
 
