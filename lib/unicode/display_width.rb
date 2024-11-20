@@ -10,8 +10,8 @@ module Unicode
   class DisplayWidth
     DEFAULT_AMBIGUOUS = 1
     INITIAL_DEPTH = 0x10000
-    ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n\v\f\r\x0E\x0F]/
-    ASCII_NON_ZERO_STRING = "\0\x05\a\b\n\v\f\r\x0E\x0F"
+    ASCII_NON_ZERO_REGEX = /[\0\x05\a\b\n-\x0F]/
+    ASCII_NON_ZERO_STRING = "\0\x05\a\b\n-\x0F"
     ASCII_BACKSPACE = "\b"
     AMBIGUOUS_MAP = {
       1 => :WIDTH_ONE,
@@ -30,6 +30,7 @@ module Unicode
       rgi_at: :REGEX_INCLUDE_MQE_UQE,
       possible: :REGEX_WELL_FORMED,
     }
+    # REGEX_NEEDS_EMOJI_HANDLING: ZWJ, VS16, MODIFIER
     REGEX_EMOJI_NOT_POSSIBLE = /\A[#*0-9]\z/
     REGEX_EMOJI_VS16 = Regexp.union(
       Regexp.compile(
@@ -44,93 +45,44 @@ module Unicode
 
     # Returns monospace display width of string
     def self.of(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
-      unless old_options.empty?
-        warn "Unicode::DisplayWidth: Please migrate to keyword arguments - #{old_options.inspect}"
-        options.merge! old_options
+      string = string.encode(Encoding::UTF_8) unless string.encoding == Encoding::UTF_8
+      options = normalize_options(string, ambiguous, overwrite, old_options, **options)
+
+      width = 0
+
+      unless options[:overwrite].empty?
+        width, string = width_custom(string, options[:overwrite])
       end
 
-      options[:ambiguous] = ambiguous if ambiguous
-      options[:ambiguous] ||= DEFAULT_AMBIGUOUS
-
-      if options[:ambiguous] != 1 && options[:ambiguous] != 2
-        raise ArgumentError, "Unicode::DisplayWidth: Ambiguous width must be 1 or 2"
+      if string.ascii_only?
+        return width + width_ascii(string)
       end
 
-      if overwrite && !overwrite.empty?
-        warn "Unicode::DisplayWidth: Please migrate to keyword arguments - overwrite: #{overwrite.inspect}"
-        options[:overwrite] = overwrite
-      end
-      options[:overwrite] ||= {}
-
-      if [nil, true, :auto].include?(options[:emoji])
-        options[:emoji] = EmojiSupport.recommended
-      end
-
-      # # #
-
-      if !options[:overwrite].empty?
-        return width_frame(string, options) do |string, index_full, index_low, first_ambiguous|
-          width_all_features(string, index_full, index_low, first_ambiguous, options[:overwrite])
-        end
-      end
-
-      if !string.ascii_only?
-        return width_frame(string, options) do |string, index_full, index_low, first_ambiguous|
-          width_no_overwrite(string, index_full, index_low, first_ambiguous)
-        end
-      end
-
-      width_ascii(string)
-    end
-
-    def self.width_ascii(string)
-      # Optimization for ASCII-only strings without certain control symbols
-      if string.match?(ASCII_NON_ZERO_REGEX)
-        res = string.delete(ASCII_NON_ZERO_STRING).size - string.count(ASCII_BACKSPACE)
-        return res < 0 ? 0 : res
-      end
-
-      # Pure ASCII
-      string.size
-    end
-
-    def self.width_frame(string, options)
       # Retrieve Emoji width
-      if options[:emoji] == false || options[:emoji] == :none
-        res = 0
-      else
-        res, string = emoji_width(
+      # TODO add quick emoji check
+      if options[:emoji] != :none
+        e_width, string = emoji_width(
           string,
           options[:emoji],
           options[:ambiguous],
         )
+        width += e_width
       end
 
-      # Prepare indexes
       ambiguous_index_name = AMBIGUOUS_MAP[options[:ambiguous]]
-
-      # Get general width
-      res += yield(string, INDEX[ambiguous_index_name], FIRST_4096[ambiguous_index_name], FIRST_AMBIGUOUS[ambiguous_index_name])
-
-      # Return result + prevent negative lengths
-      res < 0 ? 0 : res
-    end
-
-    def self.width_no_overwrite(string, index_full, index_low, first_ambiguous, _ = {})
-      res = 0
-
-      # Make sure we have UTF-8
-      string = string.encode(Encoding::UTF_8) unless string.encoding.name == "utf-8"
+      index_full = INDEX[ambiguous_index_name]
+      index_low = FIRST_4096[ambiguous_index_name]
+      first_ambiguous = FIRST_AMBIGUOUS[ambiguous_index_name]
 
       string.scan(/.{,80}/m){ |batch|
         if batch.ascii_only?
-          res += batch.size
+          width += width_ascii(batch)
         else
           batch.each_codepoint{ |codepoint|
             if codepoint > 15 && codepoint < first_ambiguous
-              res += 1
+              width += 1
             elsif codepoint < 0x1001
-              res += index_low[codepoint] || 1
+              width += index_low[codepoint] || 1
             else
               d = INITIAL_DEPTH
               w = index_full[codepoint / d]
@@ -138,45 +90,45 @@ module Unicode
                 w = w[(codepoint %= d) / (d /= 16)]
               end
 
-              res += w || 1
+              width += w || 1
             end
           }
         end
       }
 
-      res
+      # Return result + prevent negative lengths
+      width < 0 ? 0 : width
     end
 
-    # Same as .width_no_overwrite - but with applying overwrites for each char
-    def self.width_all_features(string, index_full, index_low, first_ambiguous, overwrite)
-      res = 0
+    # Returns width of custom overwrites and remaining string
+    def self.width_custom(string, overwrite)
+      width = 0
 
-      string.each_codepoint{ |codepoint|
+      string = string.each_codepoint.select{ |codepoint|
         if overwrite[codepoint]
-          res += overwrite[codepoint]
-        elsif codepoint > 15 && codepoint < first_ambiguous
-          res += 1
-        elsif codepoint < 0x1001
-          res += index_low[codepoint] || 1
+          width += overwrite[codepoint]
+          nil
         else
-          d = INITIAL_DEPTH
-          w = index_full[codepoint / d]
-          while w.instance_of? Array
-            w = w[(codepoint %= d) / (d /= 16)]
-          end
-
-          res += w || 1
+          codepoint
         end
-      }
+      }.pack("U*")
 
-      res
+      [width, string]
     end
 
+    # Returns width for ASCII-only strings. Will consider zero-width control symbols.
+    def self.width_ascii(string)
+      if string.match?(ASCII_NON_ZERO_REGEX)
+        res = string.delete(ASCII_NON_ZERO_STRING).size - string.count(ASCII_BACKSPACE)
+        return res < 0 ? 0 : res
+      end
 
+      string.size
+    end
+
+    # Returns width of all considered Emoji and remaining string
     def self.emoji_width(string, mode = :all, ambiguous = DEFAULT_AMBIGUOUS)
       res = 0
-
-      string = string.encode(Encoding::UTF_8) unless string.encoding.name == "utf-8"
 
       if emoji_set_regex = EMOJI_SEQUENCES_REGEX_MAPPING[mode]
         emoji_width_via_possible(
@@ -235,6 +187,34 @@ module Unicode
       }
 
       [res, no_emoji_string]
+    end
+
+    def self.normalize_options(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
+      unless old_options.empty?
+        warn "Unicode::DisplayWidth: Please migrate to keyword arguments - #{old_options.inspect}"
+        options.merge! old_options
+      end
+
+      options[:ambiguous] = ambiguous if ambiguous
+      options[:ambiguous] ||= DEFAULT_AMBIGUOUS
+
+      if options[:ambiguous] != 1 && options[:ambiguous] != 2
+        raise ArgumentError, "Unicode::DisplayWidth: Ambiguous width must be 1 or 2"
+      end
+
+      if overwrite && !overwrite.empty?
+        warn "Unicode::DisplayWidth: Please migrate to keyword arguments - overwrite: #{overwrite.inspect}"
+        options[:overwrite] = overwrite
+      end
+      options[:overwrite] ||= {}
+
+      if [nil, true, :auto].include?(options[:emoji])
+        options[:emoji] = EmojiSupport.recommended
+      elsif options[:emoji] == false
+        options[:emoji] = :none
+      end
+
+      options
     end
 
     def initialize(ambiguous: DEFAULT_AMBIGUOUS, overwrite: {}, emoji: true)
