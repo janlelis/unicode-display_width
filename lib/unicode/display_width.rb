@@ -47,7 +47,14 @@ module Unicode
 
     # Returns monospace display width of string
     def self.of(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
-      string = string.encode(Encoding::UTF_8) unless string.encoding == Encoding::UTF_8
+      # Binary strings don't make much sense when calculating display width.
+      # Assume it's valid UTF-8
+      if string.encoding == Encoding::BINARY && !string.force_encoding(Encoding::UTF_8).valid_encoding?
+        # Didn't work out, go back to binary
+        string.force_encoding(Encoding::BINARY)
+      end
+
+      string = string.encode(Encoding::UTF_8, invalid: :replace, undef: :replace) unless string.encoding == Encoding::UTF_8
       options = normalize_options(string, ambiguous, overwrite, old_options, **options)
 
       width = 0
@@ -236,4 +243,3 @@ module Unicode
     end
   end
 end
-

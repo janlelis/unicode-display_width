@@ -183,6 +183,17 @@ describe 'Unicode::DisplayWidth.of' do
     it 'works with non-utf8 Unicode encodings' do
       expect( 'À'.encode("UTF-16LE").display_width ).to eq 1
     end
+
+    it 'works with a string that is invalid in its encoding' do
+      s = "\x81\x39".dup.force_encoding(Encoding::SHIFT_JIS)
+
+      # Would print as �9 on the terminal
+      expect( s.display_width ).to eq 2
+    end
+
+    it 'works with a binary encoded string that is valid in UTF-8' do
+      expect( '€'.b.display_width ).to eq 1
+    end
   end
 
   describe '[emoji]' do
