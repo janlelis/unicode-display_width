@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## 3.1.3 (unreleased)
+## 3.1.3
 
-Better handling of non-UTF-8 strings:
+Better handling of non-UTF-8 strings, patch by @Earlopain:
 
 - Data with *BINARY* encoding is interpreted as UTF-8, if possible
 - Use `invalid: :replace` and `undef: :replace` options when converting to UTF-8
@@ -34,6 +34,7 @@ Better handling of non-UTF-8 strings:
 - Rename `:basic` mode to `:vs16`
 
 ## 3.0.1
+
 
 - Add WezTerm and foot as good Emoji terminals
 
