@@ -71,6 +71,11 @@ Unicode::DisplayWidth.of("·", 1) # => 1
 Unicode::DisplayWidth.of("·", 2) # => 2
 ```
 
+### Encoding Notes
+
+- Data with *BINARY* encoding is interpreted as UTF-8, if possible
+- Non-UTF-8 strings are converted to UTF-8 before measuring, using the [`{invalid: :replace, undef: :replace}`) options](https://ruby-doc.org/3.3.5/encodings_rdoc.html#label-Encoding+Options)
+
 ### Custom Overwrites
 
 You can overwrite how to handle specific code points by passing a hash (or even a proc) as `overwrite:` parameter:

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 3.1.3 (unreleased)
+
+Better handling of non-UTF-8 strings:
+
+- Data with *BINARY* encoding is interpreted as UTF-8, if possible
+- Use `invalid: :replace` and `undef: :replace` options when converting to UTF-8
+
 ## 3.1.2
 
 - Performance improvements
