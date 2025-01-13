@@ -42,7 +42,9 @@ module Unicode
       ),
       Unicode::Emoji::REGEX_EMOJI_KEYCAP
     )
-    REGEX_EMOJI_ALL_SEQUENCES = Regexp.union(/.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?(\u{200D}.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?)+/, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
+
+    # ebase = Unicode::Emoji::REGEX_PROP_MODIFIER_BASE.source
+    REGEX_EMOJI_ALL_SEQUENCES = Regexp.union(/.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?(\u{200D}.[\u{1F3FB}-\u{1F3FF}\u{FE0F}]?)+|.[\u{1F3FB}-\u{1F3FF}]/, Unicode::Emoji::REGEX_EMOJI_KEYCAP)
     REGEX_EMOJI_ALL_SEQUENCES_AND_VS16 = Regexp.union(REGEX_EMOJI_ALL_SEQUENCES, REGEX_EMOJI_VS16)
 
     # Returns monospace display width of string

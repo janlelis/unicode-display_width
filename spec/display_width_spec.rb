@@ -221,10 +221,6 @@ describe 'Unicode::DisplayWidth.of' do
     end
 
     describe '(special emoji / emoji sequences)' do
-      it 'works with singleton skin tone modifiers: width 2' do
-        expect( "🏿".display_width(emoji: :all) ).to eq 2
-      end
-
       it 'works with flags: width 2' do
         expect( "🇵🇹".display_width(emoji: :all) ).to eq 2
       end
@@ -239,8 +235,12 @@ describe 'Unicode::DisplayWidth.of' do
     end
 
     describe '(modifiers and zwj sequences)' do
+      it 'applies simple skin tone modifiers' do
+        expect( "👏🏽".display_width(emoji: :rgi) ).to eq 2
+      end
+
       it 'counts RGI Emoji ZWJ sequence as width 2' do
-        expect( "🤾🏽‍♀️".display_width(1, emoji: :rgi) ).to eq 2
+        expect( "🤾🏽‍♀️".display_width(emoji: :rgi) ).to eq 2
       end
 
       it 'works for emoji involving characters which are east asian ambiguous' do
@@ -253,6 +253,7 @@ describe 'Unicode::DisplayWidth.of' do
         it 'does no Emoji adjustments when emoji suport is disabled' do
           expect( "🤾🏽‍♀️".display_width(emoji: false) ).to eq 5
           expect( "❣️".display_width(emoji: :none) ).to eq 1
+          expect( "👏🏽".display_width(emoji: :none) ).to eq 4
         end
       end
 
@@ -277,6 +278,8 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "🤾🏽‍♀️".display_width(emoji: :rgi) ).to eq 2 # FQE
           expect( "🤾🏽‍♀".display_width(emoji: :rgi) ).to eq 2 # MQE
           expect( "❤‍🩹".display_width(emoji: :rgi) ).to eq 2 # UQE
+          expect( "👏🏽".display_width(emoji: :rgi) ).to eq 2 # Modifier
+          expect( "J🏽".display_width(emoji: :rgi) ).to eq 3 # Modifier with invalid base
           expect( "🤠‍🤢".display_width(emoji: :rgi) ).to eq 4 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(emoji: :rgi) ).to eq 6 # Invalid/non-Emoji sequence
         end
@@ -308,6 +311,8 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "🤾🏽‍♀️".display_width(emoji: :possible) ).to eq 2 # FQE
           expect( "🤾🏽‍♀".display_width(emoji: :possible) ).to eq 2 # MQE
           expect( "❤‍🩹".display_width(emoji: :possible) ).to eq 2 # UQE
+          expect( "👏🏽".display_width(emoji: :possible) ).to eq 2 # Modifier
+          expect( "J🏽".display_width(emoji: :possible) ).to eq 3 # Modifier with invalid base
           expect( "🤠‍🤢".display_width(emoji: :possible) ).to eq 2 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(emoji: :possible) ).to eq 6 # Invalid/non-Emoji sequence
         end
@@ -322,6 +327,9 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "🤾🏽‍♀️".display_width(emoji: :all) ).to eq 2 # FQE
           expect( "🤾🏽‍♀".display_width(emoji: :all) ).to eq 2 # MQE
           expect( "❤‍🩹".display_width(emoji: :all) ).to eq 2 # UQE
+          expect( "👏🏽".display_width(emoji: :all) ).to eq 2 # Modifier
+          expect( "👏🏽".display_width(emoji: :all) ).to eq 2 # Modifier
+          expect( "J🏽".display_width(emoji: :all) ).to eq 2 # Modifier with invalid base
           expect( "🤠‍🤢".display_width(emoji: :all) ).to eq 2 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(emoji: :all) ).to eq 2 # Invalid/non-Emoji sequence
         end
@@ -336,6 +344,8 @@ describe 'Unicode::DisplayWidth.of' do
           expect( "🤾🏽‍♀️".display_width(emoji: :all_no_vs16) ).to eq 2 # FQE
           expect( "🤾🏽‍♀".display_width(emoji: :all_no_vs16) ).to eq 2 # MQE
           expect( "❤‍🩹".display_width(emoji: :all_no_vs16) ).to eq 2 # UQE
+          expect( "👏🏽".display_width(emoji: :all_no_vs16) ).to eq 2 # Modifier
+          expect( "J🏽".display_width(emoji: :all_no_vs16) ).to eq 2 # Modifier with wrong base
           expect( "🤠‍🤢".display_width(emoji: :all_no_vs16) ).to eq 2 # Non-RGI/well-formed
           expect( "🚄🏾‍▶️".display_width(emoji: :all_no_vs16) ).to eq 2 # Invalid/non-Emoji sequence
         end

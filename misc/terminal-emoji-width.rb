@@ -11,6 +11,14 @@ puts "1B) TEXT-DEFAULT EMOJI + VS16"
 puts
 puts RULER + "⛹️" + ABC
 
+puts "1C) BASE EMOJI CHARACTER + MODIFIER"
+puts
+puts RULER + "🏃🏽" + ABC
+
+puts "1D) MODIFIER IN ISOLATION"
+puts
+puts RULER + "Z🏽" + ABC
+
 puts "2) RGI EMOJI SEQ"
 puts
 puts RULER + "🏃🏼‍♀‍➡" + ABC

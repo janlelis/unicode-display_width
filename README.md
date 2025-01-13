@@ -101,12 +101,16 @@ There are many Emoji which get constructed by combining other Emoji in a sequenc
 
 Another aspect where terminals disagree is whether Emoji characters which have a text presentation by default (width 1) should be turned into full-width (width 2) when combined with Variation Selector 16 (*U+FEOF*).
 
+Finally, it varies if Skin Tone Modifiers can be applied to all characters or just to those with the "Emoji Base" property.
+
 Emoji Type  | Width / Comment
 ------------|----------------
-Basic/Single Emoji character without Variation Selector | No special handling
-Basic/Single Emoji character with VS15 (Text)           | No special handling
-Basic/Single Emoji character with VS16 (Emoji)          | 2 or East Asian Width (see table below)
-Emoji Sequence                                          | 2 if Emoji belongs to configured Emoji set (see table below)
+Basic/Single Emoji character without Variation Selector   | No special handling
+Basic/Single Emoji character with VS15 (Text)             | No special handling
+Basic/Single Emoji character with VS16 (Emoji)            | 2 or East Asian Width (see table below)
+Single Emoji character with Skin Tone Modifier            | 2
+Skin Tone Modifier used in isolation or with invalid base | 2 if Emoji mode is configured to RGI
+Emoji Sequence                                            | 2 if Emoji belongs to configured Emoji set (see table below)
 
 #### Emoji Modes
 

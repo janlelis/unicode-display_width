@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.1.4
+
+- Fix that skin tone modifiers were ignored when used in a non-ZWJ sequence
+  context (= single emoji char + modifier) #29
+- Add more docs and specs about modifier handling
+
 ## 3.1.3
 
 Better handling of non-UTF-8 strings, patch by @Earlopain:
