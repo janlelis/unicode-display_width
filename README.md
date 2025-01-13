@@ -1,6 +1,6 @@
 # Unicode::DisplayWidth [![[version]](https://badge.fury.io/rb/unicode-display_width.svg)](https://badge.fury.io/rb/unicode-display_width) [<img src="https://github.com/janlelis/unicode-display_width/workflows/Test/badge.svg" />](https://github.com/janlelis/unicode-display_width/actions?query=workflow%3ATest)
 
-Determines the monospace display width of a string in Ruby, which is useful for all kinds of terminal-based applications. The implementation is based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt), the [Emoji specfication](https://www.unicode.org/reports/tr51/) and other data, 100% in Ruby. It does not rely on the OS vendor ([wcwidth()](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width in terminals.
+Determines the monospace display width of a string in Ruby, which is useful for all kinds of terminal-based applications. The implementation is based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt), the [Emoji specfication](https://www.unicode.org/reports/tr51/) and other data, 100% in Ruby. It does not rely on the OS vendor ([wcwidth](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width in terminals.
 
 Unicode version: **16.0.0** (September 2024)
 
@@ -108,8 +108,8 @@ Emoji Type  | Width / Comment
 Basic/Single Emoji character without Variation Selector   | No special handling
 Basic/Single Emoji character with VS15 (Text)             | No special handling
 Basic/Single Emoji character with VS16 (Emoji)            | 2 or East Asian Width (see table below)
-Single Emoji character with Skin Tone Modifier            | 2
-Skin Tone Modifier used in isolation or with invalid base | 2 if Emoji mode is configured to `:rgi` / `:rgi_at`
+Single Emoji character with Skin Tone Modifier            | 2 unless Emoji mode is `:none` or `vs16`
+Skin Tone Modifier used in isolation or with invalid base | 2 if Emoji mode is `:rgi` / `:rgi_at`
 Emoji Sequence                                            | 2 if Emoji belongs to configured Emoji set (see table below)
 
 #### Emoji Modes
