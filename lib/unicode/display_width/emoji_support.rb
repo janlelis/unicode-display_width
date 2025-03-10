@@ -1,5 +1,4 @@
-# require "rbconfig"
-# RbConfig::CONFIG["host_os"] =~ /mswin|mingw/ # windows
+# frozen_string_literal: true
 
 module Unicode
   class DisplayWidth
@@ -13,6 +12,10 @@ module Unicode
       # Please note: Many terminals do not set any ENV vars,
       # maybe CSI queries can help?
       def self.recommended
+        @recommended ||= _recommended
+      end
+
+      def self._recommended
         if ENV["CI"]
           return :rqi
         end
