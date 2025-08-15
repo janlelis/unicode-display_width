@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.5
+
+- Cache Emoji support level for performance reasons #30, patch by @Earlopain:
+
 ## 3.1.4
 
 - Fix that skin tone modifiers were ignored when used in a non-ZWJ sequence
