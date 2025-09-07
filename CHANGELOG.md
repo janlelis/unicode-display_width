@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.2.0 (unreleased)
+
+- Unicode 17
+
 ## 3.1.5
 
 - Cache Emoji support level for performance reasons #30, patch by @Earlopain:
