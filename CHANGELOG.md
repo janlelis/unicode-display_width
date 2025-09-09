@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## 3.2.0 (unreleased)
+## 3.2.0
 
-- Unicode 17
+- Unicode 17.0
 
 ## 3.1.5
 
