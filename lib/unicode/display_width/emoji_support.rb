@@ -17,7 +17,7 @@ module Unicode
 
       def self._recommended
         if ENV["CI"]
-          return :rqi
+          return :rgi
         end
 
         case ENV["TERM_PROGRAM"]
