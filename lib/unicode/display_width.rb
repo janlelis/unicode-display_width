@@ -236,7 +236,7 @@ module Unicode
       {
         ambiguous: kwargs[:ambiguous] || @ambiguous,
         overwrite: kwargs[:overwrite] || @overwrite,
-        emoji:     kwargs[:emoji]     || @emoji,
+        emoji:     kwargs.fetch(:emoji, @emoji),
       }
     end
 
