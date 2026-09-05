@@ -51,9 +51,9 @@ module Unicode
     def self.of(string, ambiguous = nil, overwrite = nil, old_options = {}, **options)
       # Binary strings don't make much sense when calculating display width.
       # Assume it's valid UTF-8
-      if string.encoding == Encoding::BINARY && !string.force_encoding(Encoding::UTF_8).valid_encoding?
-        # Didn't work out, go back to binary
-        string.force_encoding(Encoding::BINARY)
+      if string.encoding == Encoding::BINARY
+        utf8_string = string.dup.force_encoding(Encoding::UTF_8)
+        string = utf8_string if utf8_string.valid_encoding?
       end
 
       string = string.encode(Encoding::UTF_8, invalid: :replace, undef: :replace) unless string.encoding == Encoding::UTF_8
