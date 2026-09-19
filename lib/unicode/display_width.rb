@@ -61,8 +61,9 @@ module Unicode
 
       width = 0
 
-      unless options[:overwrite].empty?
-        width, string = width_custom(string, options[:overwrite])
+      overwrite = options[:overwrite]
+      unless overwrite.respond_to?(:empty?) && overwrite.empty?
+        width, string = width_custom(string, overwrite)
       end
 
       if string.ascii_only?
@@ -118,8 +119,8 @@ module Unicode
       width = 0
 
       string = string.each_codepoint.select{ |codepoint|
-        if overwrite[codepoint]
-          width += overwrite[codepoint]
+        if overwrite_width = overwrite[codepoint]
+          width += overwrite_width
           nil
         else
           codepoint
@@ -211,7 +212,7 @@ module Unicode
         raise ArgumentError, "Unicode::DisplayWidth: Ambiguous width must be 1 or 2"
       end
 
-      if overwrite && !overwrite.empty?
+      if overwrite && (!overwrite.respond_to?(:empty?) || !overwrite.empty?)
         warn "Unicode::DisplayWidth: Please migrate to keyword arguments - overwrite: #{overwrite.inspect}"
         options[:overwrite] = overwrite
       end
