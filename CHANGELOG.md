@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.3.0 (unreleased)
+
+- Unicode 18.0
+- Fix bug that emoji handling could not be deactivated when using config object
+- Fix edge case to not modify string when failing parsing binary input as UTF-8
+
 ## 3.2.0
 
 - Unicode 17.0
