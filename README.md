@@ -2,7 +2,7 @@
 
 Determines the monospace display width of a string in Ruby, which is useful for all kinds of terminal-based applications. The implementation is based on [EastAsianWidth.txt](https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt), the [Emoji specfication](https://www.unicode.org/reports/tr51/) and other data, 100% in Ruby. It does not rely on the OS vendor ([wcwidth](https://github.com/janlelis/wcswidth-ruby)) to provide an up-to-date method for measuring string width in terminals.
 
-Unicode version: **17.0.0** (September 2025)
+Unicode version: **18.0.0** (September 2026)
 
 ## Gem Version 3 — Improved Emoji Support
 
