@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 3.3.0 (unreleased)
+## 3.3.0
 
 - Unicode 18.0
 - Fix bug that emoji handling could not be deactivated when using config object
